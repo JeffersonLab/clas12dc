@@ -1,6 +1,6 @@
-DC_Calibration
+DC Calibration Suite
 ====================
-DC calibration Suite for CLAS12.
+DC calibration suite for CLAS12.
 
 Source directory structure
 --------------------------
@@ -17,7 +17,11 @@ The ```main()``` function for the calibration suite is invoked from the ```ui/Ap
 
 
 
-Screenshot
------------
+Screenshot: The main GUI
+--------------------------
 ![The main GUI](src/images/DC_Calib_GUI1.png)
+
+
+Screenshot: The Fit Control GUI
+-------------------------------
 ![The Fit Control GUI](src/images/DC_Calib_GUI2.png)
