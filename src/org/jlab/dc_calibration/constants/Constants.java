@@ -44,19 +44,19 @@ public final class Constants
 	public static final double[] thEdgeVzH2 =
 	{ -45, -35, -25, -20, -15, -10, -6, -2, 2, 6, 10, 15, 20, 25, 35, 45, 55 };
 
-	public static final double[] wpdist =
+	public static final double[] wpdist = // Wire to plane distance:  X_max = 2 x Wire to plane distance
 	{ 0.386160, 0.404220, 0.621906, 0.658597, 0.935140, 0.977982 };
-	public static final int nSL = 6;
-	public static final int nSectors = 6;
+	public static final int nSL = 6;  // Number of super layers
+	public static final int nSectors = 6;  //  Number of sectors
 	public static final int iSecMin = 1, iSecMax = 2;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
 														// iSecMax = 2;
-	public static final int nLayer = 6;
+	public static final int nLayer = 6;  //  Number of layers
 	public static final double[] docaBins =
 	{ -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8 };
 	public static final int nHists = 8;
-	public static final int nTh = 9;
+	public static final int nTh = 9;  // Number of angular bins
 	public static final double[] thBins =
-	{ -60.0, -40.0, -20.0, -10.0, -1.0, 1.0, 10.0, 20.0, 40.0, 60.0 };
+	{ -60.0, -40.0, -20.0, -10.0, -1.0, 1.0, 10.0, 20.0, 40.0, 60.0 };  
 
 	public static final int nFitPars = 10;// 9;//v0, deltamn, tmax, distbeta,
 											// delta_bfield_coefficient, b1, b2, b3, b4, deltaT0;
@@ -108,17 +108,18 @@ public final class Constants
 	// = 2; // for using XY-proj from h3BTXmap
 	// = 3; // for using B-field also from h3BTXmap
 
-	public static final int histTypeToUseInFitting = 1;// 2;//1;//2;
+	public static final int histTypeToUseInFitting = 3;//1; //3; //1;// 2;//1;//2;
 
-	public static final double calcDocaCut = 5.0; // 1.0 //0.85
+	public static final double calcDocaCut = 2.0; ////5.0; // 1.0 //0.85
 	public static final String outFileForFitPars = "src/files/fitParameters.txt";
 
 	// ================ Binning parameters various histograms ==================
 	// make the following controllable from the GUI (as we may have different Max for B-field
 	// depending on expt.
 	public static final int nBFieldBins = 20;
-	public static final double bFieldMin = 0.0, bFieldMax = 1.5;
-	public static final int binForTestPlotTemp = nBFieldBins / 2; // for temp purpose
+	public static final double bFieldMin = 0.3, bFieldMax = 0.8;  // <--------- Changed the limit for B-field
+	//public static final double bFieldMin = 0.0, bFieldMax = 1.5;
+	public static final int binForTestPlotTemp = 15;//nBFieldBins / 2; // for temp purpose
 	public static final int nLocalAngleBins = 160;
 	public static final double localAngleMin = -80.0, localAngleMax = 80.0;
 

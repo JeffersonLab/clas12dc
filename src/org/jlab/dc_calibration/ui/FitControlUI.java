@@ -410,31 +410,31 @@ public class FitControlUI extends javax.swing.JFrame
 		jLabel5.setText("   Fix it?");
 
 		jLabel6.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel6.setText("v0");
+		jLabel6.setText("<html>v<sub>0</sub></html>");
 
 		jLabel7.setForeground(new java.awt.Color(0, 102, 51));
-		jLabel7.setText("deltanm");
+		jLabel7.setText("<html>&delta;<sub>nm</sub></html>");
 
 		jLabel8.setForeground(new java.awt.Color(0, 102, 51));
-		jLabel8.setText("tmax");
+		jLabel8.setText("<html>t<sub>max</sub></html>");
 
 		jLabel9.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel9.setText("distbeta");
+		jLabel9.setText("<html>x<sub>&beta;</sub></html>");
 
 		jLabel10.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel10.setText("delta_bfield_coeff");
+		jLabel10.setText("<html>&delta;<sub>B</sub></html>");
 
 		jLabel11.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel11.setText("b1");
+		jLabel11.setText("<html>b<sub>1</sub></html>");
 
 		jLabel12.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel12.setText("b2");
+		jLabel12.setText("<html>b<sub>2</sub></html>");
 
 		jLabel13.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel13.setText("b3");
+		jLabel13.setText("<html>b<sub>3</sub></html>");
 
 		jLabel14.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel14.setText("b4");
+		jLabel14.setText("<html>b<sub>4</sub></html>");
 
 		jTextField1.setText("jTextField1");
 		jTextField1.addActionListener(new java.awt.event.ActionListener()
@@ -838,10 +838,10 @@ public class FitControlUI extends javax.swing.JFrame
 		});
 
 		jLabel19.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-		jLabel19.setText("xNormMin");
+		jLabel19.setText("<html>X<sup>norm</sup><sub>min<sub></html>");
 
 		jLabel20.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-		jLabel20.setText("xNormMax");
+		jLabel20.setText("<html>X<sup>norm</sup><sub>max<sub></html>");
 
 		jCheckBoxFixAll.setText("Fix All");
 		jCheckBoxFixAll.addActionListener(new java.awt.event.ActionListener()
@@ -882,7 +882,7 @@ public class FitControlUI extends javax.swing.JFrame
 		});
 
 		jLabel22.setForeground(new java.awt.Color(0, 102, 0));
-		jLabel22.setText("deltaT0");
+		jLabel22.setText("<html>&Delta;T<sub>0</sub></html>");
 
 		jLabel23.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
 		jLabel23.setText("Step Size");
@@ -1541,8 +1541,10 @@ public class FitControlUI extends javax.swing.JFrame
 			}
 		});
 
+//		jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+//				"Sec    SL   v0   deltanm   tMax  distbeta  data_bfield_coeff.    b1    b2    b3   b4  deltaT0"));
 		jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				"Sec    SL   v0   deltanm   tMax  distbeta  data_bfield_coeff.    b1    b2    b3   b4  deltaT0"));
+				"<html>Sec    &emsp; &emsp;      SL     &emsp; &emsp;      v<sub>0</sub>     &emsp; &emsp;         &delta;<sub>nm</sub>   &emsp; &emsp;      t<sub>max</sub>     &emsp; &emsp;     x<sub>&beta;</sub>     &emsp; &emsp;     &delta<sub>B</sub>     &emsp; &emsp;       b<sub>1</sub>          &emsp; &emsp;    b<sub>2</sub>        &emsp; &emsp;         b<sub>3</sub>       &emsp; &emsp;           b<sub>4</sub>       &emsp; &emsp;          &Delta;T<sub>0</sub></html>"));
 
 		jTextArea1.setColumns(20);
 		jTextArea1.setRows(5);

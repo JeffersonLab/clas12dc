@@ -118,7 +118,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Coordinate, H1F> h1avgWire4Dar = new HashMap<Coordinate, H1F>();// no ratio here
 	private Map<Coordinate, H1F> h1fitChisqProbSeg4Dar = new HashMap<Coordinate, H1F>();
 	// private Map<Coordinate, H2F> h2timeVtrkDoca = new HashMap<Coordinate, H2F>();
-	public Map<Coordinate, H2F> h2timeVtrkDoca = new HashMap<Coordinate, H2F>();// made it public -
+	public Map<Coordinate, H2F> h2timeVtrkDoca = new HashMap<Coordinate, H2F>(); // Time Residual vs trkDoca
+																				// made it public -
 																				// to be able to
 																				// access it from
 																				// SliceViewer
@@ -143,9 +144,9 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Integer, Double> gSegmAvgWireTBSegments;
 	private Map<Integer, Double> gFitChisqProbTBSegments;
 
-	private Map<Coordinate, GraphErrors> htime2DisDocaProfile = new HashMap<Coordinate, GraphErrors>();
-	private Map<Coordinate, DCFitFunction> mapOfFitFunctions = new HashMap<Coordinate, DCFitFunction>();
-	private Map<Coordinate, MnUserParameters> mapOfFitParameters = new HashMap<Coordinate, MnUserParameters>();
+	private Map<Coordinate, GraphErrors> htime2DisDocaProfile = new HashMap<Coordinate, GraphErrors>();  // T2Doca Profile Histogram
+	private Map<Coordinate, DCFitFunction> mapOfFitFunctions = new HashMap<Coordinate, DCFitFunction>(); // Map fo Fit functions
+	private Map<Coordinate, MnUserParameters> mapOfFitParameters = new HashMap<Coordinate, MnUserParameters>(); // Map of fit parameters
 	private Map<Coordinate, double[]> mapOfUserFitParameters = new HashMap<Coordinate, double[]>();
 	private Map<Coordinate, double[]> mapOfUserFitParErrors = new HashMap<Coordinate, double[]>();
 	private Map<Coordinate, DCFitDrawer> mapOfFitLines = new HashMap<Coordinate, DCFitDrawer>();
@@ -158,9 +159,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Coordinate, DCFitDrawer> mapOfFitLinesOld = new HashMap<Coordinate, DCFitDrawer>();
 	private Map<Coordinate, DCFitDrawerForXDoca> mapOfFitLinesXOld = new HashMap<Coordinate, DCFitDrawerForXDoca>();
 
-	private Map<Coordinate, SimpleH3D> h3BTXmap = new HashMap<Coordinate, SimpleH3D>(); // uses
-																						// absolute
-																						// doca
+	protected Map<Coordinate, SimpleH3D> h3BTXmap = new HashMap<Coordinate, SimpleH3D>(); // 3D Hitogram for dist vs time vs B-field, used for B-field cases and for distribution // uses absolute doca																						
 	private Map<Coordinate, DCFitFunctionWithSimpleH3D> mapOfFitFunctionsXTB = new HashMap<Coordinate, DCFitFunctionWithSimpleH3D>();
 	private Map<Coordinate, MnUserParameters> mapOfFitParametersXTB = new HashMap<Coordinate, MnUserParameters>();
 	private Map<Coordinate, double[]> mapOfUserFitParametersXTB = new HashMap<Coordinate, double[]>();
@@ -173,12 +172,12 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private H1F h1fitChisqProb, h1fitChi2Trk, h1fitChi2Trk2, h1ndfTrk, h1zVtx;
 	private H2F testHist, h2ResidualVsTrkDoca;
 	private H1F h1trkDoca4NegRes, h1trkDoca4PosRes;// Temp, 4/27/17
-	private Map<Coordinate, H1F> h1timeRes = new HashMap<Coordinate, H1F>();
+	private Map<Coordinate, H1F> h1timeRes = new HashMap<Coordinate, H1F>();   // Time Residual Plot : The main result
 	private Map<Coordinate, H2F> h2timeResVsTrkDoca = new HashMap<Coordinate, H2F>();
 
-	private GraphErrors[] vertLineDmax = new GraphErrors[nSL];
-	private GraphErrors[] vertLineDmaxCos30 = new GraphErrors[nSL];
-	private GraphErrors[][] vertLineDmaxCosTh = new GraphErrors[nSL][nThBinsVz];
+	private GraphErrors[] vertLineDmax = new GraphErrors[nSL];   // Vertical line to show boundary of Dmax
+	private GraphErrors[] vertLineDmaxCos30 = new GraphErrors[nSL]; // Vertical line to show boundary of  Dmax x cos(30)
+	private GraphErrors[][] vertLineDmaxCosTh = new GraphErrors[nSL][nThBinsVz]; //Vertical line to show boundary of  Dmax x cos(theta)
 
 	private boolean acceptorder = false;
 	private boolean isLinearFit;
@@ -197,7 +196,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		this.fileArray = files;
 		this.reader = new EvioDataChain();
 		this.readerH = new HipoDataSource();
-		this.dcTabbedPane = new DCTabbedPane("PooperDooper");
+		this.dcTabbedPane = new DCTabbedPane("DC Calibration");
 		this.isLinearFit = isLinearFit;
 		this.tupleVars = new double[5];
 
@@ -211,7 +210,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		this.OAInstance = OAInstance;
 		this.reader = new EvioDataChain();
 		this.readerH = new HipoDataSource();
-		this.dcTabbedPane = new DCTabbedPane("PooperDooper");
+		this.dcTabbedPane = new DCTabbedPane("DC Calibration");
 		this.tupleVars = new double[5];
 		this.isLinearFit = isLinearFit;
 
@@ -813,6 +812,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		{
 			int superlayer = bnkSegs.getInt("superlayer", j);
 			int sector = bnkSegs.getInt("sector", j);
+			
+			//-------- Cut 1 -------------
 			if (!(sector == 2))
 				continue; 
 
@@ -835,10 +836,14 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					}
 				}
 			}
+			
+			//----------- Cut 2 ------------------
 			if (validSegm == false)
 			{
 				continue;
 			}
+			
+			//----------- Cut 3 -----------------
 			if (trkChiSq > 2000.0)
 			{
 				continue;
@@ -901,6 +906,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			double docaMax = 2.0 * wpdist[superlayer - 1];
 			for (int h = 1; h <= 12; h++)
 			{
+				//------------ Cut 4 -----------------------
 				if (nHitsInSeg > 5)// Saving only those with more than 5 hits
 				{
 					Double gTime = timeMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
@@ -915,16 +921,26 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					}
 					double gCalcDocaNorm = gCalcDoca / docaMax;
 
+					//~~~~~~~~~~~~~~~~~~~~~~~ This Block is the possible Culprit ~~~~~~~~~~~~~~~~~~~~~~~~~
 					//----> For Temp purpose <------
 					boolean inBfieldBin = true; // For SL=3 & 4, using only data that correspond to
 												// Bfield = (0.4,0.6)
-					if ((superlayer == 3 || superlayer == 4) && (gBfield < 0.4 || gBfield > 0.6))
+					
+					// ---------------- I intentionally commented the following 4 lines to do B-field dependent calibration
+/*					if ((superlayer == 3 || superlayer == 4) && (gBfield < 0.4 || gBfield > 0.6))
+					{
+						inBfieldBin = false;
+					}
+*/					// This allows to use an average default value of 0.5 Tesla for B-field in
+					// classes such as DCTimeFunction
+					if ((superlayer == 3 || superlayer == 4) && (gBfield < 0.3 || gBfield > 0.8))
 					{
 						inBfieldBin = false;
 					}
 					// This allows to use an average default value of 0.5 Tesla for B-field in
 					// classes such as DCTimeFunction
 	
+					//-------------------Cut 5 -----------------------
 					if (gCalcDocaNorm < calcDocaCut)
 					{ 
 						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz > -1 && thBnVz < nThBinsVz
@@ -961,6 +977,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 							}
 						}
 
+						//------------------------------- The 3D histogram is filled here ---------------------------
 						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz2 > -1 && thBnVz2 < nThBinsVz2)
 						{
 							double docaNorm = gTrkDoca / docaMax;
@@ -1219,6 +1236,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				// So, for a quick test, I decided to draw for only one bin ( or may be couple more
 				// bins later)
 				bField = h3BTXmap.get(new Coordinate(iSec, iSL, k)).getBinCenterZ(binForTestPlotTemp);
+				System.out.println("The average B-field used for fitted plot:" + bField);
 			}
 			else
 			{
@@ -1774,6 +1792,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		frame.setVisible(true);
 	}
 
+	//------------------ Three dimensional histogram for distance, angle and B-field bins ----------------------------
+	// This is used for the fitting.
 	// Cannot draw my SimpleH3D, so I want to check it by drawing its XT projections & errors
 	// separately
 	public void MakeAndDrawXTProjectionsOfXTBhists()
