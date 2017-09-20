@@ -838,10 +838,10 @@ public class FitControlUI extends javax.swing.JFrame
 		});
 
 		jLabel19.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-		jLabel19.setText("<html>X<sup>norm</sup><sub>min<sub></html>");
+		jLabel19.setText("xNormMin");
 
 		jLabel20.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
-		jLabel20.setText("<html>X<sup>norm</sup><sub>max<sub></html>");
+		jLabel20.setText("xNormMax");
 
 		jCheckBoxFixAll.setText("Fix All");
 		jCheckBoxFixAll.addActionListener(new java.awt.event.ActionListener()

@@ -1,108 +1,63 @@
 /**
- * @author Latif Kabir < jlab.org/~latif >
- *
+ * 
  */
 package org.jlab.dc_calibration.test;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
-import org.jlab.groot.data.GraphErrors;
+import org.jlab.dc_calibration.init.Coordinate;
+import org.jlab.geom.base.Sector;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
-import org.jlab.groot.ui.TCanvas;
-import org.jlab.io.base.DataBank;
-import org.jlab.io.base.DataEvent;
-import org.jlab.io.hipo.HipoDataSource;
 
+import static org.jlab.dc_calibration.test.DCConstants.nSectors;
+import static org.jlab.dc_calibration.test.DCConstants.nSL;
+import static org.jlab.dc_calibration.test.DCConstants.nThBins;
+import static org.jlab.dc_calibration.test.DCConstants.thRange;
 
+/**
+ * @author Latif Kabir < jlab.org/~latif >
+ *
+ */
 public class DCHistograms
 {
-	HipoDataSource reader = new HipoDataSource();
-	ArrayList<String> fileList = new ArrayList<>();
-	DataEvent event;
-	DataBank TBHits;
-		
+
+	//----------------- Variable definitions------------------
+	//  S : Sector
+	//  SL: Super Layer
+	//  m3 : Three dimensional map
+	//  h3 : Three dimensional histogram
+	
 	//---------- List of Histograms ----------------
-	H2F h2d_time_vs_trkDoca = new H2F("time vs trkDoca", 100, -150, 800.0,100, 0, 2.0 );
-	H1F h1d_timeResidual = new H1F("Time Residual", 100, -1.0, 1.0);
+	Map<Coordinate, H2F> m3h2timeVsTrkDoca = new HashMap<Coordinate, H2F>();  // m3: (S, SL, Angle)
+	Map<Coordinate, H1F> m2h1Residual = new HashMap<Coordinate, H1F>(); // m2: (S, SL)
 	
-	/**
-	 * Constructor for DC calibration histogram
-	 */
-	public DCHistograms()
-	{
-		Init();
-	}
-
-	void Init()
-	{
-		fileList = new FileSelector().fileArray;
-	}
+	String histTitle;
 	
-	public void FillHistograms()
+	
+// 	protected	H2F h2timeVsTrkDoca = new H2F("time vs trkDoca", 100, -150, 800.0,100, 0, 2.0 );
+//	protected	H1F h1Residual = new H1F("Time Residual", 100, -1.0, 1.0);
+	
+	
+	//-------------- Initialize all histograms -------------------
+	protected void InitilizeHistograms()
 	{
-		//------------ Loop over all selected files -------------
-		for (String filePath : fileList)
+		for ( int sector = 0; sector < nSectors; ++sector)
 		{
-			System.out.println(filePath);
-
-			if (!(new File(filePath).exists()))
+			for (int superLayer = 0; superLayer < nSL; ++superLayer)
 			{
-				System.out.println("\nThe file: " + filePath + " does NOT exist ..... SKIPPED.");
-				continue;
-			}
-			else
-				System.out.println("\nNow filling file: " + filePath);
-			
-			//-------- Read the data file -----------
-			reader.open(filePath);
-
-			//------------ Loop over all events in the file -------
-			while (reader.hasEvent())
-			{
-				//--------- Load Event ---------------------------------
-				event = reader.getNextEvent();
-				if (!event.hasBank("TimeBasedTrkg::TBHits"))
-					continue;
-
-				//---------------- Load All Desired DC Banks -----------------------
-				TBHits = event.getBank("TimeBasedTrkg::TBHits");
-				// ---- Read any other desired bank here ----
 				
-				//----------- Loop over all entries (hits) of the event --------
-				for (int k = 0; k < TBHits.rows(); k++)
+				//--------------- Time vs trkDoca for (S, SL, Angle) -------------
+				for(int angBin = 0; angBin < nThBins; ++ angBin)
 				{
-					//--------- Include data selection or cut here ----------------------
-					if (TBHits.getByte("sector", k) == 2 && TBHits.getByte("superlayer", k) == 1)
-					{
-						// --------- Fill variables from TBHits bank  --------------
-						h2d_time_vs_trkDoca.fill(TBHits.getFloat("time", k), TBHits.getFloat("trkDoca", k));
-						h1d_timeResidual.fill(TBHits.getFloat("timeResidual", k));
-					
-					    //-------- Fill other variables here ------
-					
-					    //------- Fill other banks here ---------						
-					}
-				}
-			}			
-			reader.close();
-		}		
-		new TCanvas("c1", 800, 500).draw(h2d_time_vs_trkDoca);
-		new TCanvas("c2", 800, 500).draw(h1d_timeResidual);
+					histTitle = "Time vs trkDoca S" + sector + " SL" + superLayer + " AngBin: ( " + thRange[angBin] + "," + thRange[angBin+1] + ")";  
+					m3h2timeVsTrkDoca.put(new Coordinate(sector,superLayer,angBin), new H2F(histTitle , 100, 0.0, 2.0, 100, -150, 800));
+				}				
+				//--------------- Time Residual for (S, SL) -------------
+				histTitle = "Time Residual" + sector + " SL" + superLayer;
+				m2h1Residual.put(new Coordinate(sector, superLayer), new H1F(histTitle, 100, -1.0, 1.0));				
+			}
+		}
 	}
-		
-	public void drawProfileHistogram()
-	{
-		GraphErrors prof_time_vs_trkDoca = h2d_time_vs_trkDoca.getProfileY(); 
-		new TCanvas("c3", 800, 500).draw(prof_time_vs_trkDoca);
-	}
-		
-	public static void main(String arg[])
-	{
-		DCHistograms test = new DCHistograms();
-	    test.FillHistograms();
-	    test.drawProfileHistogram();
-	}
-
 }
