@@ -802,6 +802,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		boolean validSegm = false;
 		double trkChiSq = 1000000.0;// Just giving a very big value of trk-fit-chi-square (for bad
 									// fits, its a big #)
+		double slopError = 0.0; //<------------------ New cut, latif
 		gSegmThBinMapTBSegments = new HashMap<Integer, Integer>();
 		gSegmAvgWireTBSegments = new HashMap<Integer, Double>();
 		gFitChisqProbTBSegments = new HashMap<Integer, Double>();

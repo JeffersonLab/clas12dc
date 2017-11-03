@@ -93,7 +93,7 @@ public class DataProcessor extends DCHistograms
 					{
 						sector = TBHits.getByte("sector", k);
 						superLayer = TBHits.getByte("superlayer", k);
-						angDeg = Math.toDegrees(Math.atan2((double) TBSegments.getFloat("fitSlope", k), 1.0));						
+						angDeg = Math.toDegrees(Math.atan2((double) TBSegments.getFloat("fitSlope", k), 1.0));	//<---- Template only, k from Hists would not match that of Segment					
 					}
 				}
 			}			
