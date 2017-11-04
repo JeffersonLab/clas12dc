@@ -14,13 +14,8 @@ import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
 
-public class HBTimeDistribution
+public class HBTimeDistribution extends T0Estimator
 {
-	int					nSec				= 6;
-	int					nSL					= 6;
-	int					nSlots				= 7;
-	int					nCables				= 6;
-	H1F					histogram[][][][]	= new H1F[nSec][nSL][nSlots][nCables];
 	HipoDataSource		reader				= new HipoDataSource();
 	ArrayList<String>	fileList			= new ArrayList<>();
 	DataEvent			event;
@@ -28,35 +23,15 @@ public class HBTimeDistribution
 	DataBank			HBSegments;
 	DataBank			HBTracks;
 	T0SignalCableMap cableMap;
-	String title;
 	int nEvtProcessed = 0;
 	
 	/**
-	 * Constructor for DC calibration histogram
+	 * Constructor for HBTimeDistribution
 	 */
 	public HBTimeDistribution()
 	{
-		Init();
-	}
-
-	void Init()
-	{
 		fileList = new FileSelector().fileArray;
 		cableMap = new T0SignalCableMap();
-		for (int sec = 0; sec < nSec; ++sec)
-		{
-			for (int sl = 0; sl < nSL; ++sl)
-			{
-				for (int slot = 0; slot < nSlots; ++slot)
-				{
-					for (int cable = 0; cable < nCables; ++cable)
-					{
-						title = "Time Distribution : Sec " + sec + " SL " + sl + "Slot " + slot + "cable" + cable;
-						histogram[sec][sl][slot][cable] = new H1F(title, 1000, -200, 800);
-					}
-				}
-			}
-		}
 	}
 
 	public void FillHistograms()
@@ -74,7 +49,7 @@ public class HBTimeDistribution
 			else
 				System.out.println("\nNow filling file: " + filePath);
 
-			// -------- Read the data file -----------
+			// Read the data file 
 			reader.open(filePath);
 
 			//contents to be read from HBHits
@@ -115,22 +90,22 @@ public class HBTimeDistribution
 						cableNo = cableMap.getCableID1to6(layer, wire);
 						
 						time = HBHits.getFloat("time", k);
-//						Tprog = HBHits.getFloat("Tprog", k);
-//						Ttof = HBHits.getFloat("Ttof", k);
+						Tprog = HBHits.getFloat("Tprog", k);
+						Ttof = HBHits.getFloat("Ttof", k);
 						trkID = HBHits.getInt("trkID", k);
 						
-						//Cut 1: Fill only cut associated hits
+						//Cut 1: Fill only track associated hits
 						//if(trkID > 0) // <---------------------- Cut
 						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - Tprog - Ttof));
 				}
 				++nEvtProcessed;
-				if(nEvtProcessed % 1000 == 0)
-					System.out.println("Number of event processed: " + nEvtProcessed);
+				if(nEvtProcessed % 500000 == 0)
+					System.out.println("Number of events processed: " + nEvtProcessed);
 			}
 			reader.close();
 		}
 	}
-
+		
 	public static void main(String arg[])
 	{
 		HBTimeDistribution test = new HBTimeDistribution();
@@ -138,5 +113,4 @@ public class HBTimeDistribution
 		TCanvas c1 = new TCanvas("c1", 800, 600);
 		c1.draw(test.histogram[1][3][0][0]);
 	}
-
 }
