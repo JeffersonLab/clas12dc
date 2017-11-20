@@ -56,8 +56,8 @@ public class HBTimeDistribution extends T0Estimator
 			int sector;
 			int superLayer;
 			float time;
-			float Tprog = 0;
-			float Ttof = 0;
+			float TProp = 0;
+			float TFlight = 0;
 			int trkID;
 			int slotNo;
 			int cableNo;
@@ -69,6 +69,10 @@ public class HBTimeDistribution extends T0Estimator
 			{
 				// --------- Load Event ---------------------------------
 				event = reader.getNextEvent();
+				
+				if (!event.hasBank("HitBasedTrkg::HBHits")) 
+					continue;
+				
 				// Cut 0: Fill only hits that construct a track <---------------- Cut
 				//if (!event.hasBank("HitBasedTrkg::HBHits") || !event.hasBank("HitBasedTrkg::HBSegments")
 				//		|| !event.hasBank("HitBasedTrkg::HBTracks"))
@@ -86,21 +90,21 @@ public class HBTimeDistribution extends T0Estimator
 						superLayer = HBHits.getByte("superlayer", k); // SL starts from 1
 						wire = HBHits.getInt("wire", k); // wire goes from 1 to 112 in data
 						layer = HBHits.getInt("layer", k); // layer goes from 1 to 6 in data
-						slotNo = cableMap.getSlotID1to7(wire); 
-						cableNo = cableMap.getCableID1to6(layer, wire);
+						slotNo = cableMap.getSlotID1to7(wire);  // slotNo goes 1 to 7
+						cableNo = cableMap.getCableID1to6(layer, wire);  // cableNo goes 1 to 6
 						
 						time = HBHits.getFloat("time", k);
-						Tprog = HBHits.getFloat("Tprog", k);
-						Ttof = HBHits.getFloat("Ttof", k);
+						TProp = HBHits.getFloat("TProp", k);
+						TFlight = HBHits.getFloat("TFlight", k);
 						trkID = HBHits.getInt("trkID", k);
 						
 						//Cut 1: Fill only track associated hits
 						//if(trkID > 0) // <---------------------- Cut
-						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - Tprog - Ttof));
+						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - TProp - TFlight));
 				}
 				++nEvtProcessed;
-				if(nEvtProcessed % 500000 == 0)
-					System.out.println("Number of events processed: " + nEvtProcessed);
+				if(nEvtProcessed % 100000 == 0)
+					System.out.println("----->Number of events processed: " + nEvtProcessed + "<--------");
 			}
 			reader.close();
 		}

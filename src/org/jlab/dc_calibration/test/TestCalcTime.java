@@ -20,7 +20,7 @@ public class TestCalcTime
 				
 		TCanvas c1 = new TCanvas("c1", 800, 600);
 		c1.setTitle("Distance (cm) vs Time (ns)");
-		int superLaterIndex = 2;
+		int superLayerIndex = 2;
 
 		CalibrationConstantsLoader.Load(10, "default");
 		TableLoader.Fill();
@@ -38,26 +38,26 @@ public class TestCalcTime
 	
 		for (double i=0; i< 200; i=i+1.0)
 		{			
-			double dist = recFnc.interpolateOnGrid(0, 0.0, i, 0, superLaterIndex);
+			double dist = recFnc.interpolateOnGrid(0, 0.0, i, 0, superLayerIndex);
 			//System.out.println("Time "+ i + " dist " + dist);
 			gr1.addPoint(dist, i, 0, 0);
 			
-			dist = recFnc.interpolateOnGrid(0, 5.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 5.0, i, 0, superLayerIndex);
 			gr2.addPoint(dist, i, 0, 0);
 
-			dist = recFnc.interpolateOnGrid(0, 10.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 10.0, i, 0, superLayerIndex);
 			gr3.addPoint(dist, i, 0, 0);
 
-			dist = recFnc.interpolateOnGrid(0, 15.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 15.0, i, 0, superLayerIndex);
 			gr4.addPoint(dist, i, 0, 0);
 
-			dist = recFnc.interpolateOnGrid(0, 20.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 20.0, i, 0, superLayerIndex);
 			gr5.addPoint(dist, i, 0, 0);
 
-			dist = recFnc.interpolateOnGrid(0, 25.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 25.0, i, 0, superLayerIndex);
 			gr6.addPoint(dist, i, 0, 0);
 						
-			dist = recFnc.interpolateOnGrid(0, 30.0, i, 0, superLaterIndex);
+			dist = recFnc.interpolateOnGrid(0, 30.0, i, 0, superLayerIndex);
 			//System.out.println("Time "+ i + " dist " + dist);
 			gr7.addPoint(dist, i, 0, 0);
 

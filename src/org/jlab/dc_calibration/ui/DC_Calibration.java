@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -128,9 +130,13 @@ public class DC_Calibration extends WindowAdapter implements WindowListener, Act
 		// create all components and add them
 		frame = new JFrame("DC Calibration Console");
 		frame.setLayout(new BorderLayout());// kp
-
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frameSize = new Dimension((int) (screenSize.width / 1.25), (int) (screenSize.height / 1.5));
+				
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		frameSize = new Dimension((int) (width / 1.25), (int) (height / 1.5));		
+		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		//frameSize = new Dimension((int) (screenSize.width / 1.25), (int) (screenSize.height / 1.5));
 		int x = (int) (frameSize.width / 2);
 		int y = (int) (frameSize.height / 2);
 		frame.setBounds(x, y, frameSize.width, frameSize.height);
