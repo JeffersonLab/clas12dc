@@ -108,7 +108,7 @@ public final class Constants
 	// = 2; // for using XY-proj from h3BTXmap
 	// = 3; // for using B-field also from h3BTXmap
 
-        public static final int histTypeToUseInFitting = 1; //3; //1; //3; //1;// 2;//1;//2;
+    public static final int histTypeToUseInFitting = 1; //3; //1; //3; //1;// 2;//1;//2;
 
 	public static final double calcDocaCut = 2.0; ////5.0; // 1.0 //0.85
 	public static final String outFileForFitPars = "src/files/fitParameters.txt";
