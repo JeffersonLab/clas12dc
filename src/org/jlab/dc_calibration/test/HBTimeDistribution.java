@@ -63,6 +63,7 @@ public class HBTimeDistribution extends T0Estimator
 			int cableNo;
 			int layer;
 			int wire;
+			int clusterID;
 
 			// ------------ Loop over all events in the file -------
 			while (reader.hasEvent())
@@ -97,9 +98,11 @@ public class HBTimeDistribution extends T0Estimator
 						TProp = HBHits.getFloat("TProp", k);
 						TFlight = HBHits.getFloat("TFlight", k);
 						trkID = HBHits.getInt("trkID", k);
+						clusterID = HBHits.getShort("clusterID", k);
 						
 						//Cut 1: Fill only track associated hits
-						//if(trkID > 0) // <---------------------- Cut
+						//if(trkID <= 0 || clusterID == -1) // or CllusterID > -1 ???? <---------------------- Cut
+						//	continue;							
 						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - TProp - TFlight));
 				}
 				++nEvtProcessed;

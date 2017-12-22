@@ -7,8 +7,8 @@ package org.jlab.dc_calibration.test;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.ui.TCanvas;
-import org.jlab.rec.dc.CalibrationConstantsLoader;
-import org.jlab.rec.dc.timetodistance.TableLoader;
+import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
+import org.jlab.dc_calibration.io.TableLoader;
 import org.jlab.rec.dc.timetodistance.TimeToDistanceEstimator;
 
 public class TestCalcTime

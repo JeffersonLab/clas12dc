@@ -20,7 +20,7 @@ import org.jlab.groot.ui.TCanvas;
  * @author Latif Kabir < jlab.org/~latif >
  *
  */
-public class FitterForT0 extends HBTimeDistribution
+public class FitterForT0Static extends HBTimeDistribution
 {
 	double val1;
 	double val2;
@@ -28,7 +28,7 @@ public class FitterForT0 extends HBTimeDistribution
 	int minBin = 0;
 	int maxBin = 0;
 	int offset = 15;
-	int nPoints = 45;//30;
+	int nPoints = 30;
 	double maxVal;
 	double a;
 	double b;
@@ -36,18 +36,17 @@ public class FitterForT0 extends HBTimeDistribution
 	double delta_b;
 	double T0;
 	double delta_T0;
-	double max_slope = 0;
-	double max_const = 0;	
 	FileOutputWriter file = null;
 	boolean append_to_file = false;
 	String result;
-	//TCanvas c1 = new TCanvas("Fit Result",1200,800);
+	TCanvas c1 = new TCanvas("Fit Result",1200,800);
+
 	/**
 	 * 
 	 */
-	public FitterForT0()
+	public FitterForT0Static()
 	{
-		//c1.divide(6, 6);
+		c1.divide(6, 6);
 		try
 		{
 			file = new FileOutputWriter("T0Estimation.txt", append_to_file);
@@ -60,30 +59,36 @@ public class FitterForT0 extends HBTimeDistribution
 	}
 	
 	public void FitLeadingEdge(int sec, int sl, int slot, int cable)
-	{				
-		F1D myFnc = MaxSlopBin(sec, sl, slot, cable);
+	{
+		GraphErrors gr = new GraphErrors();
+				
+		minBin = 128;
 		
+		for(int i = minBin; i< (minBin + nPoints); ++i)
+		{
+			gr.addPoint(histogram[sec][sl][slot][cable].getDataX(i), histogram[sec][sl][slot][cable].getBinContent(i), histogram[sec][sl][slot][cable].getDataEX(i), histogram[sec][sl][slot][cable].getDataEY(i));		
+		}
+		
+	
 		double pedestal = 0.0;
 		for(int i = 0; i< 10; i++)
 		{
-			pedestal += histogram[sec][sl][slot][cable].getBinContent(290 + i);
+			pedestal += histogram[sec][sl][slot][cable].getBinContent(i);
 		}
 		pedestal /= 10.0;
 		System.out.println("The pedestal is: " + pedestal);
 		
-		//System.out.println("Fit param 1: " + myFnc.getParameter(0) + " +- " + myFnc.parameter(0).error());
-		//System.out.println("Fit param 2: " + myFnc.getParameter(1) + " +- " + myFnc.parameter(1).error());
-        //System.out.println("Estimated T0 : " + (-1.0*myFnc.getParameter(1)/myFnc.getParameter(0)));
-
-		a = max_slope;
-		delta_a = 0;
-		b = max_const;
-		delta_b = 0;
+		//F1D myFnc = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(minBin), histogram[sec][sl][slot][cable].getDataX(maxBin - offset));
+		F1D myFnc = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(minBin), histogram[sec][sl][slot][cable].getDataX(minBin + nPoints));
+		myFnc.setParameter(0, 1.0);
+		myFnc.setParameter(1,25.0);
 		
-//		a = myFnc.getParameter(0);
-//		delta_a = myFnc.parameter(0).error();
-//		b = myFnc.getParameter(1);
-//		delta_b = myFnc.parameter(1).error();
+		DataFitter.fit(myFnc, gr, "E");  // Other option is Q, no option uses error for sigma
+
+		a = myFnc.getParameter(0);
+		delta_a = myFnc.parameter(0).error();
+		b = myFnc.getParameter(1);
+		delta_b = myFnc.parameter(1).error();
 		//T0 = -1.0*b/a;		
 		T0 = (pedestal - b)/a;		
 		/*
@@ -98,16 +103,17 @@ public class FitterForT0 extends HBTimeDistribution
 		
 		result = String.format("%d %d %d %d %4.3f %4.3f", (sec + 1), (sl + 1), (slot + 1), (cable + 1), T0, delta_T0 );
 		file.Write(result);
+
+		if(slot == 0 && cable == 0)
+		{
+			 c1.cd(sec * 6 + sl);	
+			 c1.draw(histogram[sec][sl][slot][cable].getGraph());
+			 c1.draw(myFnc,"same");
+		}		
 		
-//		if(slot == 0 && cable == 0)
-//		{
-//			 c1.cd(sec * 6 + sl);	
-//			 c1.draw(histogram[sec][sl][slot][cable].getGraph());
-//			 c1.draw(myFnc,"same");
-//		}		
-		 TCanvas c1 = new TCanvas("Strainght line", 800, 600);
-		 c1.draw(histogram[sec][sl][slot][cable].getGraph());
-		 c1.draw(myFnc,"same");
+//		 TCanvas c1 = new TCanvas("Strainght line", 800, 600);
+//		 c1.draw(histogram[sec][sl][slot][cable].getGraph());
+//		 c1.draw(myFnc,"same");
 	}
 	
 	public void DoFitting()
@@ -117,7 +123,7 @@ public class FitterForT0 extends HBTimeDistribution
 			System.out.println("Unable to create output file");
 			return;
 		}
-		for (int sec = 0; sec < 6; ++sec) 
+		for (int sec = 0; sec < nSec; ++sec) 
 		{
 			for (int sl = 0; sl < nSL; ++sl)
 			{
@@ -139,47 +145,16 @@ public class FitterForT0 extends HBTimeDistribution
 			Logger.getLogger(EstimateT0correction.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
-	public F1D MaxSlopBin(int sec, int sl, int slot, int cable)
-	{
-		int min_Bin = 250;
-		int max_Bin = 400;
-		double slope = 0;
-		int lower_bin = 0; 
-		F1D my_Fnc = null;
-		
-		while (min_Bin <= (max_Bin - 20))
-		{
-			F1D myFnc = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(min_Bin), histogram[sec][sl][slot][cable].getDataX(min_Bin + 20));
-			myFnc.setParameter(0, 1.0);
-			myFnc.setParameter(1, 25.0);
 
-			DataFitter.fit(myFnc, histogram[sec][sl][slot][cable], "E"); // Other option is Q, no option uses error for sigma
-
-			slope = myFnc.getParameter(0);
-//			if (slope > max_slope)
-//			{
-				max_slope = slope;
-				max_const = myFnc.getParameter(1);
-				my_Fnc = myFnc;
-				
-				System.out.println("Slope:" + max_slope);
-//			}
-			++min_Bin;
-		}
-		return my_Fnc;
-	}
-	
-	
 	public static void main(String arg[])
 	{
-		FitterForT0 test = new FitterForT0();
+		FitterForT0Static test = new FitterForT0Static();
 		test.FillHistograms();
-		test.FitLeadingEdge(1, 2, 0, 0);
+		//test.FitLeadingEdge(1, 2, 0, 0);
 		//test.FitLeadingEdge(1, 0, 6, 2);
 		//test.FitLeadingEdge(1, 5, 4, 2);
-		//test.DoFitting();		
-//		 TCanvas c1 = new TCanvas("c1", 800, 600);
-//		 c1.draw(test.histogram[1][2][0][0]);
+		test.DoFitting();		
+		// TCanvas c1 = new TCanvas("c1", 800, 600);
+		// c1.draw(test.histogram[1][3][0][0]);
 	}		
 }

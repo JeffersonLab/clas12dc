@@ -37,7 +37,7 @@ public class T0Estimator
 					for (int cable = 0; cable < nCables; ++cable)
 					{
 						title = "Time Distribution : Sec " + sec + " SL " + sl + "Slot " + slot + "cable" + cable;
-						histogram[sec][sl][slot][cable] = new H1F(title, 1000, -200, 800);
+						histogram[sec][sl][slot][cable] = new H1F(title, 1000, 0, 1000);
 					}
 				}
 			}

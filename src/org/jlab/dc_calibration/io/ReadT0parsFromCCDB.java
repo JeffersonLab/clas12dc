@@ -29,13 +29,15 @@ public class ReadT0parsFromCCDB
 {
 	public Vector<Integer> Sector, Superlayer, Slot, Cable;
 	public Vector<Double> T0Correction, T0Error;
-	String ccdbVariation = "dc_test1";
+	String ccdbVariation = "calib";
+	int run_number = -1;
 
-	public ReadT0parsFromCCDB(String ccdbVariation)
+	public ReadT0parsFromCCDB(String ccdbVariation, int runNumber)
 	{
 		this.ccdbVariation = ccdbVariation;
+		this.run_number = runNumber;
 
-		System.out.println("Hi ... ");
+		System.out.println("Connecting to CCDB ... ");
 		// JDBCProvider provider = CcdbPackage.createProvider("mysql://localhost") ;
 		JDBCProvider provider = CcdbPackage.createProvider("mysql://clas12reader@clasdb.jlab.org/clas12");
 		provider.connect();
@@ -46,6 +48,10 @@ public class ReadT0parsFromCCDB
 		System.out.println("CCDB variation name is " + ccdbVariation);
 		// provider.setDefaultVariation("dc_test1"); //("default");
 		provider.setDefaultVariation(ccdbVariation);
+		if(run_number<=0)
+			provider.setDefaultRun(1000);
+		else
+			provider.setDefaultRun(run_number);
 
 		Assignment asgmt = provider.getData("/calibration/dc/time_corrections/T0Corrections");
 
@@ -149,9 +155,9 @@ public class ReadT0parsFromCCDB
 
 	public static void main(String[] args)
 	{
-		ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("dc_test1");
-		// readT0.printCurrentT0s();
-		readT0.printModifiedT0s(6, 6, 10.0);
-		readT0.writeOutModifiedT0s(6, 6, 10.0);
+		ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", 1984);
+		readT0.printCurrentT0s();
+		//readT0.printModifiedT0s(6, 6, 10.0);
+		//readT0.writeOutModifiedT0s(6, 6, 10.0);
 	}
 }

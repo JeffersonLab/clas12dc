@@ -1174,7 +1174,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		if (nFreePars > 9)
 		{
 			System.out.println("deltaT0 determined from the time-to-distance fit: " + fPars[9]);
-			ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("dc_test1");
+			ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", -1);
 			// readT0.printCurrentT0s();
 			readT0.printModifiedT0s(iSec + 1, iSL + 1, fPars[9]);
 			readT0.writeOutModifiedT0s(iSec + 1, iSL + 1, fPars[9]);

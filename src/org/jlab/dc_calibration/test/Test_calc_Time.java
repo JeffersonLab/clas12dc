@@ -14,8 +14,8 @@ import org.jlab.dc_calibration.fit.DCTimeFunction;
 import org.jlab.dc_calibration.io.ReadT2DparsFromCCDB;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.graphics.EmbeddedCanvas;
-import org.jlab.rec.dc.CCDBConstants;
-import org.jlab.rec.dc.CalibrationConstantsLoader;
+import org.jlab.dc_calibration.io.CCDBConstants;
+import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
 import org.jlab.rec.dc.timetodistance.TableLoader;
 
 /**

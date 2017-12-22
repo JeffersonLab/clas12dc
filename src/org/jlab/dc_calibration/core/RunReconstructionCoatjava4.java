@@ -14,7 +14,7 @@ import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
 import org.jlab.io.hipo.HipoDataSync;
-import org.jlab.service.dc.DCHBEngineCalib;
+import org.jlab.service.dc.DCHBEngine;
 //import org.jlab.service.dc.DCHBEngineT2DConfig;
 
 /**
@@ -57,7 +57,7 @@ public class RunReconstructionCoatjava4
 		System.err.println(" \n[PROCESSING FILE] : " + inputFile);
 
 		// DCHBEngineT2DConfig en = new DCHBEngineT2DConfig();
-		DCHBEngineCalib en = new DCHBEngineCalib();// 2/14/17
+		DCHBEngine en = new DCHBEngine();// 2/14/17
 		en.init();
 		DCTBEngine en2 = new DCTBEngine();
 		en2.init();

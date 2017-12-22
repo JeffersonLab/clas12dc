@@ -6,9 +6,9 @@
 package org.jlab.dc_calibration.test;
 
 import org.jlab.dc_calibration.io.ReadT2DparsFromCCDB;
-import org.jlab.rec.dc.CalibrationConstantsLoader;
-import org.jlab.rec.dc.timetodistance.TableLoader;
-import org.jlab.rec.dc.CCDBConstants;
+import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
+import org.jlab.dc_calibration.io.TableLoader;
+import org.jlab.dc_calibration.io.CCDBConstants;
 
 public class CompareCCDBvariations
 {

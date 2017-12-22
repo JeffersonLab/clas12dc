@@ -21,11 +21,11 @@ import java.util.Vector;
 public class ReadT2DparsFromCCDB
 {
 	// private int superlayer;
-	public Vector<Integer> Sector, Superlayer;
+	public Vector<Integer> Sector, Superlayer, Component;
 	public Vector<Double> v0, deltanm, tmax, distbeta;
-	public Vector<Double> delta_bfield_coefficient, b1, b2, b3, b4;
-	public double[][][] parsFromCCDB = new double[nSectors][nSL][nFitPars];// nFitPars = 9
-	String ccdbVariation = "dc_test1";
+	public Vector<Double> delta_bfield_coefficient, b1, b2, b3, b4, delta_T0;
+	public double[][][] parsFromCCDB = new double[nSectors][nSL][nFitPars];// nFitPars = 10
+	String ccdbVariation = "calib";
 	int run_number = -1;
 	
 	/**
@@ -52,8 +52,8 @@ public class ReadT2DparsFromCCDB
 		provider.connect();
 
 		// to check the table exists
-		System.out.println("\t\t---->/calibration/dc/time_to_distance/tvsx_devel_v2 exists? - "
-				+ provider.isTypeTableAvailable("/calibration/dc/time_to_distance/tvsx_devel_v2"));
+		System.out.println("\t\t---->/calibration/dc/time_to_distance/time2dist exists? - "
+				+ provider.isTypeTableAvailable("/calibration/dc/time_to_distance/time2dist"));
 		System.out.println("\t\t---->CCDB variation name is: " + ccdbVariation);
 		System.out.println("\t\t---->CCDB run number: " + run_number);
 		System.out.println("=========================================================================================");
@@ -62,10 +62,12 @@ public class ReadT2DparsFromCCDB
 		// provider.setDefaultVariation("dc_test1");
 		// provider.setDefaultVariation("default");
 		provider.setDefaultVariation(ccdbVariation);
-		if(run_number>=0)
+		if(run_number<=0)
 			provider.setDefaultRun(1000);
+		else
+			provider.setDefaultRun(run_number);
 
-		Assignment asgmt = provider.getData("/calibration/dc/time_to_distance/tvsx_devel_v2");
+		Assignment asgmt = provider.getData("/calibration/dc/time_to_distance/time2dist");
 		for (Vector<Double> row : asgmt.getTableDouble())
 		{
 			for (Double cell : row)
@@ -88,15 +90,17 @@ public class ReadT2DparsFromCCDB
 		// Now put all the columns in the corresponding Vector members.
 		Sector = asgmt.getColumnValuesInt(0);
 		Superlayer = asgmt.getColumnValuesInt(1);
-		v0 = asgmt.getColumnValuesDouble(2);
-		deltanm = asgmt.getColumnValuesDouble(3);
-		tmax = asgmt.getColumnValuesDouble(4);
-		distbeta = asgmt.getColumnValuesDouble(5);
-		delta_bfield_coefficient = asgmt.getColumnValuesDouble(6);
-		b1 = asgmt.getColumnValuesDouble(7);
-		b2 = asgmt.getColumnValuesDouble(8);
-		b3 = asgmt.getColumnValuesDouble(9);
-		b4 = asgmt.getColumnValuesDouble(10);
+		Component = asgmt.getColumnValuesInt(2);
+		v0 = asgmt.getColumnValuesDouble(3);
+		deltanm = asgmt.getColumnValuesDouble(4);
+		tmax = asgmt.getColumnValuesDouble(5);
+		distbeta = asgmt.getColumnValuesDouble(6);
+		delta_bfield_coefficient = asgmt.getColumnValuesDouble(7);
+		b1 = asgmt.getColumnValuesDouble(8);
+		b2 = asgmt.getColumnValuesDouble(9);
+		b3 = asgmt.getColumnValuesDouble(10);
+		b4 = asgmt.getColumnValuesDouble(11);
+		delta_T0 = asgmt.getColumnValuesDouble(12);
 
 		for (int i = 0; i < nSectors; i++)
 		{
@@ -111,17 +115,33 @@ public class ReadT2DparsFromCCDB
 				parsFromCCDB[i][j][6] = b2.elementAt(6 * i + j);
 				parsFromCCDB[i][j][7] = b3.elementAt(6 * i + j);
 				parsFromCCDB[i][j][8] = b4.elementAt(6 * i + j);
+				parsFromCCDB[i][j][9] = delta_T0.elementAt(6 * i + j);
 			}
 		}
 	}
 	
+	public void printPars()
+	{
+		System.out.println("----------------------------------------------------------------------------------------------------------");
+		System.out.println("S \t SL \t v0 \t delta_nm \t tmax \t distbeta \t delta_B_coeff \t b1 \t b2 \t b3 \t b4 \t delta_T0");
+		for (int i = 0; i < nSectors; i++)
+		{
+			for (int j = 0; j < nSL; j++)
+			{
+				System.out.println((i + 1) + "\t" + (j + 1) + "\t" + parsFromCCDB[i][j][0] + "\t" + parsFromCCDB[i][j][1] + "\t" + parsFromCCDB[i][j][2] + "\t" + parsFromCCDB[i][j][3] + "\t" + parsFromCCDB[i][j][4] + "\t"
+			    + parsFromCCDB[i][j][5] + "\t" + parsFromCCDB[i][j][6] + "\t" + parsFromCCDB[i][j][7] + "\t" + parsFromCCDB[i][j][8] + "\t" + parsFromCCDB[i][j][9]);
+			}
+		}
+		System.out.println("----------------------------------------------------------------------------------------------------------");
+	}
 	/**
 	 * Unit test
 	 * @param args
 	 */
 	public static void main(String[] args)
 	{
-		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("default", 1000);
+		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("calib", 1894);
 		read_ccdb.LoadCCDB();
+		read_ccdb.printPars();
 	}
 }

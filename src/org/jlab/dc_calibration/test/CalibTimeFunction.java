@@ -73,7 +73,8 @@ public class CalibTimeFunction extends Func1D
 		GStyle.getFunctionAttributes()
 				.setTitle("Time vs Distance for S = " + (secIndex + 1) + " SL = " + (slIndex + 1));
 
-		ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("default",1000);
+		//ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("default",1000);
+		ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("calib",1894);
 		defPars.LoadCCDB();
 
 		for (angDegree = 0.0; angDegree <= 30.0; angDegree += 5)
