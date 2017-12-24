@@ -555,15 +555,15 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				h1timeRes.put(new Coordinate(i, j), new H1F(hNm, 200, -1.0, 1.0));
 				hTtl = String.format("residual (cm) (Sec=%d, SL=%d)", i, j + 1);
 				h1timeRes.get(new Coordinate(i, j)).setTitle(hTtl);
-				h1timeRes.get(new Coordinate(i, j)).setTitleX("residual");
+				h1timeRes.get(new Coordinate(i, j)).setTitleX("residual [cm]");
 
 				// h2timeResVsTrkDoca
 				hNm = String.format("timeResVsTrkDocaS%dSL%d", i, j);
 				h2timeResVsTrkDoca.put(new Coordinate(i, j), new H2F(hNm, 200, 0.0, 1.2 * dMax, 200, -1.0, 1.0));
 				hTtl = String.format("residual (cm) (Sec=%d, SL=%d)", i, j + 1);
 				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitle(hTtl);
-				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleX("|trkDoca|");
-				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleY("residual");
+				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleX("|trkDoca| [cm]");
+				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleY("residual [ns]");
 
 				// Following is used for individual angle bins
 				for (int k = 0; k < nThBinsVz; k++)
@@ -579,8 +579,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					h2timeResVsTrkDoca.put(new Coordinate(i, j, k), new H2F(hNm, 200, 0.0, 1.2 * dMax, 200, -1.0, 1.0));
 					hTtl = String.format("Sec=%d, SL=%d, Th(%2.1f,%2.1f)", i, j + 1, thEdgeVzL[k], thEdgeVzH[k]);
 					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitle(hTtl);
-					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleX("|trkDoca|");
-					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleY("residual");
+					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleX("|trkDoca| [cm]");
+					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleY("residual [ns]");
 				}
 			}
 		}
@@ -775,6 +775,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			layerMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("layer", j));
 			wireMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("wire", j));
 			timeMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("time", j));
+			//timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getFloat("time", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j)) );  // Subtracted TProp and TFlight
 			trkDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("trkDoca", j));
 			calcDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("doca", j));
 			timeResMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("timeResidual", j));
@@ -802,7 +803,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		boolean validSegm = false;
 		double trkChiSq = 1000000.0;// Just giving a very big value of trk-fit-chi-square (for bad
 									// fits, its a big #)
-		double slopError = 0.0; //<------------------ New cut, latif
+		double slopeError = 0.0; //<------------------ New cut, latif
 		gSegmThBinMapTBSegments = new HashMap<Integer, Integer>();
 		gSegmAvgWireTBSegments = new HashMap<Integer, Double>();
 		gFitChisqProbTBSegments = new HashMap<Integer, Double>();
@@ -815,8 +816,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			int sector = bnkSegs.getInt("sector", j);
 			
 			//-------- Cut 1 -------------
-			if (!(sector == 2))
-				continue; 
+			if(iSecMin != 0 && iSecMax != 6)
+			{	
+				if (!(sector == iSecMax ))
+					continue;
+			}	
 
 			// Check if any of these segments matches with those associated with the available
 			// tracks
@@ -1335,7 +1339,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canvas3.draw(h2timeVcalcDoca.get(new Coordinate(iSec, iSL, k)));
 			canvas3.draw(mapOfFitLinesX.get(new Coordinate(iSec, iSL, k)), "same");
 			canvas3.getPad(k - nSkippedThBins).setTitle(Title);
-			canvas3.setPadTitlesX("trkDoca");
+			canvas3.setPadTitlesX("trkDoca [cm]");
 			canvas3.setPadTitlesY("time (ns)");
 			canvas3.draw(vertLineDmax[iSL], "same");
 			canvas3.draw(vertLineDmaxCos30[iSL], "same");
@@ -1738,8 +1742,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					canvas.draw(mapOfFitLinesXOld.get(new Coordinate(i, j, k)), "same");
 					// canvas.draw(mapOfFitLinesX.get(new Coordinate(i, j, k)), "same");
 					canvas.getPad(j).setTitle(Title);
-					canvas.setPadTitlesX("trkDoca");
-					canvas.setPadTitlesY("time (ns)");
+					canvas.setPadTitlesX("trkDoca [cm]"); 
+					canvas.setPadTitlesY("time [ns]");
 					/*
 					 * PaveText stat1 = new PaveText(colSimulFit); stat1.addText("simulFit");
 					 * PaveText stat2 = new PaveText(colIndivFit); stat2.addText("indivFit");

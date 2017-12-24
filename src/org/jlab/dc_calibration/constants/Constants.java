@@ -48,7 +48,7 @@ public final class Constants
 	{ 0.386160, 0.404220, 0.621906, 0.658597, 0.935140, 0.977982 };
 	public static final int nSL = 6;  // Number of super layers
 	public static final int nSectors = 6;  //  Number of sectors
-	public static final int iSecMin = 1, iSecMax = 2;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
+	public static final int iSecMin = 0, iSecMax = 6;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
 														// iSecMax = 2;
 	public static final int nLayer = 6;  //  Number of layers
 	public static final double[] docaBins =

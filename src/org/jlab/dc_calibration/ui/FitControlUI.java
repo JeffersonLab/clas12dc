@@ -42,7 +42,7 @@ public class FitControlUI extends javax.swing.JFrame
 	// private final int nPars = nFitPars; //9;
 	private int gSector = 2;
 	private int gSuperlayer = 1;
-	private String ccdbVariation = "dc_test1";
+	private String ccdbVariation = "calib";
 	private int xMeanErrorType = 2; // 0: RMS, 1=RMS/sqrt(N), 2 = 1.0 (giving equal weight to all
 									// profile means)
 	private boolean[] checkboxVal =
@@ -134,11 +134,11 @@ public class FitControlUI extends javax.swing.JFrame
 		// Instead of reading the two tables again and again whenever we select the item from
 		// the corresponding jComboBox4, it's better to read both once at the beginning,
 		// keep them stored in two different array variables and use those arrays later.
-		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB("dc_test1",1000);
+		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB("calib",2091);
 		rdTable.LoadCCDB();
 		parsFromCCDB_dc_test1 = rdTable.parsFromCCDB;
 
-		ReadT2DparsFromCCDB rdTable2 = new ReadT2DparsFromCCDB("default",1000);
+		ReadT2DparsFromCCDB rdTable2 = new ReadT2DparsFromCCDB("default",2091);
 		rdTable2.LoadCCDB();
 		parsFromCCDB_default = rdTable2.parsFromCCDB;
 	}
@@ -150,7 +150,7 @@ public class FitControlUI extends javax.swing.JFrame
 			for (int j = 0; j < nFitPars; j++)
 			{
 				// Get the init values from CCDB
-				if (ccdbVariation == "dc_test1")
+				if (ccdbVariation == "calib")
 				{
 					resetFitPars[i][j] = parsFromCCDB_dc_test1[sector - 1][i][j];
 				}
@@ -179,9 +179,9 @@ public class FitControlUI extends javax.swing.JFrame
 			}
 
 			// 6/5/17: as of now, deltaT0 is not in CCDB table, so I am assigning by hard-coding
-			resetFitPars[i][9] = 0.0;
-			resetFitParsLow[i][9] = -30.0;
-			resetFitParsHigh[i][9] = 30.0;
+			//resetFitPars[i][9] = 0.0;
+			//resetFitParsLow[i][9] = -30.0;
+			//resetFitParsHigh[i][9] = 30.0;
 		}
 	}
 
@@ -853,7 +853,7 @@ public class FitControlUI extends javax.swing.JFrame
 		});
 
 		jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]
-		{ "default", "dc_test1" }));
+		{ "default", "calib" }));
 		jComboBox4.setSelectedIndex(1);
 		jComboBox4.addActionListener(new java.awt.event.ActionListener()
 		{

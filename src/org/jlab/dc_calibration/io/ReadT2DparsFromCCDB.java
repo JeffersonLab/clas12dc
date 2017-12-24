@@ -140,7 +140,7 @@ public class ReadT2DparsFromCCDB
 	 */
 	public static void main(String[] args)
 	{
-		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("calib", 1894);
+		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("calib", 2091);
 		read_ccdb.LoadCCDB();
 		read_ccdb.printPars();
 	}

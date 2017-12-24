@@ -62,7 +62,7 @@ public class FitterForT0Static extends HBTimeDistribution
 	{
 		GraphErrors gr = new GraphErrors();
 				
-		minBin = 128;
+		minBin = 120;
 		
 		for(int i = minBin; i< (minBin + nPoints); ++i)
 		{

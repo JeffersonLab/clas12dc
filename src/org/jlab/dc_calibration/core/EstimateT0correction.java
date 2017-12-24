@@ -98,13 +98,14 @@ public class EstimateT0correction
 
 	public EstimateT0correction()
 	{
-		String iDir = "/Users/kpadhikari/Desktop/BigFls/CLAS12/KPP/";
+		String iDir = "/home/latif/Scratch/Data/"; 
 		String[] results = new String[2];
-		results[0] = iDir + "kpp_Rec_000758_Files1to6Comb.hipo"; // "kpp_Decoded_000806_FilesAllComb.hipo";
+		results[0] = iDir + "out_clas_002052.hipo.20"; // "kpp_Decoded_000806_FilesAllComb.hipo";
 		System.out.println("Debug 11");
 		results[1] = "0";
 
-		ArrayList<String> fileArray = null;
+		ArrayList<String> fileArray = new ArrayList<String>();
+		//fileArray.add(iDir);
 		fileArray.add(results[0]);// iDir + "kpp_Rec_000758_Files1to6Comb.hipo");
 		createHists();
 		GoEstimate(results, fileArray);
@@ -904,7 +905,8 @@ public class EstimateT0correction
 		 */
 		System.out.println("Debug 0");
 		EstimateT0correction t0c = new EstimateT0correction();
-		t0c.DrawPlots();
+		//t0c.DrawPlots();
+		t0c.FitAndDrawT0PlotsForAllCables();
 		// t0c.DrawPlotsForAllCables();
 		System.out.println("Finished drawing the T0 plots ..");
 	}
