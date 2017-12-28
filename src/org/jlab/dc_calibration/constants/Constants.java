@@ -12,6 +12,8 @@
 */
 package org.jlab.dc_calibration.constants;
 
+import org.jlab.dc_calibration.init.Configure;
+
 public final class Constants
 {
 	public static final double rad2deg = 180.0 / Math.PI;
@@ -48,8 +50,11 @@ public final class Constants
 	{ 0.386160, 0.404220, 0.621906, 0.658597, 0.935140, 0.977982 };
 	public static final int nSL = 6;  // Number of super layers
 	public static final int nSectors = 6;  //  Number of sectors
-	public static final int iSecMin = 0, iSecMax = 6;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
+	
+	//public static final int iSecMin = 0, iSecMax = 6;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
 														// iSecMax = 2;
+	public static final int iSecMin = Configure.Sector - 1, iSecMax = Configure.Sector;
+	
 	public static final int nLayer = 6;  //  Number of layers
 	public static final double[] docaBins =
 	{ -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8 };
@@ -108,10 +113,12 @@ public final class Constants
 	// = 2; // for using XY-proj from h3BTXmap
 	// = 3; // for using B-field also from h3BTXmap
 
-    public static final int histTypeToUseInFitting = 1; //3; //1; //3; //1;// 2;//1;//2;
+    public static final int histTypeToUseInFitting = Configure.HistType; //3; //1; //3; //1;// 2;//1;//2;
 
 	public static final double calcDocaCut = 2.0; ////5.0; // 1.0 //0.85
-	public static final String outFileForFitPars = "src/files/fitParameters.txt";
+	public static final String dataOutputDir = Configure.jarFilePath + "/data/";
+	public static final String plotsOutputDir = Configure.jarFilePath + "/plots/";
+	public static final String outFileForFitPars = dataOutputDir + "fitParameters.txt";//"src/files/fitParameters.txt";
 
 	// ================ Binning parameters various histograms ==================
 	// make the following controllable from the GUI (as we may have different Max for B-field

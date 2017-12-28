@@ -3,16 +3,25 @@
  */
 package org.jlab.dc_calibration.test;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+
+import org.jlab.dc_calibration.constants.Constants;
 import org.jlab.dc_calibration.core.EstimateT0correction;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
+import org.jlab.dc_calibration.init.Configure;
 import org.jlab.dc_calibration.io.FileOutputWriter;
+import org.jlab.dc_calibration.ui.CalibStyle;
 import org.jlab.groot.data.GraphErrors;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.fitter.DataFitter;
+import org.jlab.groot.graphics.EmbeddedCanvas;
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.ui.TCanvas;
 
@@ -39,17 +48,15 @@ public class FitterForT0Static extends HBTimeDistribution
 	FileOutputWriter file = null;
 	boolean append_to_file = false;
 	String result;
-	TCanvas c1 = new TCanvas("Fit Result",1200,800);
-
+	F1D myFnc[][][][] = new F1D[nSec][nSL][nSlots][nCables];
 	/**
 	 * 
 	 */
 	public FitterForT0Static()
 	{
-		c1.divide(6, 6);
 		try
 		{
-			file = new FileOutputWriter("T0Estimation.txt", append_to_file);
+			file = new FileOutputWriter(Constants.dataOutputDir + "T0Estimation.txt", append_to_file);
 			file.Write("Sec  SL  Slot  Cable  T0 T0err");
 		}
 		catch (IOException ex)
@@ -78,17 +85,16 @@ public class FitterForT0Static extends HBTimeDistribution
 		pedestal /= 10.0;
 		System.out.println("The pedestal is: " + pedestal);
 		
-		//F1D myFnc = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(minBin), histogram[sec][sl][slot][cable].getDataX(maxBin - offset));
-		F1D myFnc = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(minBin), histogram[sec][sl][slot][cable].getDataX(minBin + nPoints));
-		myFnc.setParameter(0, 1.0);
-		myFnc.setParameter(1,25.0);
+		myFnc[sec][sl][slot][cable] = new F1D("f1", "[a]*x + [b]", histogram[sec][sl][slot][cable].getDataX(minBin), histogram[sec][sl][slot][cable].getDataX(minBin + nPoints));
+		myFnc[sec][sl][slot][cable].setParameter(0, 1.0);
+		myFnc[sec][sl][slot][cable].setParameter(1,25.0);
 		
-		DataFitter.fit(myFnc, gr, "E");  // Other option is Q, no option uses error for sigma
+		DataFitter.fit(myFnc[sec][sl][slot][cable], gr, "E");  // Other option is Q, no option uses error for sigma
 
-		a = myFnc.getParameter(0);
-		delta_a = myFnc.parameter(0).error();
-		b = myFnc.getParameter(1);
-		delta_b = myFnc.parameter(1).error();
+		a = myFnc[sec][sl][slot][cable].getParameter(0);
+		delta_a = myFnc[sec][sl][slot][cable].parameter(0).error();
+		b = myFnc[sec][sl][slot][cable].getParameter(1);
+		delta_b = myFnc[sec][sl][slot][cable].parameter(1).error();
 		//T0 = -1.0*b/a;		
 		T0 = (pedestal - b)/a;		
 		/*
@@ -104,16 +110,41 @@ public class FitterForT0Static extends HBTimeDistribution
 		result = String.format("%d %d %d %d %4.3f %4.3f", (sec + 1), (sl + 1), (slot + 1), (cable + 1), T0, delta_T0 );
 		file.Write(result);
 
-		if(slot == 0 && cable == 0)
+	}
+	
+	public void DrawHist()
+	{
+		JFrame frame = new JFrame();
+		JTabbedPane sectorPanes = new JTabbedPane();
+		for (int sec = 0; sec < nSec; ++sec)
 		{
-			 c1.cd(sec * 6 + sl);	
-			 c1.draw(histogram[sec][sl][slot][cable].getGraph());
-			 c1.draw(myFnc,"same");
-		}		
+			JTabbedPane superLayerPanes = new JTabbedPane();
+			for (int sl = 0; sl < nSL; ++sl)
+			{
+				JTabbedPane slotPanes = new JTabbedPane();
+				for (int slot = 0; slot < nSlots; ++slot)
+				{
+					EmbeddedCanvas canvas = new EmbeddedCanvas();
+					canvas.setSize(3 * 400, 2 * 400);
+					canvas.divide(3, 2);
+					for (int cable = 0; cable < nCables; ++cable)
+					{
+						canvas.cd(cable);						
+						canvas.draw(histogram[sec][sl][slot][cable]);
+						canvas.draw(myFnc[sec][sl][slot][cable],"same");
+					}
+					slotPanes.add(canvas, "Slot " + (slot + 1));
+				}
+				superLayerPanes.add(slotPanes, "SuperLayer " + (sl + 1));
+			}
+			sectorPanes.add(superLayerPanes, "Sector " + (sec + 1));
+		}
 		
-//		 TCanvas c1 = new TCanvas("Strainght line", 800, 600);
-//		 c1.draw(histogram[sec][sl][slot][cable].getGraph());
-//		 c1.draw(myFnc,"same");
+		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setSize((int) (screensize.getWidth() * .9), (int) (screensize.getHeight() * .9));
+		frame.setLocationRelativeTo(null);
+		frame.add(sectorPanes);
+		frame.setVisible(true);
 	}
 	
 	public void DoFitting()
@@ -148,13 +179,11 @@ public class FitterForT0Static extends HBTimeDistribution
 
 	public static void main(String arg[])
 	{
-		FitterForT0Static test = new FitterForT0Static();
-		test.FillHistograms();
-		//test.FitLeadingEdge(1, 2, 0, 0);
-		//test.FitLeadingEdge(1, 0, 6, 2);
-		//test.FitLeadingEdge(1, 5, 4, 2);
-		test.DoFitting();		
-		// TCanvas c1 = new TCanvas("c1", 800, 600);
-		// c1.draw(test.histogram[1][3][0][0]);
+		CalibStyle.setStyle();
+		Configure.setConfig();
+		FitterForT0Static t0Fit = new FitterForT0Static();
+		t0Fit.FillHistograms();
+		t0Fit.DoFitting();	
+		t0Fit.DrawHist();
 	}		
 }

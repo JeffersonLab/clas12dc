@@ -1,5 +1,5 @@
 //Filename: Config.java
-//Description: 
+//Description: Read calibration configuration from the config.cfg file
 //Author: Latif Kabir < latif@jlab.org >
 //Created: Sun Dec 24 00:16:14 2017 (-0500)
 //URL: jlab.org/~latif
@@ -7,21 +7,33 @@
 package org.jlab.dc_calibration.init;
 
 import java.util.Properties;
-
+import java.io.File;
+import java.io.FileInputStream;
 public class Configure
 {
 	Properties configFile;
 	public static int Sector;
-	public static int iSecMax;
-	public static int iSecMin;
 	public static String BField;
+	public static int HistType;
+	public static String jarFilePath;
 	
 	public Configure(String config_file)
 	{
 		configFile = new java.util.Properties();
 		try
 		{
-			configFile.load(this.getClass().getClassLoader().getResourceAsStream(config_file));
+			File jarPath = new File(Configure.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+			jarFilePath = jarPath.getParent();
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+		}
+
+		try
+		{
+			// configFile.load(this.getClass().getClassLoader().getResourceAsStream(config_file));
+			configFile.load(new FileInputStream(jarFilePath + config_file));
 		}
 		catch (Exception eta)
 		{
@@ -37,16 +49,18 @@ public class Configure
 
 	public static void setConfig()	
 	{
-		Configure config = new Configure("config/config.cfg");
-		Sector = Integer.parseInt(config.getProperty("sector"));
-		iSecMax = Integer.parseInt(config.getProperty("iSecMax"));
-		iSecMin = Integer.parseInt(config.getProperty("iSecMin"));
-		BField = config.getProperty("BField");		
+		Configure config = new Configure("/config/config.cfg");
+		System.out.println("Reading the calibration configuration ... ...");
+		Sector = Integer.parseInt(config.getProperty("Sector").replaceAll("\\s", ""));
+		BField = config.getProperty("BField");
+		HistType = Integer.parseInt(config.getProperty("HistType").replaceAll("\\s", ""));
+		System.out.println(" Sector: " + Configure.Sector  + " HistType: " + Configure.HistType);
+		System.out.println("Jar file dir: " + Configure.jarFilePath);
 	}
-	
+		
 	public static void main(String[] args)
 	{
 		Configure.setConfig();
-		System.out.println(" Sector: " + Configure.Sector + " iSecMax: " + Configure.iSecMax + " iSecMin: " + Configure.iSecMin + " BField: " + Configure.BField);
+		System.out.println(" Sector: " + Configure.Sector  + " BField: " + Configure.BField);
 	}
 }

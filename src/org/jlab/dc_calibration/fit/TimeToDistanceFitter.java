@@ -54,6 +54,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.math3.analysis.function.Abs;
 import org.freehep.math.minuit.FunctionMinimum;
 import org.freehep.math.minuit.MnMigrad;
 import org.freehep.math.minuit.MnStrategy;
@@ -136,6 +137,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Integer, Integer> layerMapTBHits;
 	private Map<Integer, Integer> wireMapTBHits;
 	private Map<Integer, Double> timeMapTBHits;
+	private Map<Integer, Double> TPropMapTBHits;
+	private Map<Integer, Double> TFlightMapTBHits;
 	private Map<Integer, Double> trkDocaMapTBHits;
 	private Map<Integer, Double> calcDocaMapTBHits;
 	private Map<Integer, Double> timeResMapTBHits;
@@ -202,6 +205,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 		createVerticalLinesForDMax();
 		createHists();
+		
+		System.out.println("Calibration Configuration before data processing: Sector - " + iSecMax + " HistType- " + histTypeToUseInFitting);
 	}
 
 	public TimeToDistanceFitter(OrderOfAction OAInstance, ArrayList<String> files, boolean isLinearFit)
@@ -216,6 +221,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 		createVerticalLinesForDMax();
 		createHists();
+		
+		System.out.println("Calibration Configuration before data processing: Sector - " + iSecMax + " HistType- " + histTypeToUseInFitting);
 	}
 
 	// I didn't know how to make a vertical line out of the function classes such as Func1D.
@@ -289,7 +296,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		h1trkDoca4PosRes.setTitle("trkDoca for positive residual");
 		h2ResidualVsTrkDoca = new H2F("ResidualVsTrkDoca", 200, -2.0, 2.0, 100, -0.5, 0.5);
 		h2ResidualVsTrkDoca.setTitle("residual vs trkDoca");
-		h2ResidualVsTrkDoca.setTitleY("residual");
+		h2ResidualVsTrkDoca.setTitleY("residual [cm]");
 
 		testHist = new H2F("A test of superlayer6 at thetabin6", 200, 0.0, 1.0, 150, 0.0, 200.0);
 
@@ -563,7 +570,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				hTtl = String.format("residual (cm) (Sec=%d, SL=%d)", i, j + 1);
 				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitle(hTtl);
 				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleX("|trkDoca| [cm]");
-				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleY("residual [ns]");
+				h2timeResVsTrkDoca.get(new Coordinate(i, j)).setTitleY("residual [cm]");
 
 				// Following is used for individual angle bins
 				for (int k = 0; k < nThBinsVz; k++)
@@ -572,7 +579,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					h1timeRes.put(new Coordinate(i, j, k), new H1F(hNm, 200, -1.0, 1.0));
 					hTtl = String.format(" Sec=%d, SL=%d, Th(%2.1f,%2.1f)", i, j + 1, thEdgeVzL[k], thEdgeVzH[k]);
 					h1timeRes.get(new Coordinate(i, j, k)).setTitle(hTtl);
-					h1timeRes.get(new Coordinate(i, j, k)).setTitleX("residual");
+					h1timeRes.get(new Coordinate(i, j, k)).setTitleX("residual [cm]");
 
 					// h2timeResVsTrkDoca
 					hNm = String.format("timeResVsTrkDocaS%dSL%d", i, j, k);
@@ -580,7 +587,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					hTtl = String.format("Sec=%d, SL=%d, Th(%2.1f,%2.1f)", i, j + 1, thEdgeVzL[k], thEdgeVzH[k]);
 					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitle(hTtl);
 					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleX("|trkDoca| [cm]");
-					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleY("residual [ns]");
+					h2timeResVsTrkDoca.get(new Coordinate(i, j, k)).setTitleY("residual [cm]");
 				}
 			}
 		}
@@ -768,6 +775,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		calcDocaMapTBHits = new HashMap<Integer, Double>();
 		timeResMapTBHits = new HashMap<Integer, Double>();
 		BMapTBHits = new HashMap<Integer, Double>();
+		TFlightMapTBHits = new HashMap<Integer, Double>();
+		TPropMapTBHits = new HashMap<Integer, Double>();
 
 		bnkHits = (DataBank) event.getBank("TimeBasedTrkg::TBHits");
 		for (int j = 0; j < bnkHits.rows(); j++)
@@ -779,6 +788,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			trkDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("trkDoca", j));
 			calcDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("doca", j));
 			timeResMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("timeResidual", j));
+			TFlightMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("TFlight", j));
+			TPropMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("TProp", j));
 			bFieldVal = (double) bnkHits.getFloat("B", j);
 			sector = bnkHits.getInt("sector", j);
 			superlayer = bnkHits.getInt("superlayer", j);
@@ -803,7 +814,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		boolean validSegm = false;
 		double trkChiSq = 1000000.0;// Just giving a very big value of trk-fit-chi-square (for bad
 									// fits, its a big #)
-		double slopeError = 0.0; //<------------------ New cut, latif
+		float fitSlope = 0; //<------------------ New cut, latif
+		float fitSlopeErr = 0;
+		float fitInterc = 0;
+		float fitIntercErr =0;
+		
 		gSegmThBinMapTBSegments = new HashMap<Integer, Integer>();
 		gSegmAvgWireTBSegments = new HashMap<Integer, Double>();
 		gFitChisqProbTBSegments = new HashMap<Integer, Double>();
@@ -814,13 +829,25 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		{
 			int superlayer = bnkSegs.getInt("superlayer", j);
 			int sector = bnkSegs.getInt("sector", j);
-			
-			//-------- Cut 1 -------------
-			if(iSecMin != 0 && iSecMax != 6)
-			{	
-				if (!(sector == iSecMax ))
+
+			fitSlope = bnkSegs.getFloat("fitSlope", j);
+			fitSlopeErr = bnkSegs.getFloat("fitSlopeErr", j);
+			fitInterc = bnkSegs.getFloat("fitInterc", j);
+			fitIntercErr = bnkSegs.getFloat("fitIntercErr", j);
+
+			//--------- New cut by Latif: If error in fir in greater than some percentage then continue --------
+			if(fitSlope !=0 && fitInterc !=0 )
+			{
+				if(100*fitSlopeErr/Math.abs(fitSlope) > 50)
 					continue;
-			}	
+
+				if(100*fitIntercErr/Math.abs(fitInterc) > 50)
+					continue;
+			}
+			//-------- Cut 1 -------------
+			// Currently calibrate only one sector at a time, because of high memory consumption. 
+			if (!(sector == iSecMax ))
+				continue;
 
 			// Check if any of these segments matches with those associated with the available
 			// tracks
@@ -919,13 +946,19 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					Double gCalcDoca = calcDocaMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gTimeRes = timeResMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gBfield = BMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
-
+					Double gTProp = TPropMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
+					Double gTFlight = TFlightMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
+					
 					if (gTime == null || gTrkDoca == null && gBfield == null)
 					{
 						continue;
 					}
 					double gCalcDocaNorm = gCalcDoca / docaMax;
 
+					//------------- New Cut: Exclude zero TFlight or TProp hits ----------------
+					if(gTFlight == 0.0 || gTProp == 0.0)
+						continue;
+					
 					//~~~~~~~~~~~~~~~~~~~~~~~ This Block is the possible Culprit ~~~~~~~~~~~~~~~~~~~~~~~~~
 					//----> For Temp purpose <------
 					boolean inBfieldBin = true; // For SL=3 & 4, using only data that correspond to
@@ -1375,7 +1408,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			iPad = j;
 			canvas4.cd(iPad);
 			H1F h1 = h1timeRes.get(new Coordinate(iSec, j));
-			func[iSec][j] = new F1D("func", "[amp]*gaus(x,[mean],[sigma])", -0.07, 0.07);
+			func[iSec][j] = new F1D("func", "[amp]*gaus(x,[mean],[sigma])", -0.06, 0.06); // Changed the fit range from 0.07: Latif
 			func[iSec][j].setLineColor(2);
 			func[iSec][j].setLineStyle(1);
 			func[iSec][j].setLineWidth(2);
@@ -1408,7 +1441,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canvas5.setPadTitlesX("|trkDoca| (cm)");
 			canvas5.setPadTitlesY("residual (cm)");
 		}
-		// canvas5.save(String.format("src/images/residualVsTrkDocaSec%d.png", i + 1));
+		canvas5.save(String.format(Constants.plotsOutputDir + "plots/residualVsTrkDocaSec%d.png", Sec + 1));
 		tabbedPane.add(canvas5, "Residual vs trkDoca"); // Second tab in the resPanes
 
 		// Following two tabs are for individual residuals (1D & 2D) for the given sec, SL & th-bin
@@ -1441,7 +1474,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canvas6.setPadTitlesX("residual (cm)");// "Residual vs trkDoca"
 			canvas6.setPadTitlesY(" ");// "Residual vs trkDoca"
 		}
-		// canvas4.save(String.format("src/images/residualSec%d.png", i + 1));
+		canvas4.save(String.format(Constants.plotsOutputDir + "plots/residualSec%d.png", Sec + 1));
 		tabbedPane.add(canvas6, "residual (cm) (In ThBins)");
 
 		EmbeddedCanvas canvas7 = new EmbeddedCanvas();
@@ -1459,7 +1492,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canvas7.setPadTitlesX("|trkDoca| (cm)");
 			canvas7.setPadTitlesY("residual (cm)");
 		}
-		// canvas5.save(String.format("src/images/residualVsTrkDocaSec%d.png", i + 1));
+		canvas5.save(String.format(Constants.plotsOutputDir + "plots/residualVsTrkDocaSec%d.png", Sec + 1));
 		tabbedPane.add(canvas7, "Res. vs trkDoca (In ThBins)");
 
 		JFrame frame = new JFrame();
@@ -1551,7 +1584,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canvas.cd(i);
 			canvas.draw(h1bFieldSL[i]);
 		}
-		// canv0.save("src/images/test_bFieldAllSL.png");
+		canvas.save(Constants.plotsOutputDir + "plots/test_bFieldAllSL.png");
 		tabbedPane.add(canvas, "Time (In ThBins)");
 
 		JFrame frame = new JFrame();
@@ -1610,7 +1643,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		canv.setSize(500, 500);
 		canv.cd(0);
 		canv.draw(h1bField);
-		canv.save("src/images/test_bField.png");
+		canv.save(Constants.plotsOutputDir + "plots/test_bField.png");
 
 		EmbeddedCanvas canv0 = new EmbeddedCanvas();
 		canv0.setSize(1500, 1000);
@@ -1620,7 +1653,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			canv0.cd(i);
 			canv0.draw(h1bFieldSL[i]);
 		}
-		canv0.save("src/images/test_bFieldAllSL.png");
+		canv0.save(Constants.plotsOutputDir + "plots/test_bFieldAllSL.png");
 
 		EmbeddedCanvas canv1 = new EmbeddedCanvas();
 		canv1.setSize(1200, 800);
@@ -1635,7 +1668,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		canv1.draw(h1zVtx);
 		canv1.cd(4);
 		canv1.draw(h1fitChi2Trk2);// (h1fitChisqProb);
-		canv1.save("src/images/test_fitChisqProb.png");
+		canv1.save(Constants.plotsOutputDir + "plots/test_fitChisqProb.png");
 
 		canv1 = new EmbeddedCanvas();
 		canv1.setSize(1200, 400);
@@ -1646,7 +1679,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		canv1.draw(h1trkDoca4NegRes);
 		canv1.cd(2);
 		canv1.draw(h2ResidualVsTrkDoca);
-		canv1.save("src/images/residualVsTrkDoca.png");
+		canv1.save(Constants.plotsOutputDir + "plots/residualVsTrkDoca.png");
 	}
 
 	protected void DrawResidualsInTabbedPanes()
@@ -1685,7 +1718,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				canvas.getPad(iPad).setTitle(Title);
 				canvas.setPadTitlesX("residual (cm)");// "Residual vs trkDoca"
 			}
-			canvas.save(String.format("src/images/residualSec%d.png", i + 1));
+			canvas.save(String.format(Constants.plotsOutputDir + "plots/residualSec%d.png", i + 1));
 			resPanes.add(canvas, "residual (cm)");
 
 			EmbeddedCanvas canvas2 = new EmbeddedCanvas();
@@ -1702,7 +1735,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				canvas2.setPadTitlesX("|trkDoca| (cm)");
 				canvas2.setPadTitlesY("residual (cm)");
 			}
-			canvas2.save(String.format("src/images/residualVsTrkDocaSec%d.png", i + 1));
+			canvas2.save(String.format(Constants.plotsOutputDir + "plots/residualVsTrkDocaSec%d.png", i + 1));
 			resPanes.add(canvas2, "Residual vs trkDoca"); // Second tab in the resPanes
 
 			sectorPanes.add(resPanes, String.format("Sector%d", i + 1));

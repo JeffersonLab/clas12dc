@@ -12,11 +12,14 @@
  */
 package org.jlab.dc_calibration.ui;
 
+import org.jlab.dc_calibration.init.Configure;
+
 public class Application
 {
 	public static void main(String[] args)
 	{
 		CalibStyle.setStyle();
+		Configure.setConfig();
 		DC_Calibration DcCalib = new DC_Calibration();
 		DcCalib.Initialize();
 	}

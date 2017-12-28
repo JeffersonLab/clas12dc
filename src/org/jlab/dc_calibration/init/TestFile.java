@@ -36,6 +36,7 @@ import org.freehep.math.minuit.FunctionMinimum;
 import org.freehep.math.minuit.MnMigrad;
 import org.freehep.math.minuit.MnStrategy;
 import org.freehep.math.minuit.MnUserParameters;
+import org.jlab.dc_calibration.constants.Constants;
 import org.jlab.dc_calibration.fit.DCFitDrawer;
 import org.jlab.dc_calibration.fit.DCFitFunction;
 import org.jlab.dc_calibration.ui.DCTabbedPane;
@@ -224,7 +225,7 @@ public class TestFile implements ActionListener, Runnable
 					canvasPlace++;
 				}
 			}
-			wires.get(i).save("src/images/wires" + (i + 1) + ".png");
+			wires.get(i).save(Constants.plotsOutputDir + "wires" + (i + 1) + ".png");
 		}
 		for (int i = 0; i < nSectors; i++)
 		{
@@ -235,7 +236,7 @@ public class TestFile implements ActionListener, Runnable
 				trkDocas.get(i).draw(htrkDoca.get(new Coordinate(i, j)));
 				canvasPlace++;
 			}
-			trkDocas.get(i).save("src/images/trkDocas" + (i + 1) + ".png");
+			trkDocas.get(i).save(Constants.plotsOutputDir + "trkDocas" + (i + 1) + ".png");
 		}
 
 		for (int i = 0; i < nSectors; i++)
@@ -275,11 +276,11 @@ public class TestFile implements ActionListener, Runnable
 				}
 
 				trkDocasvsTime.get(new Coordinate(i, j))
-						.save("src/images/timeVtrkDocaSector" + (i + 1) + "SuperLayer" + (j + 1) + ".png");
+						.save(Constants.plotsOutputDir + "timeVtrkDocaSector" + (i + 1) + "SuperLayer" + (j + 1) + ".png");
 				addToPane("timeVtrkDocaSector" + (i + 1) + "SuperLayer" + (j + 1),
 						trkDocasvsTime.get(new Coordinate(i, j)));
 				trkDocasvsTimeProfiles.get(new Coordinate(i, j))
-						.save("src/images/timeVtrkDocaProfilesSector" + (i + 1) + "SuperLayer" + (j + 1) + ".png");
+						.save(Constants.plotsOutputDir + "timeVtrkDocaProfilesSector" + (i + 1) + "SuperLayer" + (j + 1) + ".png");
 				addToPane("timeVtrkDocaProfilesSector" + (i + 1) + "SuperLayer" + (j + 1),
 						trkDocasvsTimeProfiles.get(new Coordinate(i, j)));
 			}

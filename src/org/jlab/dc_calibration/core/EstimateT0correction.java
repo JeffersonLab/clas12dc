@@ -52,10 +52,12 @@ import org.jlab.groot.graphics.EmbeddedCanvas;
 //https://github.com/KPAdhikari/groot/blob/master/src/main/java/org/jlab/groot/demo/MultiGaus.java
 import org.jlab.groot.math.F1D;
 import org.jlab.groot.fitter.DataFitter;
+import org.jlab.dc_calibration.constants.Constants;
 import org.jlab.dc_calibration.constants.T0SignalCableMap;
 import org.jlab.dc_calibration.fit.T0FitFunction;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
 import org.jlab.dc_calibration.fit.TmaxFitFunction;
+import org.jlab.dc_calibration.init.Configure;
 import org.jlab.dc_calibration.init.ProcessTBTracks;
 import org.jlab.dc_calibration.io.FileOutputWriter;
 import org.jlab.dc_calibration.io.ReadDCTranslationTableFromCCDB;
@@ -251,7 +253,7 @@ public class EstimateT0correction
 
 		try
 		{
-			file = new FileOutputWriter("src/files/fitParsForT0Estimation.txt", append_to_file);
+			file = new FileOutputWriter(Constants.dataOutputDir + "fitParsForT0Estimation.txt", append_to_file);
 			file.Write(
 					"Sec  SL  Slot  Cable  T0(BkgIntersect) T0err T0N p0  p1  p2  p3  p4(Bkg) xSigmHalf Err(p0  p1  p2  p3  p4)");
 		}
@@ -443,7 +445,7 @@ public class EstimateT0correction
 		canvas.cd(0);
 		canvas.draw(h1timeAll);
 		canvas.getPad(0).setTitle("Time");
-		canvas.save("src/images/timeAll.png");
+		canvas.save(Constants.plotsOutputDir + "plots/timeAll.png");
 
 		EmbeddedCanvas canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -454,7 +456,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeSL[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeSL.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeSL.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -465,7 +467,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeSLn[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeSLnearZero.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeSLnearZero.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -476,7 +478,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeTbSL[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeTbSL.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeTbSL.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -487,7 +489,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeTbSLn[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeTbSLnearZero.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeTbSLnearZero.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -498,7 +500,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeSLtmax[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeSLwdTmax.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeSLwdTmax.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -509,7 +511,7 @@ public class EstimateT0correction
 			canvas2.draw(h1timeSLn2[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/timeSLnearZeroWider.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/timeSLnearZeroWider.png");
 
 		// TDC plots
 		canvas2 = new EmbeddedCanvas();
@@ -521,7 +523,7 @@ public class EstimateT0correction
 			canvas2.draw(h1tdcSL[i]);
 			canvas2.getPad(i).setTitle("TDC in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/tdcSL.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/tdcSL.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -532,7 +534,7 @@ public class EstimateT0correction
 			canvas2.draw(h1tdcSLn[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/tdcSLnearZero.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/tdcSLnearZero.png");
 
 		canvas2 = new EmbeddedCanvas();
 		canvas2.setSize(3 * 400, 2 * 400);
@@ -543,7 +545,7 @@ public class EstimateT0correction
 			canvas2.draw(h1tdcSLtmax[i]);
 			canvas2.getPad(i).setTitle("Time in SL=" + (i + 1));
 		}
-		canvas2.save("src/images/tdcSLwdTmax.png");
+		canvas2.save(Constants.plotsOutputDir + "plots/tdcSLwdTmax.png");
 	}
 
 	public void DrawPlotsForAllCablesOld()
@@ -567,7 +569,7 @@ public class EstimateT0correction
 					canvas.draw(h1timeRC[i][j]);
 					canvas.getPad(pad).setTitle("Time in Reg=" + (i + 1) + " Cable=" + cableID);
 				}
-				iName = String.format("src/images/timeReg%dCable%02d.png", (i + 1), cableID);
+				iName = String.format(Constants.plotsOutputDir + "plots/timeReg%dCable%02d.png", (i + 1), cableID);
 				canvas.save(iName);
 			}
 		}
@@ -682,7 +684,7 @@ public class EstimateT0correction
 						canvas.getPad(pad).setTitle(
 								"Time (S" + (i + 1) + " SL" + (j + 1) + "Slot" + (k + 1) + " Cable" + cableID + ")");
 					}
-					iName = String.format("src/images/timeSec%dSL%dSlot%dCable%d.png", (i + 1), (j + 1), (k + 1),
+					iName = String.format(Constants.plotsOutputDir + "plots/timeSec%dSL%dSlot%dCable%d.png", (i + 1), (j + 1), (k + 1),
 							cableID);
 					canvas.save(iName);
 					slotPanes.add(canvas, "Slot " + (k + 1));
@@ -788,7 +790,7 @@ public class EstimateT0correction
 					canvas.draw(grT0[i][j]);
 					canvas.getPad(j).setTitle("T0s for Sec=" + (i + 1) + " SL=" + (j + 1));
 				}
-				iName = String.format("src/images/estimatedT0Sec%d.png", (i + 1));
+				iName = String.format(Constants.plotsOutputDir + "plots/estimatedT0Sec%d.png", (i + 1));
 				canvas.save(iName);
 			}
 
@@ -876,7 +878,7 @@ public class EstimateT0correction
 
 						canvas.draw(h1timeSSSCtmax[i][j][k][pad]);
 					}
-					iName = String.format("src/images/timeTMaxSec%dSL%dSlot%dCable%d.png", (i + 1), (j + 1), (k + 1),
+					iName = String.format(Constants.plotsOutputDir + "plots/timeTMaxSec%dSL%dSlot%dCable%d.png", (i + 1), (j + 1), (k + 1),
 							cableID);
 					canvas.save(iName);
 					slotPanes.add(canvas, "Slot " + (k + 1));
@@ -903,11 +905,12 @@ public class EstimateT0correction
 		 * System.out.println("resuts:" + results); if (results[0] != null) {
 		 * System.out.println("Input file: " + results[0] + "\nOutput file: " + results[1]); }
 		 */
+		Configure.setConfig();
 		System.out.println("Debug 0");
 		EstimateT0correction t0c = new EstimateT0correction();
 		//t0c.DrawPlots();
 		t0c.FitAndDrawT0PlotsForAllCables();
-		// t0c.DrawPlotsForAllCables();
+		//t0c.DrawPlotsForAllCables();
 		System.out.println("Finished drawing the T0 plots ..");
 	}
 

@@ -237,6 +237,9 @@ public class DCFitFunction implements FCNBase
 																							// SimpleH3D
 																							// histos
 			}
+			else 
+				h2tvXnorm = null;
+			
 			nBinsX = h2tvXnorm.getXAxis().getNBins();
 			nBinsY = h2tvXnorm.getYAxis().getNBins();
 			double wBinX = h2tvXnorm.getDataEX(1); // width of the 1st x-bin (but will be the same

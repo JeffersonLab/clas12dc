@@ -17,6 +17,7 @@ import static org.jlab.dc_calibration.constants.Constants.nSlots7;
  */
 import java.io.IOException;
 
+import org.jlab.dc_calibration.constants.Constants;
 import org.jlab.dc_calibration.core.*;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
 import org.jlab.ccdb.*;
@@ -113,7 +114,7 @@ public class ReadT0parsFromCCDB
 		FileOutputWriter file = null;
 		try
 		{
-			file = new FileOutputWriter(String.format("src/files/T0plus_deltaT0_Sec%dSL%d.txt",
+			file = new FileOutputWriter(String.format(Constants.dataOutputDir + "T0plus_deltaT0_Sec%dSL%d.txt",
 					sector, superlayer), append_to_file);
 			file.Write("#Sector  Superlayer  Slot  Cable  T0Correction  T0Error");
 		}
