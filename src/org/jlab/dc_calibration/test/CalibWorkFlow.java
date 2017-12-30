@@ -89,7 +89,7 @@ public class CalibWorkFlow extends TimeToDistanceFitter
 					Title = "Sec=" + (i + 1) + " SL=" + (j + 1)
 							+ " theta=(" + thEdgeVzL2[k] + "," + thEdgeVzH2[k] + ")"
 							+ " indvFitCol";
-					canvas.draw(h3BTXmap.get(new Coordinate(i, j, k)).getYZProj());
+					////canvas.draw(h3BTXmap.get(new Coordinate(i, j, k)).getYZProj());
 					canvas.getPad(j).setTitle(Title);
 					canvas.setPadTitlesX("time");
 					canvas.setPadTitlesY("B-field");

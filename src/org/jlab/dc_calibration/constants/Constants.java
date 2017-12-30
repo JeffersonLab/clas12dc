@@ -53,8 +53,9 @@ public final class Constants
 	
 	//public static final int iSecMin = 0, iSecMax = 6;// iSecMin = 0, iSecMax = 6;//iSecMin = 1,
 														// iSecMax = 2;
-	public static final int iSecMin = Configure.Sector - 1, iSecMax = Configure.Sector;
-	
+////	public static final int iSecMin = Configure.Sector - 1, iSecMax = Configure.Sector;
+	public static final int iSecMin = 0, iSecMax = 6;
+
 	public static final int nLayer = 6;  //  Number of layers
 	public static final double[] docaBins =
 	{ -0.8, -0.6, -0.4, -0.2, -0.0, 0.2, 0.4, 0.6, 0.8 };

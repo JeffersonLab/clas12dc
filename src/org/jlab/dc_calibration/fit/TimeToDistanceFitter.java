@@ -162,7 +162,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Coordinate, DCFitDrawer> mapOfFitLinesOld = new HashMap<Coordinate, DCFitDrawer>();
 	private Map<Coordinate, DCFitDrawerForXDoca> mapOfFitLinesXOld = new HashMap<Coordinate, DCFitDrawerForXDoca>();
 
-	protected Map<Coordinate, SimpleH3D> h3BTXmap = new HashMap<Coordinate, SimpleH3D>(); // 3D Hitogram for dist vs time vs B-field, used for B-field cases and for distribution // uses absolute doca																						
+	////protected Map<Coordinate, SimpleH3D> h3BTXmap = new HashMap<Coordinate, SimpleH3D>(); // 3D Hitogram for dist vs time vs B-field, used for B-field cases and for distribution // uses absolute doca																						
 	private Map<Coordinate, DCFitFunctionWithSimpleH3D> mapOfFitFunctionsXTB = new HashMap<Coordinate, DCFitFunctionWithSimpleH3D>();
 	private Map<Coordinate, MnUserParameters> mapOfFitParametersXTB = new HashMap<Coordinate, MnUserParameters>();
 	private Map<Coordinate, double[]> mapOfUserFitParametersXTB = new HashMap<Coordinate, double[]>();
@@ -542,11 +542,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					h1timeFitRes.get(new Coordinate(i, j, k)).setTitleX("Time (ns)");
 				}
 			
-				for (int k = 0; k < nThBinsVz2; k++)
-				{
-					h3BTXmap.put(new Coordinate(i, j, k),
-							new SimpleH3D(100, 0.0, 1.2 * dMax, 100, tMin, timeAxisMax[j], 60, 0.0, 1.2));
-				}
+////				for (int k = 0; k < nThBinsVz2; k++)
+////				{
+////					h3BTXmap.put(new Coordinate(i, j, k),
+////							new SimpleH3D(100, 0.0, 1.2 * dMax, 100, tMin, timeAxisMax[j], 60, 0.0, 1.2));
+////				}
 			}
 		}
 
@@ -846,8 +846,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			}
 			//-------- Cut 1 -------------
 			// Currently calibrate only one sector at a time, because of high memory consumption. 
-			if (!(sector == iSecMax ))
-				continue;
+////			if (!(sector == iSecMax ))
+////				continue;
 
 			// Check if any of these segments matches with those associated with the available
 			// tracks
@@ -955,8 +955,12 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					}
 					double gCalcDocaNorm = gCalcDoca / docaMax;
 
-					//------------- New Cut: Exclude zero TFlight or TProp hits ----------------
+					//------------- New Cut by Latif: Exclude zero TFlight or TProp hits ----------------
 					if(gTFlight == 0.0 || gTProp == 0.0)
+						continue;
+					
+					// Latif: Skip hits outside 100% of max cell size
+					if(gTrkDoca/docaMax > 1.0)
 						continue;
 					
 					//~~~~~~~~~~~~~~~~~~~~~~~ This Block is the possible Culprit ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1016,12 +1020,12 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 						}
 
 						//------------------------------- The 3D histogram is filled here ---------------------------
-						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz2 > -1 && thBnVz2 < nThBinsVz2)
-						{
-							double docaNorm = gTrkDoca / docaMax;
-							h3BTXmap.get(new Coordinate(sector - 1, superlayer - 1, thBnVz2)).fill(Math.abs(gTrkDoca),
-									gTime, gBfield);
-						}
+////						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz2 > -1 && thBnVz2 < nThBinsVz2)
+////						{
+////							double docaNorm = gTrkDoca / docaMax;
+////							h3BTXmap.get(new Coordinate(sector - 1, superlayer - 1, thBnVz2)).fill(Math.abs(gTrkDoca),
+////									gTime, gBfield);
+////						}
 					}
 
 					// here I will fill a test histogram of superlay6 and thetabin6
@@ -1139,9 +1143,9 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		}
 		else if (histTypeToUseInFitting > 1)
 		{
-			mapOfFitFunctions.put(new Coordinate(iSec, iSL),
-					new DCFitFunction(h3BTXmap, iSec, iSL, xMeanErrorType, xNormLow, xNormHigh, isLinearFit,
-							selectedAngleBins, true)); // Using map of SimpleH3D
+////			mapOfFitFunctions.put(new Coordinate(iSec, iSL),
+////					new DCFitFunction(h3BTXmap, iSec, iSL, xMeanErrorType, xNormLow, xNormHigh, isLinearFit,
+////							selectedAngleBins, true)); // Using map of SimpleH3D
 		}
 
 		mapOfFitParameters.put(new Coordinate(iSec, iSL), new MnUserParameters());
@@ -1273,8 +1277,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				// be clumsy to show the T-vs-X 2D histograms corresponding to all the B-bins.
 				// So, for a quick test, I decided to draw for only one bin ( or may be couple more
 				// bins later)
-				bField = h3BTXmap.get(new Coordinate(iSec, iSL, k)).getBinCenterZ(binForTestPlotTemp);
-				System.out.println("The average B-field used for fitted plot:" + bField);
+////				bField = h3BTXmap.get(new Coordinate(iSec, iSL, k)).getBinCenterZ(binForTestPlotTemp);
+////				System.out.println("The average B-field used for fitted plot:" + bField);
 			}
 			else
 			{
@@ -1319,11 +1323,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			}
 			else if (histTypeToUseInFitting == 2)
 			{
-				canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj());
+////				canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj());
 			}
 			else if (histTypeToUseInFitting == 3 && (iSL == 2 || iSL == 3))
 			{
-				canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getSliceZ(binForTestPlotTemp));// Tmp
+////				canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getSliceZ(binForTestPlotTemp));// Tmp
 			}
 			canvas.draw(mapOfFitLinesX.get(new Coordinate(iSec, iSL, k)), "same");
 			canvas.getPad(k - nSkippedThBins).setTitle(Title);
@@ -1348,7 +1352,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			}
 			else if (histTypeToUseInFitting == 2)
 			{
-				canvas2.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj().getProfileX());
+////				canvas2.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj().getProfileX());
 			}
 			canvas2.draw(mapOfFitLinesX.get(new Coordinate(iSec, iSL, k)), "same");
 			canvas2.getPad(k - nSkippedThBins).setTitle(Title);
@@ -1855,7 +1859,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					Title = "Sec=" + (i + 1) + " SL=" + (j + 1)
 							+ " theta=(" + thEdgeVzL2[k] + "," + thEdgeVzH2[k] + ")"
 							+ " indvFitCol=" + colIndivFit;
-					canvas.draw(h3BTXmap.get(new Coordinate(i, j, k)).getXYProj());
+					////canvas.draw(h3BTXmap.get(new Coordinate(i, j, k)).getXYProj());
+					canvas.draw(h2timeVtrkDoca.get(new Coordinate(i, j, k)));
 					canvas.getPad(j).setTitle(Title);
 					canvas.setPadTitlesX("trkDoca");
 					canvas.setPadTitlesY("time (ns)");

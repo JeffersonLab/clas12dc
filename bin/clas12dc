@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Filename: clas12dc
+# Description: bash program for clas12dc calibration. This is intended for debugging purpose and to be used by the experts.
+# Author: Latif Kabir < latif@jlab.org >
+# Created: Sat Dec 30 02:15:54 2017 (-0500)
+# URL: jlab.org/~latif
+
+echo "-----------------------------------------------------------------------------------"
+echo "|										  |"
+echo "|                  Welcome to DC Calibration Debugging Tools			  |"
+echo "|										  |"
+echo "-----------------------------------------------------------------------------------"
+
+
+if [ "-h" == $1 ]
+then
+    echo "                   "
+    echo "Syntax: clas12dc <OPTION>"
+    echo "                    "
+    exit
+fi
+
+
+if [ $# -ne 1 ]
+then
+   echo "                   "		
+   echo "Syntax: clas12dc <OPTION>"		
+   echo "------ List of available options -------"
+   echo "tbhits     : Plot different variables from TBHits bank"
+   echo "t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
+   echo "explorer   : Open Data Explorer GUI"
+   echo "getT0      : Estimate T0 correction"
+   echo "calib      : Open DC Calibration GUI" 
+   echo "                    "
+   exit
+fi
+
+OPTION=$1
+
+
+case $OPTION in 
+ "tbhits") java -cp  clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
+  ;;
+  "t2d")  java -cp  DC_Calibration.jar org.jlab.dc_calibration.test.CompareReconAndCalib
+  ;;
+  "explorer") java -jar DataExplorer.jar
+  ;;
+  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.test.FitterForT0
+  ;;
+  "calib") java -jar DC_Calibration.jar
+esac  

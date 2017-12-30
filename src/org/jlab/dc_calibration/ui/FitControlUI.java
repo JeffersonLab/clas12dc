@@ -69,8 +69,8 @@ public class FitControlUI extends javax.swing.JFrame
 	private double[][] resetFitParsLow = new double[nSL][nFitPars];
 	private double[][] resetFitParsHigh = new double[nSL][nFitPars];
 	private double[][] resetFitParSteps = new double[nSL][nFitPars];
-	private double[][][] parsFromCCDB_default = new double[nSectors][nSL][nFitPars];// nFitPars = 9
-	private double[][][] parsFromCCDB_dc_test1 = new double[nSectors][nSL][nFitPars];// nFitPars = 9
+	private double[][][] parsFromCCDB_default = new double[nSectors][nSL][nFitPars];// nFitPars = 10
+	private double[][][] parsFromCCDB_dc_test1 = new double[nSectors][nSL][nFitPars];// nFitPars = 10
 	private double xNormLow = 0.0, xNormHigh = 0.8;
 	TimeToDistanceFitter fitter;
 	FitControlBinSelectionUI binSelector;

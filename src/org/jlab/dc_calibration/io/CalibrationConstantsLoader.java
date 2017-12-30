@@ -266,11 +266,9 @@ System.out.println(" LOADING DEVEL for Run "+runNb+" var "+var+" var2 "+var2);
             double t0 = dbprovider_Test.getDouble("/calibration/dc/time_corrections/T0Corrections/T0Correction", i);
             double t0Error = dbprovider_Test.getDouble("/calibration/dc/time_corrections/T0Corrections/T0Error", i);
 
-//            T0[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = t0;   // <---- TEMPORARY!!! latif
-//            T0ERR[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = t0Error; // <--------- TEMPORARY latif
-            T0[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = 0.0;
-            T0ERR[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = 0.0;
-
+            T0[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = t0;   
+            T0ERR[iSec - 1][iSly - 1][iSlot - 1][iCab - 1] = t0Error;
+            
            // System.out.println(" DC CALIBRATION CONSTANTS TO; Cable id = "+iCab+" T0 = "+t0 + " for variation "+var2+" Run = "+runNb);
         }
         CCDBConstants.setDELTANM(DELTANM);

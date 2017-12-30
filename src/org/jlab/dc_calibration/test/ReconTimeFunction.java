@@ -7,12 +7,18 @@
 package org.jlab.dc_calibration.test;
 
 import org.jlab.groot.ui.TCanvas;
-import org.jlab.dc_calibration.io.TableLoader;
+//import org.jlab.dc_calibration.io.TableLoader;
 import org.jlab.rec.dc.timetodistance.TimeToDistanceEstimator;
-import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
+//import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
 import org.jlab.dc_calibration.ui.CalibStyle;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.GraphErrors;
+
+//import org.jlab.service.dc.DCTBEngine;
+import org.jlab.rec.dc.timetodistance.*;
+//import org.jlab.detector.calib.utils.ConstantsManager;
+import org.jlab.detector.calib.utils.DatabaseConstantProvider;
+import org.jlab.utils.groups.IndexedTable;
 
 public class ReconTimeFunction
 {
@@ -27,8 +33,19 @@ public class ReconTimeFunction
     	sec_index = SecIndex;
     	SL_index = SLindex;
     	
-		CalibrationConstantsLoader.Load(1000, "default");
-		TableLoader.Fill();
+		//CalibrationConstantsLoader.Load(1000, "default");
+		//TableLoader.Fill();
+		
+		//ConstantsManager manager = new ConstantsManager("default");
+		//manager.setVariation("calib");
+		//manager.getConstants(2052, "/calibration/dc/time_to_distance/time2dist");
+		 DatabaseConstantProvider provider = new DatabaseConstantProvider(2052,"default");
+		 IndexedTable table = provider.readTable("/calibration/dc/time_to_distance/time2dist");
+	 
+		//DCTBEngine en = new DCTBEngine();
+		//en.init();
+		//TableLoader.Fill(manager.getConstants(2052, "/calibration/dc/time_to_distance/time2dist"));
+			TableLoader.Fill(table);
 	 }
 
     public GraphErrors getGraph(double bField, double angDegree, double minTime, double maxTime)
@@ -59,7 +76,7 @@ public class ReconTimeFunction
 		double minTime = 0;
 		
 		int secIndex = 0;
-		int slIndex = 0;
+		int slIndex = 3;
 		double bField = 0.0;
 
 		GStyle.getGraphErrorsAttributes().setTitle("Time (ns) vs Distance (cm) for S " + (secIndex + 1) + " SL " + (slIndex + 1) + " from Reconstruction");
@@ -67,19 +84,19 @@ public class ReconTimeFunction
 		ReconTimeFunction recon = new ReconTimeFunction(secIndex, slIndex);
 
 		// c1.draw(recon.getGraph(bField, 30, minTime, maxTime));		
-		for(double angDegree = 0; angDegree <= 30; angDegree += 5)
+		for(double angDegree = 0; angDegree < 30; angDegree += 5)
 		{
 		    GStyle.getGraphErrorsAttributes().setMarkerColor((int)(Math.abs(angDegree)/5) + 1);
 			c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
 		}
 
-		// for( bField = 0.0; bField <= 1.5; bField += 0.5)
-		// {
-		//     for(double angDegree = 0; angDegree <= 30; angDegree += 5)
-		//     {
-		// 	GStyle.getGraphErrorsAttributes().setMarkerColor((int)(angDegree/5) + 1);
-		// 	c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
-		//     }		
-		// }
+//		 for( bField = 0.0; bField <= 1.5; bField += 0.5)
+//		 {
+//		     for(double angDegree = 0; angDegree < 30; angDegree += 5)
+//		     {
+//		 	GStyle.getGraphErrorsAttributes().setMarkerColor((int)(angDegree/5) + 1);
+//		 	c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
+//		     }		
+//		 }
     }    
 }
