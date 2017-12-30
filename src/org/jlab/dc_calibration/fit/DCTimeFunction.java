@@ -168,5 +168,4 @@ public class DCTimeFunction
 
 		return ralpha * rad2deg;
 	}
-
 }

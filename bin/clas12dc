@@ -6,17 +6,17 @@
 # Created: Sat Dec 30 02:15:54 2017 (-0500)
 # URL: jlab.org/~latif
 
-echo "-----------------------------------------------------------------------------------"
-echo "|										  |"
-echo "|                  Welcome to DC Calibration Debugging Tools			  |"
-echo "|										  |"
-echo "-----------------------------------------------------------------------------------"
+echo "          ---------------------------------------------------------------------------------"
+echo "          |										  |"
+echo "          |                  Welcome to DC Calibration Expert's Mode			  |"
+echo "          |										  |"
+echo "          ---------------------------------------------------------------------------------"
 
 
 if [ "-h" == $1 ]
 then
     echo "                   "
-    echo "Syntax: clas12dc <OPTION>"
+    echo "          Syntax: clas12dc <OPTION>"
     echo "                    "
     exit
 fi
@@ -25,13 +25,14 @@ fi
 if [ $# -ne 1 ]
 then
    echo "                   "		
-   echo "Syntax: clas12dc <OPTION>"		
-   echo "------ List of available options -------"
-   echo "tbhits     : Plot different variables from TBHits bank"
-   echo "t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
-   echo "explorer   : Open Data Explorer GUI"
-   echo "getT0      : Estimate T0 correction"
-   echo "calib      : Open DC Calibration GUI" 
+   echo "          Syntax: clas12dc <OPTION>"
+   echo "                   "			
+   echo "          ------ List of available options -------"
+   echo "          tbhits     : Plot different variables from TBHits bank"
+   echo "          t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
+   echo "          explorer   : Open Data Explorer GUI"
+   echo "          getT0      : Estimate T0 correction"
+   echo "          calib      : Open DC Calibration GUI" 
    echo "                    "
    exit
 fi

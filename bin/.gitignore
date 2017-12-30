@@ -1,5 +1,5 @@
-/org/
-/files/
-/images/
-/config/
+org/
+files/
+images/
 *.jar
+*.class
