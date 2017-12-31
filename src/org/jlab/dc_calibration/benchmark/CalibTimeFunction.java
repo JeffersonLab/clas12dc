@@ -4,7 +4,7 @@
 // Created: Sat Aug 19 23:32:29 2017 (-0400)
 // URL: latifkabir.github.io
 
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import org.jlab.groot.math.Func1D;
 import org.jlab.groot.ui.TCanvas;
@@ -41,10 +41,8 @@ public class CalibTimeFunction extends Func1D
 	@Override
 	public void setParameters(double[] values)
 	{
-		for (int i = 0; i < (nParam - 1); i++)
+		for (int i = 0; i < nParam; i++)
 			params[i] = values[i];
-
-		params[nParam - 1] = 0.0; // Delta_T_0 constant not in CCDB
 	}
 
 	@Override
@@ -73,8 +71,8 @@ public class CalibTimeFunction extends Func1D
 		GStyle.getFunctionAttributes()
 				.setTitle("Time vs Distance for S = " + (secIndex + 1) + " SL = " + (slIndex + 1));
 
-		//ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("default",1000);
-		ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("calib",1894);
+		ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("default",2052);
+		//ReadT2DparsFromCCDB defPars = new ReadT2DparsFromCCDB("calib",1894);
 		defPars.LoadCCDB();
 
 		for (angDegree = 0.0; angDegree <= 30.0; angDegree += 5)

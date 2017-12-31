@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Filename: clas12dc
-# Description: bash program for clas12dc calibration. This is intended for debugging purpose and to be used by the experts.
+# Description: Expert's mode for clas12dc calibration. This is intended for debugging purpose and to be used by the experts.
 # Author: Latif Kabir < latif@jlab.org >
 # Created: Sat Dec 30 02:15:54 2017 (-0500)
 # URL: jlab.org/~latif
@@ -43,11 +43,11 @@ OPTION=$1
 case $OPTION in 
  "tbhits") java -cp  clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
   ;;
-  "t2d")  java -cp  DC_Calibration.jar org.jlab.dc_calibration.test.CompareReconAndCalib
+  "t2d")  java -cp  DC_Calibration.jar org.jlab.dc_calibration.benchmark.CompareT2DReconVsCalib
   ;;
   "explorer") java -jar DataExplorer.jar
   ;;
-  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.test.FitterForT0
+  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.FitterForT0
   ;;
   "calib") java -jar DC_Calibration.jar
 esac  

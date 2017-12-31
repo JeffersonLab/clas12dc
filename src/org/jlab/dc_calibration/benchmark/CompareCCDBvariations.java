@@ -3,7 +3,7 @@
  * @author Latif Kabir < jlab.org/~latif >
  *
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import org.jlab.dc_calibration.io.ReadT2DparsFromCCDB;
 import org.jlab.dc_calibration.io.CalibrationConstantsLoader;

@@ -1,4 +1,4 @@
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import static org.jlab.dc_calibration.constants.Constants.iSecMax;
 import static org.jlab.dc_calibration.constants.Constants.iSecMin;

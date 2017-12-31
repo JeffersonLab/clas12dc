@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 /**
  * @author Latif Kabir < jlab.org/~latif >

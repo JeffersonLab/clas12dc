@@ -2,7 +2,7 @@
  * @author Latif Kabir < jlab.org/~latif >
  *
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import java.io.File;
 import java.util.ArrayList;

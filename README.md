@@ -10,7 +10,7 @@ The source files are divided into the following modules:
  - fit : All the fit routine and functions
  - init : All the initialization (prepare histo, graph, data container etc) stuff
  - io : The input/output services
- - test : Scripts used for testing
+ - benchmark : Scripts used for testing
  - ui : User interface 
 
 The ```main()``` function for the calibration suite is invoked from the ```ui/Application``` class. 

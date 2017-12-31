@@ -4,19 +4,15 @@
 // Created: Sat Aug 26 10:24:56 2017 (-0400)
 // URL: latifkabir.github.io
 
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import org.jlab.groot.ui.TCanvas;
-//import org.jlab.dc_calibration.io.TableLoader;
 import org.jlab.rec.dc.timetodistance.TimeToDistanceEstimator;
-//import org.jlab.dc_calibration.io.CalibrationConstantsLoader;
 import org.jlab.dc_calibration.ui.CalibStyle;
 import org.jlab.groot.base.GStyle;
 import org.jlab.groot.data.GraphErrors;
 
-//import org.jlab.service.dc.DCTBEngine;
 import org.jlab.rec.dc.timetodistance.*;
-//import org.jlab.detector.calib.utils.ConstantsManager;
 import org.jlab.detector.calib.utils.DatabaseConstantProvider;
 import org.jlab.utils.groups.IndexedTable;
 
@@ -33,19 +29,10 @@ public class ReconTimeFunction
     	sec_index = SecIndex;
     	SL_index = SLindex;
     	
-		//CalibrationConstantsLoader.Load(1000, "default");
-		//TableLoader.Fill();
-		
-		//ConstantsManager manager = new ConstantsManager("default");
-		//manager.setVariation("calib");
-		//manager.getConstants(2052, "/calibration/dc/time_to_distance/time2dist");
-		 DatabaseConstantProvider provider = new DatabaseConstantProvider(2052,"default");
-		 IndexedTable table = provider.readTable("/calibration/dc/time_to_distance/time2dist");
-	 
-		//DCTBEngine en = new DCTBEngine();
-		//en.init();
-		//TableLoader.Fill(manager.getConstants(2052, "/calibration/dc/time_to_distance/time2dist"));
-			TableLoader.Fill(table);
+    	 //Uncomment the following lines if you make the plot independently
+		 //DatabaseConstantProvider provider = new DatabaseConstantProvider(2052,"default");
+		 //IndexedTable table = provider.readTable("/calibration/dc/time_to_distance/time2dist");	 
+		 //TableLoader.Fill(table);
 	 }
 
     public GraphErrors getGraph(double bField, double angDegree, double minTime, double maxTime)
@@ -56,8 +43,7 @@ public class ReconTimeFunction
 		{			
     		distance = recFnc.interpolateOnGrid(bField, angDegree, i, sec_index, SL_index);
     		gr.addPoint(distance, i, 0, 0);
-		}
-    	
+		}    	
     	return gr;
 	}
     
@@ -90,13 +76,14 @@ public class ReconTimeFunction
 			c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
 		}
 
-//		 for( bField = 0.0; bField <= 1.5; bField += 0.5)
-//		 {
-//		     for(double angDegree = 0; angDegree < 30; angDegree += 5)
-//		     {
-//		 	GStyle.getGraphErrorsAttributes().setMarkerColor((int)(angDegree/5) + 1);
-//		 	c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
-//		     }		
-//		 }
-    }    
+/*		 for( bField = 0.0; bField <= 1.5; bField += 0.5)
+		 {
+		     for(double angDegree = 0; angDegree < 30; angDegree += 5)
+		     {
+		 	GStyle.getGraphErrorsAttributes().setMarkerColor((int)(angDegree/5) + 1);
+		 	c1.draw(recon.getGraph(bField, angDegree, minTime, maxTime),"same");
+		     }		
+		 }
+*/
+	}
 }

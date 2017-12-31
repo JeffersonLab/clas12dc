@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import org.jlab.groot.data.H1F;
 

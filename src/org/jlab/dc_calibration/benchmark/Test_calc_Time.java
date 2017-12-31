@@ -1,7 +1,7 @@
 /*
  * Wanted to compare my and Veronique's calc times but didn't complete the task.
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.nSL;

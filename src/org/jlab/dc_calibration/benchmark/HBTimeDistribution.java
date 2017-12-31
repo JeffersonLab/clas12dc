@@ -2,7 +2,7 @@
  * @author Latif Kabir < jlab.org/~latif >
  *
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class HBTimeDistribution extends T0Estimator
 				if (!event.hasBank("HitBasedTrkg::HBHits")) 
 					continue;
 				
-				// Cut 0: Fill only hits that construct a track <---------------- Cut
+				// Fill only hits that construct a track <---------------- Cut
 				//if (!event.hasBank("HitBasedTrkg::HBHits") || !event.hasBank("HitBasedTrkg::HBSegments")
 				//		|| !event.hasBank("HitBasedTrkg::HBTracks"))
 				//	continue;

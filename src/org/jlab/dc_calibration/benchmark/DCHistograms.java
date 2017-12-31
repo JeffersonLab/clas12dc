@@ -1,20 +1,21 @@
 /**
  * 
  */
-package org.jlab.dc_calibration.test;
+package org.jlab.dc_calibration.benchmark;
 
 import java.util.Map;
+
+import static org.jlab.dc_calibration.benchmark.DCConstants.nSL;
+import static org.jlab.dc_calibration.benchmark.DCConstants.nSectors;
+import static org.jlab.dc_calibration.benchmark.DCConstants.nThBins;
+import static org.jlab.dc_calibration.benchmark.DCConstants.thRange;
+
 import java.util.HashMap;
 
 import org.jlab.dc_calibration.init.Coordinate;
 import org.jlab.geom.base.Sector;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
-
-import static org.jlab.dc_calibration.test.DCConstants.nSectors;
-import static org.jlab.dc_calibration.test.DCConstants.nSL;
-import static org.jlab.dc_calibration.test.DCConstants.nThBins;
-import static org.jlab.dc_calibration.test.DCConstants.thRange;
 
 /**
  * @author Latif Kabir < jlab.org/~latif >
