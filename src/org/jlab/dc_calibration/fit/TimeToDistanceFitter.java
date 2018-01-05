@@ -81,6 +81,8 @@ import org.jlab.io.base.DataBank;
 import org.jlab.io.evio.EvioDataChain;
 import org.jlab.io.hipo.HipoDataSource;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class TimeToDistanceFitter implements ActionListener, Runnable
 {
 	//------------------ step#  : Declare all data field and histograms -------------------------------------
@@ -511,7 +513,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					hTtl = String.format("time vs. |Doca| (Sec=%d, SL=%d, th(%2.1f,%2.1f))", i, j + 1, thEdgeVzL[k],
 							thEdgeVzH[k]);
 					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitle(hTtl);
-					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitleX("|Doca| (cm)");
+					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitleX("trkDoca (cm)");
 					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitleY("Time (ns)");
 
 					hNm = String.format("Sector %d timeVcalcDocaS%dTh%02d", i, j, k);
@@ -558,9 +560,9 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				dMax = 2 * wpdist[j];
 
 				// Following is used for all angle-bins combined
-				hNm = String.format("timeResS%dSL%d", i, j);
+				hNm = String.format("ResS%dSL%d", (i + 1), (j + 1));
 				h1timeRes.put(new Coordinate(i, j), new H1F(hNm, 200, -1.0, 1.0));
-				hTtl = String.format("residual (cm) (Sec=%d, SL=%d)", i, j + 1);
+				hTtl = String.format("residual (cm) (Sec=%d, SL=%d)", i + 1, j + 1);
 				h1timeRes.get(new Coordinate(i, j)).setTitle(hTtl);
 				h1timeRes.get(new Coordinate(i, j)).setTitleX("residual [cm]");
 
@@ -959,10 +961,10 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					if(gTFlight == 0.0 || gTProp == 0.0)
 						continue;
 					
-					// Latif: Skip hits outside 100% of max cell size
+					// ---------- Latif: Skip hits outside 100% of max cell size --------------
 					if(gTrkDoca/docaMax > 1.0)
 						continue;
-					
+										
 					//~~~~~~~~~~~~~~~~~~~~~~~ This Block is the possible Culprit ~~~~~~~~~~~~~~~~~~~~~~~~~
 					//----> For Temp purpose <------
 					boolean inBfieldBin = true; // For SL=3 & 4, using only data that correspond to
@@ -995,7 +997,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 									.fill(Math.abs(gTrkDoca), gTime);
 							h2timeVcalcDoca.get(new Coordinate(sector - 1, superlayer - 1, thBnVz))
 									.fill(Math.abs(gCalcDoca), gTime);
-							if (Math.abs(thDeg) < 30.0)
+							if (Math.abs(thDeg) < 30.0) // Reconstruction T2D fnc has issue with angle equal or greater than 30.
 							{
 								h1timeSlTh.get(new Coordinate(sector - 1, superlayer - 1, thBnVz)).fill(gTime);
 								// Following two for all angle-bins combined (but for individual
@@ -1230,7 +1232,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		{
 			System.out.println( "\t" + parName[p] + " : " + fPars[p] + " +/- " + fErrs[p]);
 		}
-		//System.out.println("\n\tChi Square : " + mapOfFitFunctions.get(new Coordinate(iSec, iSL)).valueOf(fPars));
+		System.out.println("\n\tChi Square : " + mapOfFitFunctions.get(new Coordinate(iSec, iSL)).valueOf(fPars));
 		
 		System.out.println("\t====================================================================");
 		System.out.println("\t\t\t Note the beta is currently set to: " + Constants.beta);
@@ -1426,8 +1428,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 			canvas4.draw(h1);
 			canvas4.getPad(iPad).setTitle(Title);
-			canvas4.setPadTitlesX("residual (cm)");// "Residual vs trkDoca"
-			canvas4.setPadTitlesY(" ");// "Residual vs trkDoca"
+			canvas4.setPadTitlesX("residual (cm)");// "Residual"
+			canvas4.setPadTitlesY(" ");
 		}
 		tabbedPane.add(canvas4, "residual (cm)");
 
@@ -1760,10 +1762,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 		String Title = "";
 		JFrame frame = new JFrame();
-		JTabbedPane sectorPanes = new JTabbedPane();
+		JTabbedPane sectorPanes = new JTabbedPane(); 
 		for (int i = iSecMin; i < iSecMax; i++)
 		{
 			JTabbedPane anglePanes = new JTabbedPane();
+	
 			for (int k = 0; k < nThBinsVz; k++)
 			{
 				EmbeddedCanvas canvas = new EmbeddedCanvas();
@@ -1787,9 +1790,9 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					 */
 				}
 				anglePanes.add(canvas, "ThBin" + (k + 1));
+				
 			}
-			sectorPanes.add(anglePanes, "Sector " + (i + 1));
-		}
+		}		
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setSize((int) (screensize.getWidth() * .9), (int) (screensize.getHeight() * .9));
 		frame.setLocationRelativeTo(null);
@@ -1844,10 +1847,15 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		// Now drawing these projections onto Tabbed Panes:
 		String Title = "";
 		JFrame frame = new JFrame();
-		JTabbedPane sectorPanes = new JTabbedPane();
+		
+		JTabbedPane mainPane = new JTabbedPane();
+		JTabbedPane sectorPanesDist = new JTabbedPane();     // Pane for the time vs trkDoca distribution
+		JTabbedPane resolutionDist = new JTabbedPane();  // Pane for the resolution distribution
+
 		for (int i = iSecMin; i < iSecMax; i++)
 		{
 			JTabbedPane anglePanes = new JTabbedPane();
+			JTabbedPane resPanes = new JTabbedPane();
 			for (int k = 0; k < nThBinsVz2; k++)
 			{
 				EmbeddedCanvas canvas = new EmbeddedCanvas();
@@ -1867,12 +1875,40 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				}
 				anglePanes.add(canvas, "ThBin" + (k + 1));
 			}
-			sectorPanes.add(anglePanes, "Sector " + (i + 1));
+			sectorPanesDist.add(anglePanes, "Sector " + (i + 1));
+			
+			EmbeddedCanvas canvasRes = new EmbeddedCanvas();
+			canvasRes.setSize(3 * 400, 2 * 400);
+			canvasRes.divide(3, 2);
+
+			for(int k = 0; k< nSL; ++k)
+			{				
+				canvasRes.cd(k);
+				H1F h1 = h1timeRes.get(new Coordinate(i, k));				
+				F1D gausFunc = new F1D("gausFunc", "[amp]*gaus(x,[mean],[sigma])", -0.06, 0.06); // Changed the fit range from 0.07: Latif
+				gausFunc.setLineColor(2);
+				gausFunc.setLineStyle(1);
+				gausFunc.setLineWidth(2);
+				gausFunc.setParameter(0, 1000);
+				gausFunc.setParameter(1, 0.0);
+				gausFunc.setParameter(2, 0.05);// 500 micron
+				//gausFunc.show(); // Prints fit parameters
+				DataFitter.fit(gausFunc, h1, "Q");
+				gausFunc.setOptStat(1110);
+				canvasRes.draw(h1);
+			}
+			
+			sectorPanesDist.add(anglePanes, "Sector " + (i + 1));
+			resolutionDist.add("Sec " + (i + 1), canvasRes);			
 		}
+		
+		mainPane.add("time vs trkDoca Dist", sectorPanesDist);
+		mainPane.add("Resolution", resolutionDist);
+		
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setSize((int) (screensize.getWidth() * .9), (int) (screensize.getHeight() * .9));
 		frame.setLocationRelativeTo(null);
-		frame.add(sectorPanes);
+		frame.add(mainPane);
 		frame.setVisible(true);
 	}
 

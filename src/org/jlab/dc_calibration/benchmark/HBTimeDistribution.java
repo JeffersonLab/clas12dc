@@ -105,7 +105,8 @@ public class HBTimeDistribution extends T0Estimator
 							continue;	
 						if(TProp == 0 || TFlight == 0)
 							continue;
-						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - TProp - TFlight));
+						//histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - TProp - TFlight));
+						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time));
 				}
 				++nEvtProcessed;
 				if(nEvtProcessed % 100000 == 0)

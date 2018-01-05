@@ -81,7 +81,7 @@ public class CompareT2DReconVsCalib
 		    sectorPanesA.add(canvasA[sec],"Sec " + (sec + 1));
 		    
 		    canvasB[sec] = new EmbeddedCanvas();
-		    canvasB[sec].divide(3, 2);
+		    canvasB[sec].divide(4, 2);
 		    sectorPanesB.add(canvasB[sec],"Sec " + (sec + 1));
 		}
 	}
@@ -119,10 +119,10 @@ public class CompareT2DReconVsCalib
 
 		recon = new ReconTimeFunction(secIndex, slIndex);
 		int Bfield_bin = (int)(B_field/0.5);
-		canvasB[secIndex].cd((slIndex - 2)*3 + Bfield_bin -1);		
+		canvasB[secIndex].cd((slIndex - 2)*4 + Bfield_bin -1);		
 		
 		GStyle.getGraphErrorsAttributes().setTitle("S " + (secIndex + 1) + " SL " + (slIndex + 1)
-				+ " Recon (dotted line) vs Calib (solid line),theta = 0 - 29 and B = " + B_field + " T");
+				+ " Recon (dotted line) vs Calib (solid line),theta = " + min_ang_degree + "-" +  max_ang_degree + " and B = " + B_field + " T");
 		
 		for (double angDegree = min_ang_degree; angDegree <= max_ang_degree; angDegree += 5)
 		{
@@ -160,7 +160,7 @@ public class CompareT2DReconVsCalib
 		{
 			for (int slI = 2; slI < 4; ++slI)
 			{
-				 for( double bField = 0.5; bField <= 1.5; bField += 0.5)
+				 for( double bField = 0.5; bField <= 2.0; bField += 0.5)
 				 {
 					 plotWithBfield(secI, slI, bField);
 				 }
@@ -224,7 +224,7 @@ public class CompareT2DReconVsCalib
 	
 	public static void main(String[] args)
 	{
-		CompareT2DReconVsCalib t2d = new CompareT2DReconVsCalib(2052, "default");
+		CompareT2DReconVsCalib t2d = new CompareT2DReconVsCalib(810, "default");
 		t2d.MakeComparison();
 		//t2d.CompareSingleSL(1,3);
 	}

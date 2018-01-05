@@ -70,7 +70,7 @@ public class FitControlUI extends javax.swing.JFrame
 	private double[][] resetFitParsHigh = new double[nSL][nFitPars];
 	private double[][] resetFitParSteps = new double[nSL][nFitPars];
 	private double[][][] parsFromCCDB_default = new double[nSectors][nSL][nFitPars];// nFitPars = 10
-	private double[][][] parsFromCCDB_dc_test1 = new double[nSectors][nSL][nFitPars];// nFitPars = 10
+	private double[][][] parsFromCCDB_calib = new double[nSectors][nSL][nFitPars];// nFitPars = 10
 	private double xNormLow = 0.0, xNormHigh = 0.8;
 	TimeToDistanceFitter fitter;
 	FitControlBinSelectionUI binSelector;
@@ -134,11 +134,11 @@ public class FitControlUI extends javax.swing.JFrame
 		// Instead of reading the two tables again and again whenever we select the item from
 		// the corresponding jComboBox4, it's better to read both once at the beginning,
 		// keep them stored in two different array variables and use those arrays later.
-		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB("calib",2091);
+		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB("calib",2052);
 		rdTable.LoadCCDB();
-		parsFromCCDB_dc_test1 = rdTable.parsFromCCDB;
+		parsFromCCDB_calib = rdTable.parsFromCCDB;
 
-		ReadT2DparsFromCCDB rdTable2 = new ReadT2DparsFromCCDB("default",2091);
+		ReadT2DparsFromCCDB rdTable2 = new ReadT2DparsFromCCDB("default",2052);
 		rdTable2.LoadCCDB();
 		parsFromCCDB_default = rdTable2.parsFromCCDB;
 	}
@@ -152,7 +152,7 @@ public class FitControlUI extends javax.swing.JFrame
 				// Get the init values from CCDB
 				if (ccdbVariation == "calib")
 				{
-					resetFitPars[i][j] = parsFromCCDB_dc_test1[sector - 1][i][j];
+					resetFitPars[i][j] = parsFromCCDB_calib[sector - 1][i][j];
 				}
 				else if (ccdbVariation == "default")
 				{
@@ -177,11 +177,8 @@ public class FitControlUI extends javax.swing.JFrame
 					resetFitParsHigh[i][j] = 2.0 * resetFitPars[i][j] + 0.001;
 				}
 			}
-
-			// 6/5/17: as of now, deltaT0 is not in CCDB table, so I am assigning by hard-coding
-			//resetFitPars[i][9] = 0.0;
-			//resetFitParsLow[i][9] = -30.0;
-			//resetFitParsHigh[i][9] = 30.0;
+			resetFitParsLow[i][9] += -5.0;
+			resetFitParsHigh[i][9] += 5.0;
 		}
 	}
 
