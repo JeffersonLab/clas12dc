@@ -27,12 +27,14 @@ then
    echo "                   "		
    echo "          Syntax: clas12dc <OPTION>"
    echo "                   "			
-   echo "          ------ List of available options -------"
+   echo "          ------------------------------------- List of available options --------------------------------"
    echo "          tbhits     : Plot different variables from TBHits bank"
    echo "          t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
    echo "          explorer   : Open Data Explorer GUI"
    echo "          getT0      : Estimate T0 correction"
    echo "          calib      : Open DC Calibration GUI" 
+   echo "          dcmon      : Open DC monitoring GUI" 
+   echo "          effi       : Open DC efficiency studies GUI" 
    echo "                    "
    exit
 fi
