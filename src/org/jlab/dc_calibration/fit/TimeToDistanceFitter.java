@@ -1223,12 +1223,13 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 		mapOfUserFitParameters.put(new Coordinate(iSec, iSL), fPars);
 
-		if (!(file == null))
-		{
-			file.Write(str);
-			textArea.append(str + "\n"); // Show the results in the text area of fitControlUI
-			file.Close();
-		}
+		textArea.append(str + "\n"); // Show the results in the text area of fitControlUI
+		//if (!(file == null))
+		//{
+		//	file.Write(str);
+		//	textArea.append(str + "\n"); // Show the results in the text area of fitControlUI
+		//	file.Close();
+		//}
 
 		if (nFreePars > 9)
 		{

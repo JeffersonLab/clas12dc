@@ -7,7 +7,7 @@
  *    / X MK X /`-------'
  *   / X MK X /
  *  / X MK X /
- * (________(                @author m.c.kunkel, kpadhikari
+ * (________(                @author m.c.kunkel, kpadhikari, Latif Kabir
  *  `------'
  */
 package org.jlab.dc_calibration.ui;

@@ -28,6 +28,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
+import org.jlab.dc_calibration.init.Coordinate;
 import org.jlab.dc_calibration.io.FileOutputWriter;
 import org.jlab.dc_calibration.io.ReadT2DparsFromCCDB;
 
@@ -74,6 +75,7 @@ public class FitControlUI extends javax.swing.JFrame
 	private double xNormLow = 0.0, xNormHigh = 0.8;
 	TimeToDistanceFitter fitter;
 	FitControlBinSelectionUI binSelector;
+	//FileOutputWriter file;
 
 	/**
 	 * Creates new form FitControlUI
@@ -105,7 +107,7 @@ public class FitControlUI extends javax.swing.JFrame
 		try
 		{
 			file = new FileOutputWriter(outFileForFitPars, append_to_file);
-			file.Write("#Sec  SL  v0  deltanm  tMax  distbeta  delta_bfield_coefficient  b1  b2  b3  b4");
+			file.Write("#Sec  SL  component  v0   deltanm   tMax   distbeta   delta_bfield_coefficient   b1   b2   b3   b4  c1   c2   c3");
 			file.Close();
 		}
 		catch (IOException ex)
@@ -417,6 +419,7 @@ public class FitControlUI extends javax.swing.JFrame
 		jButton6 = new javax.swing.JButton();
 		jButton7 = new javax.swing.JButton();
 		jButton9 = new javax.swing.JButton();
+		jButtonSave = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Fit Control");
@@ -1631,6 +1634,15 @@ public class FitControlUI extends javax.swing.JFrame
 				jButton9ActionPerformed(evt);
 			}
 		});
+		
+		jButtonSave.setText("Save To File");
+		jButtonSave.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				jButtonSaveActionPerformed(evt);
+			}
+		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -1661,6 +1673,9 @@ public class FitControlUI extends javax.swing.JFrame
 																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 														.addComponent(jButton9)
 														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addComponent(jButtonSave)
+														.addPreferredGap(
 																javax.swing.LayoutStyle.ComponentPlacement.RELATED,
 																javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 														.addComponent(jButton3))
@@ -1685,7 +1700,8 @@ public class FitControlUI extends javax.swing.JFrame
 										.addComponent(jButton5)
 										.addComponent(jButton6)
 										.addComponent(jButton7)
-										.addComponent(jButton9))
+										.addComponent(jButton9)
+										.addComponent(jButtonSave))
 								.addContainerGap()));
 
 		jScrollPane1.getAccessibleContext().setAccessibleName(
@@ -1799,8 +1815,7 @@ public class FitControlUI extends javax.swing.JFrame
 		fitter.runFitterAndDrawPlots(this, jTextArea1, gSector, gSuperlayer,
 				xMeanErrorType, xNormLow, xNormHigh, checkboxVal, checkBoxFixAll,
 				resetFitParsLow, resetFitPars, resetFitParsHigh, resetFitParSteps, selectedAngleBins);
-		
-		//----------------- flag : Update fit parameters value here --------------
+		//----------------- Update fit parameters value --------------
 		updateFitValuesToResetArrays(gSector);
 		assignParValuesToTextFields(gSector, gSuperlayer);
 	}// GEN-LAST:event_jButton2ActionPerformed
@@ -2281,6 +2296,29 @@ public class FitControlUI extends javax.swing.JFrame
 	{// GEN-FIRST:event_jButton9ActionPerformed
 		fitter.showLocalAngleDistributions(this, gSector, gSuperlayer, xNormLow, xNormHigh);
 	}// GEN-LAST:event_jButton9ActionPerformed
+	
+	private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		String pStr = "  ";
+		pStr += gSector + "\t" + gSuperlayer + "\t" + 0 + "\t";
+		for (int p = 0; p < nFitPars; p++)
+		{
+			pStr += (float)fitter.fPars[p] + "\t";
+		}
+		pStr += "\t" + 0 + "\t" + 0 + "\t" + 0;
+		boolean append_to_file = true;
+		FileOutputWriter file = null;
+		try
+		{
+			file = new FileOutputWriter(outFileForFitPars, append_to_file);
+			file.Write(pStr);
+			file.Close();
+		}
+		catch (IOException ex)
+		{
+			Logger.getLogger(TimeToDistanceFitter.class.getName()).log(Level.SEVERE, null, ex);
+		}				
+	}
 
 	private void printValuesOfSelectedAngularBins()
 	{
@@ -2389,6 +2427,7 @@ public class FitControlUI extends javax.swing.JFrame
 	private javax.swing.JButton jButton7;
 	private javax.swing.JButton jButton8;
 	private javax.swing.JButton jButton9;
+	private javax.swing.JButton jButtonSave;
 	private javax.swing.JCheckBox jCheckBox1;
 	private javax.swing.JCheckBox jCheckBox10;
 	private javax.swing.JCheckBox jCheckBox2;
