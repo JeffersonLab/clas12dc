@@ -395,6 +395,7 @@ public class FitControlUI extends javax.swing.JFrame
 		jTextField32 = new javax.swing.JTextField();
 		jCheckBox10 = new javax.swing.JCheckBox();
 		jLabel22 = new javax.swing.JLabel();
+		jLabelChiSq = new javax.swing.JLabel();
 		jLabel23 = new javax.swing.JLabel();
 		jTextField33 = new javax.swing.JTextField();
 		jTextField34 = new javax.swing.JTextField();
@@ -913,6 +914,9 @@ public class FitControlUI extends javax.swing.JFrame
 
 		jLabel22.setForeground(new java.awt.Color(0, 102, 0));
 		jLabel22.setText("<html>&Delta;T<sub>0</sub></html>");
+		
+		jLabelChiSq.setForeground(new java.awt.Color(0, 102, 0));
+		jLabelChiSq.setText("<html>&Chi Square</html>");
 
 		jLabel23.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
 		jLabel23.setText("Step Size");
@@ -1574,7 +1578,7 @@ public class FitControlUI extends javax.swing.JFrame
 //		jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(
 //				"Sec    SL   v0   deltanm   tMax  distbeta  data_bfield_coeff.    b1    b2    b3   b4  deltaT0"));
 		jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				"<html>Sec    &emsp; &emsp;      SL     &emsp; &emsp;      v<sub>0</sub>     &emsp; &emsp;         &delta;<sub>nm</sub>   &emsp; &emsp;      t<sub>max</sub>     &emsp; &emsp;     x<sub>&beta;</sub>     &emsp; &emsp;     &delta<sub>B</sub>     &emsp; &emsp;       b<sub>1</sub>          &emsp; &emsp;    b<sub>2</sub>        &emsp; &emsp;         b<sub>3</sub>       &emsp; &emsp;           b<sub>4</sub>       &emsp; &emsp;          &Delta;T<sub>0</sub></html>"));
+				"<html>Sec    &emsp; &emsp;      SL     &emsp; &emsp;      v<sub>0</sub>     &emsp; &emsp;         &delta;<sub>nm</sub>   &emsp; &emsp;      t<sub>max</sub>     &emsp; &emsp;     x<sub>&beta;</sub>     &emsp; &emsp;     &delta<sub>B</sub>     &emsp; &emsp;       b<sub>1</sub>          &emsp; &emsp;    b<sub>2</sub>        &emsp; &emsp;         b<sub>3</sub>       &emsp; &emsp;           b<sub>4</sub>       &emsp; &emsp;          &Delta;T<sub>0</sub>       &emsp; &emsp;          &chi<sup>2</sup></html>"));
 
 		jTextArea1.setColumns(20);
 		jTextArea1.setRows(5);
@@ -2415,6 +2419,7 @@ public class FitControlUI extends javax.swing.JFrame
 	private javax.swing.JLabel jLabel20;
 	private javax.swing.JLabel jLabel21;
 	private javax.swing.JLabel jLabel22;
+	private javax.swing.JLabel jLabelChiSq;
 	private javax.swing.JLabel jLabel23;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;

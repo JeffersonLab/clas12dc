@@ -1216,9 +1216,10 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		for (int p = 0; p < nFreePars; p++)
 		{
 			pars2write[iSec][iSL][p] = fPars[p];
-			pStr = String.format("%s %5.4f ", pStr, fPars[p]);
+			pStr = String.format("%s  %5.4f ", pStr, fPars[p]);
 		}
-		str = String.format("%d %d %s", iSec + 1, iSL + 1, pStr);
+		pStr = String.format("%s  %5.4f ", pStr, mapOfFitFunctions.get(new Coordinate(iSec, iSL)).valueOf(fPars));
+		str = String.format("%d   %d   %s", iSec + 1, iSL + 1, pStr);
 
 		mapOfUserFitParameters.put(new Coordinate(iSec, iSL), fPars);
 
