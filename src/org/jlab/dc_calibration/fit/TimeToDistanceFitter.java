@@ -196,6 +196,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	double[] tupleVars;
 	public static int runNumber = 0;
 	private boolean runNumberFound = false;
+	public double[] fPars = new double[nFitPars];
+	public double[] fErrs = new double[nFitPars];
 
 	//----------------------- step# : Constructor -------------------------------------- 
 	public TimeToDistanceFitter(ArrayList<String> files, boolean isLinearFit)
@@ -1179,8 +1181,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			}
 		}
 
-		double[] fPars = new double[nFreePars];
-		double[] fErrs = new double[nFreePars];
 		// Following is to ensure that initial values are written as output if all parameters are
 		// fixed i.e. when checkBoxFixAll == true;
 		for (int p = 0; p < nFreePars; p++)
@@ -1253,6 +1253,14 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		System.out.println("\t\t\t Note the beta is currently set to: " + Constants.beta);
 		System.out.println("\t====================================================================");
 
+		// If the fit is invalid don't update fit values
+		if(!minimization_status)
+		{
+			for (int p = 0; p < nFreePars; p++)
+			{ 
+				fPars[p] = pInit[iSL][p];
+			}
+		}
 		
 		System.out.println("End of runFitterNew(..) ");
 	}

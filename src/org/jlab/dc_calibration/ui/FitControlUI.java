@@ -193,6 +193,39 @@ public class FitControlUI extends javax.swing.JFrame
 		}
 	}
 
+	private void updateFitValuesToResetArrays(int sector)
+	{
+		for (int i = 0; i < nSL; i++)
+		{
+			for (int j = 0; j < nFitPars; j++)
+			{
+				resetFitPars[i][j] = fitter.fPars[j];
+
+				// Calculate and assign lower and upper limits based on sign and values of the
+				// init-values
+				if (resetFitPars[i][j] < 0.0)
+				{
+					resetFitParsLow[i][j] = 2.0 * resetFitPars[i][j];
+					resetFitParsHigh[i][j] = 0.2 * resetFitPars[i][j];
+				}
+				else if(resetFitPars[i][j] > 0.0)
+				{
+					resetFitParsLow[i][j] = 0.2 * resetFitPars[i][j];
+					resetFitParsHigh[i][j] = 2.0 * resetFitPars[i][j];
+				}
+				else if(resetFitPars[i][j] == 0.0)
+				{
+					resetFitParsLow[i][j] = 0.2 * resetFitPars[i][j] - 0.001;
+					resetFitParsHigh[i][j] = 2.0 * resetFitPars[i][j] + 0.001;
+				}
+			}
+			resetFitParsLow[i][9] += -5.0;
+			resetFitParsHigh[i][9] += 5.0;
+		}
+	}
+
+	
+	
 	private void messageControlTest() throws Exception
 	{
 		JTextComponent textComponent = new JTextPane();
@@ -1762,6 +1795,10 @@ public class FitControlUI extends javax.swing.JFrame
 		fitter.runFitterAndDrawPlots(this, jTextArea1, gSector, gSuperlayer,
 				xMeanErrorType, xNormLow, xNormHigh, checkboxVal, checkBoxFixAll,
 				resetFitParsLow, resetFitPars, resetFitParsHigh, resetFitParSteps, selectedAngleBins);
+		
+		//----------------- flag : Update fit parameters value here --------------
+		updateFitValuesToResetArrays(gSector);
+		assignParValuesToTextFields(gSector, gSuperlayer);
 	}// GEN-LAST:event_jButton2ActionPerformed
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)
