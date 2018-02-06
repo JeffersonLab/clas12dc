@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import org.jlab.dc_calibration.constants.Constants;
-import org.jlab.dc_calibration.core.EstimateT0correction;
+import org.jlab.dc_calibration.core.EstimateT0correctionDeprecated;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
 import org.jlab.dc_calibration.init.Configure;
 import org.jlab.dc_calibration.io.FileOutputWriter;
@@ -173,7 +173,7 @@ public class FitterForT0Static extends HBTimeDistribution
 		}
 		catch (IOException ex)
 		{
-			Logger.getLogger(EstimateT0correction.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(EstimateT0correctionDeprecated.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

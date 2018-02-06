@@ -66,9 +66,11 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 
-import org.jlab.dc_calibration.core.EstimateT0correction;
+import org.jlab.dc_calibration.benchmark.EstimateT0Correction;
+import org.jlab.dc_calibration.core.EstimateT0correctionDeprecated;
 import org.jlab.dc_calibration.core.RunReconstructionCoatjava4;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;
+import org.jlab.dc_calibration.init.Configure;
 
 //import javafx.scene.layout.Border;
 
@@ -311,7 +313,12 @@ public class DC_Calibration extends WindowAdapter implements WindowListener, Act
 				}
 				else
 				{
-					createDialogForT0Correction();
+					//Old way ---->//createDialogForT0Correction();					
+					//System.out.println("Statring T0 Estimation. It takes some time. Wait .....");
+					//EstimateT0Correction t0Fitter = new EstimateT0Correction();					
+                    //t0Fitter.EstimateT0();
+                    //System.out.println("Done with T0 estimation.");        
+					System.out.println("For the time being please run T0 estimator from the terminal."); 
 				}
 			}
 		});
@@ -417,7 +424,7 @@ public class DC_Calibration extends WindowAdapter implements WindowListener, Act
 					"Input file: " + results[0] + "\nOutput file: " + results[1]);
 
 			System.out.println("\tDebug 0");
-			EstimateT0correction t0c = new EstimateT0correction(results, fileArray);
+			EstimateT0correctionDeprecated t0c = new EstimateT0correctionDeprecated(results, fileArray);
 			t0c.DrawPlots();
 			t0c.FitAndDrawT0PlotsForAllCables();
 			t0c.FitAndDrawTMaxPlotsForAllCables();

@@ -67,7 +67,7 @@ import org.jlab.groot.data.GraphErrors;
  *
  * @author KPAdhikari
  */
-public class EstimateT0correction
+public class EstimateT0correctionDeprecated
 {
 	private DataBank bnkHits;
 	private H1F h1timeAll;
@@ -98,7 +98,7 @@ public class EstimateT0correction
 	public T0SignalCableMap cableMap;
 	FileOutputWriter file = null;
 
-	public EstimateT0correction()
+	public EstimateT0correctionDeprecated()
 	{
 		String iDir = "/home/latif/Scratch/Data/"; 
 		String[] results = new String[2];
@@ -113,7 +113,7 @@ public class EstimateT0correction
 		GoEstimate(results, fileArray);
 	}
 
-	public EstimateT0correction(String[] results, ArrayList<String> fileArray)
+	public EstimateT0correctionDeprecated(String[] results, ArrayList<String> fileArray)
 	{
 		System.out.println("The input data file is: " + results[1]);
 		createHists();
@@ -800,7 +800,7 @@ public class EstimateT0correction
 			}
 			catch (IOException ex)
 			{
-				Logger.getLogger(EstimateT0correction.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(EstimateT0correctionDeprecated.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 
@@ -907,7 +907,7 @@ public class EstimateT0correction
 		 */
 		Configure.setConfig();
 		System.out.println("Debug 0");
-		EstimateT0correction t0c = new EstimateT0correction();
+		EstimateT0correctionDeprecated t0c = new EstimateT0correctionDeprecated();
 		//t0c.DrawPlots();
 		t0c.FitAndDrawT0PlotsForAllCables();
 		//t0c.DrawPlotsForAllCables();

@@ -109,7 +109,7 @@ public class HBTimeDistribution extends T0Estimator
 						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time));
 				}
 				++nEvtProcessed;
-				if(nEvtProcessed % 100000 == 0)
+				if(nEvtProcessed % 5000 == 0)
 					System.out.println("----->Number of events processed: " + nEvtProcessed + "<--------");
 			}
 			reader.close();

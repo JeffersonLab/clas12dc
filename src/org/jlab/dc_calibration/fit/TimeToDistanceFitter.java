@@ -1231,14 +1231,14 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		//	file.Close();
 		//}
 
-		if (nFreePars > 9)
-		{
-			System.out.println("deltaT0 determined from the time-to-distance fit: " + fPars[9]);
-			ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", -1);
-			// readT0.printCurrentT0s();
-			readT0.printModifiedT0s(iSec + 1, iSL + 1, fPars[9]);
-			readT0.writeOutModifiedT0s(iSec + 1, iSL + 1, fPars[9]);
-		}
+		//if (nFreePars > 9)
+		//{
+		//	System.out.println("deltaT0 determined from the time-to-distance fit: " + fPars[9]);
+		//	ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", -1);
+		//	// readT0.printCurrentT0s();
+		//	readT0.printModifiedT0s(iSec + 1, iSL + 1, fPars[9]);
+		//	readT0.writeOutModifiedT0s(iSec + 1, iSL + 1, fPars[9]);
+		//}
 
 		//Printing error in fit parameter
 		System.out.println("\t====================================================================");

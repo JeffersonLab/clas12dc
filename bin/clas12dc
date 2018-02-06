@@ -49,7 +49,7 @@ case $OPTION in
   ;;
   "explorer") java -jar DataExplorer.jar
   ;;
-  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.FitterForT0
+  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
   ;;
   "calib") java -jar DC_Calibration.jar
 esac  
