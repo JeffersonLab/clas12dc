@@ -194,6 +194,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private DCTabbedPane dcTabbedPane;
 
 	double[] tupleVars;
+	public static int runNumber = 0;
+	private boolean runNumberFound = false;
 
 	//----------------------- step# : Constructor -------------------------------------- 
 	public TimeToDistanceFitter(ArrayList<String> files, boolean isLinearFit)
@@ -628,6 +630,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		int counter = 0;
 		int icounter = 0;
 		int ndf = -1;
+		int fileCounter = 0;
 		double chi2 = -1.0, Vtx0_z = -10000.0;
 
 		for (String str : fileArray)
@@ -639,6 +642,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			while (readerH.hasEvent())
 			{
 				icounter++;
+	
 				if (icounter % 2000 == 0)
 				{
 					System.out.println("Processed " + icounter + " events.");
@@ -649,6 +653,16 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 				if (event == null)
 					continue;
 
+				if(!runNumberFound)
+				{
+					if (event.hasBank("RUN::config"))
+					{
+						runNumber = event.getBank("RUN::config").getInt("run", 0);
+						runNumberFound = true;
+						System.out.println("Run number found from the data bank:" + runNumber);
+					}
+				}
+				
 				if (event.hasBank("TimeBasedTrkg::TBSegmentTrajectory"))
 				{
 					counter++;
@@ -689,6 +703,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 			}
 			readerH.close();
+			++fileCounter;
 		}
 		System.out.println(
 				"processed " + counter + " Events with TimeBasedTrkg::TBSegmentTrajectory entries from a total of "
