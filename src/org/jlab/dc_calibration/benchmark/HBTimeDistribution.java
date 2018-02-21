@@ -101,7 +101,7 @@ public class HBTimeDistribution extends T0Estimator
 						clusterID = HBHits.getShort("clusterID", k);
 						
 						//Cut 1: Fill only track associated hits
-						if(trkID <= 0 || clusterID == -1) // or CllusterID > -1 ???? <---------------------- Cut
+						if(trkID <= 0 || clusterID == -1) //  <---------------------- Cut
 							continue;	
 						if(TProp == 0 || TFlight == 0)
 							continue;

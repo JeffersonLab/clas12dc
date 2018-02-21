@@ -41,7 +41,7 @@ public class FitControlUI extends javax.swing.JFrame
 	public static int counterForConsole;
 	private final int nSL = 6;
 	// private final int nPars = nFitPars; //9;
-	private int gSector = 2;
+	private int gSector = 1;
 	private int gSuperlayer = 1;
 	private String ccdbVariation = "calib";
 	private int xMeanErrorType = 2; // 0: RMS, 1=RMS/sqrt(N), 2 = 1.0 (giving equal weight to all
@@ -106,7 +106,7 @@ public class FitControlUI extends javax.swing.JFrame
 		FileOutputWriter file = null;
 		try
 		{
-			file = new FileOutputWriter(outFileForFitPars, append_to_file);
+			file = new FileOutputWriter(outFileForFitPars + TimeToDistanceFitter.runNumber + ".txt", append_to_file);
 			file.Write("#Sec  SL  component  v0   deltanm   tMax   distbeta   delta_bfield_coefficient   b1   b2   b3   b4  c1   c2   c3");
 			file.Close();
 		}
@@ -2310,7 +2310,7 @@ public class FitControlUI extends javax.swing.JFrame
 		FileOutputWriter file = null;
 		try
 		{
-			file = new FileOutputWriter(outFileForFitPars, append_to_file);
+			file = new FileOutputWriter(outFileForFitPars + TimeToDistanceFitter.runNumber + ".txt", append_to_file);
 			file.Write(pStr);
 			file.Close();
 		}

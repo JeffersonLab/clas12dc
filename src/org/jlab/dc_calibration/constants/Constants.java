@@ -119,7 +119,7 @@ public final class Constants
 	public static final double calcDocaCut = 2.0; ////5.0; // 1.0 //0.85
 	public static final String dataOutputDir = Configure.jarFilePath + "/data/";
 	public static final String plotsOutputDir = Configure.jarFilePath + "/plots/";
-	public static final String outFileForFitPars = dataOutputDir + "fitParameters.txt";//"src/files/fitParameters.txt";
+	public static final String outFileForFitPars = dataOutputDir + "fitParameters_run";//"src/files/fitParameters.txt";
 
 	// ================ Binning parameters various histograms ==================
 	// make the following controllable from the GUI (as we may have different Max for B-field

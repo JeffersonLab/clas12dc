@@ -35,6 +35,8 @@ then
    echo "          calib      : Open DC Calibration GUI" 
    echo "          dcmon      : Open DC monitoring GUI" 
    echo "          effi       : Open DC efficiency studies GUI" 
+   echo "          cook_local : Data Cooking on local machine" 
+   echo "          cook_farm  : Data Cooking on farm machine" 
    echo "                    "
    exit
 fi
@@ -52,4 +54,6 @@ case $OPTION in
   "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
   ;;
   "calib") java -jar DC_Calibration.jar
+  ;;
+  "*") echo "Invalid option or to be implemented"	   
 esac  
