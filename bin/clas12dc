@@ -1,19 +1,55 @@
 #!/bin/bash
 
 # Filename: clas12dc
-# Description: Expert's mode for clas12dc calibration. This is intended for debugging purpose and to be used by the experts.
+# Description: Unified Interface for all DC related software.
 # Author: Latif Kabir < latif@jlab.org >
 # Created: Sat Dec 30 02:15:54 2017 (-0500)
 # URL: jlab.org/~latif
 
-echo "          ---------------------------------------------------------------------------------"
-echo "          |										  |"
-echo "          |                  Welcome to DC Calibration Expert's Mode			  |"
-echo "          |										  |"
-echo "          ---------------------------------------------------------------------------------"
 
 
-if [ "-h" == $1 ]
+WelcomeMessage()
+{
+    echo "          ---------------------------------------------------------------------------------"
+    echo "          |										  |"
+    echo "          |                     Welcome to DC Software Packages			          |"
+    echo "          |		  For a list of options type \"clas12dc -h\"			  |"
+    echo "          |		     report issues to: latif@jlab.org				  |"
+    echo "          ---------------------------------------------------------------------------------"    
+}
+
+
+Instruction()
+{
+   echo "                   "		
+   echo "          Syntax: clas12dc <OPTION>"
+   echo "                   "			
+   echo "          ------------------------------------- List of available options --------------------------------"
+   echo "          tbh        : Plot different variables from TBHits bank"
+   echo "          t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
+   echo "          explorer   : Open Data Explorer GUI"
+   echo "          t0         : Estimate T0 correction"
+   echo "          calib      : Open DC Calibration GUI" 
+   echo "          clas12mon  : Open Clas12 monitoring GUI" 
+   echo "          dcmon      : Open DC monitoring GUI" 
+   echo "          effi       : Open DC efficiency studies GUI" 
+   echo "          cook_local : Data Cooking on local machine" 
+   echo "          cook_farm  : Data Cooking on farm machine"
+   echo "          ------------------------------------------------------------------------------------------------"
+   echo "                    "    
+}
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#--------------------------------------------------------------------------------------------------------------------------
+
+WelcomeMessage
+
+if [ $# -ne 1 ]
 then
     echo "                   "
     echo "          Syntax: clas12dc <OPTION>"
@@ -21,23 +57,9 @@ then
     exit
 fi
 
-
-if [ $# -ne 1 ]
+if [ "-h" == $1 ] || [ "-help" == $1 ] || [ "help" == $1 ] || [ "--help" == $1 ]
 then
-   echo "                   "		
-   echo "          Syntax: clas12dc <OPTION>"
-   echo "                   "			
-   echo "          ------------------------------------- List of available options --------------------------------"
-   echo "          tbhits     : Plot different variables from TBHits bank"
-   echo "          t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
-   echo "          explorer   : Open Data Explorer GUI"
-   echo "          getT0      : Estimate T0 correction"
-   echo "          calib      : Open DC Calibration GUI" 
-   echo "          dcmon      : Open DC monitoring GUI" 
-   echo "          effi       : Open DC efficiency studies GUI" 
-   echo "          cook_local : Data Cooking on local machine" 
-   echo "          cook_farm  : Data Cooking on farm machine" 
-   echo "                    "
+    Instruction
    exit
 fi
 
@@ -45,15 +67,23 @@ OPTION=$1
 
 
 case $OPTION in 
- "tbhits") java -cp  clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
-  ;;
-  "t2d")  java -cp  DC_Calibration.jar org.jlab.dc_calibration.benchmark.CompareT2DReconVsCalib
-  ;;
-  "explorer") java -jar DataExplorer.jar
-  ;;
-  "getT0") java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
-  ;;
-  "calib") java -jar DC_Calibration.jar
-  ;;
-  "*") echo "Invalid option or to be implemented"	   
+    "tbh")
+	java -cp  clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
+	;;
+    "t2d")
+	java -cp  DC_Calibration.jar org.jlab.dc_calibration.benchmark.CompareT2DReconVsCalib
+	;;
+    "explorer")
+	java -jar DataExplorer.jar
+	;;
+    "t0")
+	java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
+	;;
+    "calib")
+	java -jar DC_Calibration.jar
+	;;
+    "clas12mon")
+	java -jar clas12mon.jar
+	;; 	       
+    "*") echo "Invalid option or to be implemented"	   
 esac  
