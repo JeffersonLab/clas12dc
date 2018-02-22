@@ -14,7 +14,7 @@ WelcomeMessage()
     echo "          |										  |"
     echo "          |                     Welcome to DC Software Packages			          |"
     echo "          |		  For a list of options type \"clas12dc -h\"			  |"
-    echo "          |		     report issues to: latif@jlab.org				  |"
+    echo "          |		     Report issues to: latif@jlab.org				  |"
     echo "          ---------------------------------------------------------------------------------"    
 }
 
@@ -25,16 +25,17 @@ Instruction()
    echo "          Syntax: clas12dc <OPTION>"
    echo "                   "			
    echo "          ------------------------------------- List of available options --------------------------------"
-   echo "          tbh        : Plot different variables from TBHits bank"
-   echo "          t2d        : Compare time-to-distance function used in reconstruction and calibration suite"
-   echo "          explorer   : Open Data Explorer GUI"
-   echo "          t0         : Estimate T0 correction"
-   echo "          calib      : Open DC Calibration GUI" 
-   echo "          clas12mon  : Open Clas12 monitoring GUI" 
-   echo "          dcmon      : Open DC monitoring GUI" 
-   echo "          effi       : Open DC efficiency studies GUI" 
-   echo "          cook_local : Data Cooking on local machine" 
-   echo "          cook_farm  : Data Cooking on farm machine"
+   echo "          tbh               : Plot different variables from TBHits bank"
+   echo "          t2d               : Compare time-to-distance function used in reconstruction and calibration suite"
+   echo "          explorer          : Open Data Explorer GUI"
+   echo "          t0                : Estimate T0 correction"
+   echo "          calib             : Open DC Calibration GUI" 
+   echo "          clas12mon         : Open Clas12 monitoring GUI" 
+   echo "          dcmon             : Open DC monitoring GUI" 
+   echo "          effi              : Open DC efficiency studies GUI" 
+   echo "          cook_local        : Data Cooking on local machine" 
+   echo "          cook_farm         : Data Cooking on farm machine"
+   echo "          cooking_status    : Farm Data Cooking Status"
    echo "          ------------------------------------------------------------------------------------------------"
    echo "                    "    
 }
@@ -87,6 +88,10 @@ case $OPTION in
 	;;
     "dcmon")
 	java -jar lib/dcmon.jar
+	;;
+    "cooking_status")
+	echo "Please wait while the cooking status is retrieved ... ..."
+	jobstat -u `whoami`
 	;; 	       
     "*") echo "Invalid option or to be implemented"	   
 esac  
