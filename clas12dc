@@ -68,22 +68,25 @@ OPTION=$1
 
 case $OPTION in 
     "tbh")
-	java -cp  clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
+	java -cp  lib/clas12lib.jar org.jlab.latif.clas12lib.dc.TBtrkingDist
 	;;
     "t2d")
-	java -cp  DC_Calibration.jar org.jlab.dc_calibration.benchmark.CompareT2DReconVsCalib
+	java -cp  lib/DC_Calibration.jar org.jlab.dc_calibration.benchmark.CompareT2DReconVsCalib
 	;;
     "explorer")
-	java -jar DataExplorer.jar
+	java -jar lib/DataExplorer.jar
 	;;
     "t0")
-	java -cp DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
+	java -cp lib/DC_Calibration.jar org.jlab.dc_calibration.benchmark.EstimateT0Correction
 	;;
     "calib")
-	java -jar DC_Calibration.jar
+	java -jar lib/DC_Calibration.jar
 	;;
     "clas12mon")
-	java -jar clas12mon.jar
+	java -jar lib/clas12mon.jar
+	;;
+    "dcmon")
+	java -jar lib/dcmon.jar
 	;; 	       
     "*") echo "Invalid option or to be implemented"	   
 esac  
