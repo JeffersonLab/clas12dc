@@ -32,11 +32,11 @@ import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
  * @author Latif Kabir < jlab.org/~latif >
  *
  *To be done:
- *         Discard (replace with neighbor) result if: nEntries < 10000 , error > 50%, T0 < -700 or T0 > -200. Improve pedestal calculation using histogram, Correct error calculation,
+ *         Discard (replace with neighbor) result if: nEntries < 10000 , error > 50%, T0 < 0 or T0 > 200. Improve pedestal calculation using histogram, Correct error calculation,
  *         include error in pedestal calculation
  *
  */
-public class EstimateT0Correction extends TBTimeDistribution
+public class EstimateT0CorrectionOld extends TBTimeDistribution
 {
 	double a;
 	double b;
@@ -44,7 +44,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 	double delta_b;
 	double T0;
 	double delta_T0;
-	double previousT0 = -500.0;
+	double previousT0 = 100.0;
 	double previous_delta_T0 = 5.0;
 	FileOutputWriter file = null;
 	boolean append_to_file = false;
@@ -55,7 +55,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 	/**
 	 * 
 	 */
-	public EstimateT0Correction()
+	public EstimateT0CorrectionOld()
 	{
 		try
 		{
@@ -101,7 +101,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		delta_T0 = Math.sqrt(Math.pow(delta_b / a, 2) + Math.pow(b * (delta_a / Math.pow(a, 2)), 2)
 				+ Math.pow(pedestal * (delta_a / Math.pow(a, 2)), 2));
 
-		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < -700 || T0 > -200
+		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < 0 || T0 > 200
 				|| 100 * delta_T0 / Math.abs(T0) > 50)
 		{
 			System.out.println("For Sec:" + sec + " SL: " + sl + " Slot:" + slot + " Cable:" + cable
@@ -234,7 +234,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 	{
 		Configure.setConfig();
 		CalibStyle.setStyle();
-		EstimateT0Correction t0Fitter = new EstimateT0Correction();
+		EstimateT0CorrectionOld t0Fitter = new EstimateT0CorrectionOld();
 		if (t0Fitter.fileList.size() == 0)
 			return;
 		t0Fitter.FillHistograms();

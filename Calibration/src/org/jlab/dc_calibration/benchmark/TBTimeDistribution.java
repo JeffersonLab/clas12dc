@@ -14,21 +14,21 @@ import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
 import org.jlab.io.hipo.HipoDataSource;
 
-public class HBTimeDistribution extends T0Estimator
+public class TBTimeDistribution extends T0Estimator
 {
 	HipoDataSource		reader				= new HipoDataSource();
 	ArrayList<String>	fileList			= new ArrayList<>();
 	DataEvent			event;
-	DataBank			HBHits;
-	DataBank			HBSegments;
-	DataBank			HBTracks;
+	DataBank			TBHits;
+	DataBank			TBSegments;
+	DataBank			TBTracks;
 	T0SignalCableMap cableMap;
 	int nEvtProcessed = 0;
 	
 	/**
-	 * Constructor for HBTimeDistribution
+	 * Constructor for TBTimeDistribution
 	 */
-	public HBTimeDistribution()
+	public TBTimeDistribution()
 	{
 		fileList = new FileSelector().fileArray;
 		cableMap = new T0SignalCableMap();
@@ -55,9 +55,11 @@ public class HBTimeDistribution extends T0Estimator
 			//contents to be read from HBHits
 			int sector;
 			int superLayer;
+			int TDC;
 			float time;
 			float TProp = 0;
 			float TFlight = 0;
+			float TStart = 0;
 			int trkID;
 			int slotNo;
 			int cableNo;
@@ -71,41 +73,36 @@ public class HBTimeDistribution extends T0Estimator
 				// --------- Load Event ---------------------------------
 				event = reader.getNextEvent();
 				
-				if (!event.hasBank("HitBasedTrkg::HBHits")) 
+				if (!event.hasBank("TimeBasedTrkg::TBHits")) 
 					continue;
 				
-				// Fill only hits that construct a track <---------------- Cut
-				//if (!event.hasBank("HitBasedTrkg::HBHits") || !event.hasBank("HitBasedTrkg::HBSegments")
-				//		|| !event.hasBank("HitBasedTrkg::HBTracks"))
-				//	continue;
-
 				// ---------------- Load All Desired DC Banks -----------------------
-				HBHits = event.getBank("HitBasedTrkg::HBHits");
-				//HBSegments = event.getBank("HitBasedTrkg::HBSegments");
-				//HBTracks = event.getBank("HitBasedTrkg::HBTracks");
+				TBHits = event.getBank("TimeBasedTrkg::TBHits");
 
 				// ----------- Loop over all entries (hits) of the event --------
-				for (int k = 0; k < HBHits.rows(); k++)
+				for (int k = 0; k < TBHits.rows(); k++)
 				{
-						sector = HBHits.getByte("sector", k); // sector starts from 1
-						superLayer = HBHits.getByte("superlayer", k); // SL starts from 1
-						wire = HBHits.getInt("wire", k); // wire goes from 1 to 112 in data
-						layer = HBHits.getInt("layer", k); // layer goes from 1 to 6 in data
-						slotNo = cableMap.getSlotID1to7(wire);  // slotNo goes 1 to 7
-						cableNo = cableMap.getCableID1to6(layer, wire);  // cableNo goes 1 to 6
+						sector = TBHits.getByte("sector", k);                      // sector starts from 1
+						superLayer = TBHits.getByte("superlayer", k);              // SL starts from 1
+						wire = TBHits.getInt("wire", k);                           // wire goes from 1 to 112 in data
+						layer = TBHits.getInt("layer", k);                         // layer goes from 1 to 6 in data
+						slotNo = cableMap.getSlotID1to7(wire);                     // slotNo goes 1 to 7
+						cableNo = cableMap.getCableID1to6(layer, wire);            // cableNo goes 1 to 6
 						
-						time = HBHits.getFloat("time", k);
-						TProp = HBHits.getFloat("TProp", k);
-						TFlight = HBHits.getFloat("TFlight", k);
-						trkID = HBHits.getInt("trkID", k);
-						clusterID = HBHits.getShort("clusterID", k);
+						TDC = TBHits.getInt("TDC", k);
+						TProp = TBHits.getFloat("TProp", k);
+						TFlight = TBHits.getFloat("TFlight", k);
+						TStart = TBHits.getFloat("TStart", k);
+						trkID = TBHits.getInt("trkID", k);
+						clusterID = TBHits.getShort("clusterID", k);
 						
+						time = TDC - TProp - TFlight - TStart;
+
 						//Cut 1: Fill only track associated hits
-						if(trkID <= 0 || clusterID == -1) //  <---------------------- Cut
+						if(trkID <= 0 || clusterID == -1)                          // Cut
 							continue;	
-						if(TProp == 0 || TFlight == 0)
+						if(TProp == 0 || TFlight == 0 || TStart == 0)
 							continue;
-						//histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time - TProp - TFlight));
 						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time));
 				}
 				++nEvtProcessed;
@@ -118,7 +115,7 @@ public class HBTimeDistribution extends T0Estimator
 		
 	public static void main(String arg[])
 	{
-		HBTimeDistribution test = new HBTimeDistribution();
+		TBTimeDistribution test = new TBTimeDistribution();
 		test.FillHistograms();
 		TCanvas c1 = new TCanvas("c1", 800, 600);
 		c1.draw(test.histogram[1][3][0][0]);

@@ -66,7 +66,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 
-import org.jlab.dc_calibration.benchmark.EstimateT0Correction;
+import org.jlab.dc_calibration.benchmark.EstimateT0CorrectionOld;
 import org.jlab.dc_calibration.core.EstimateT0correctionDeprecated;
 import org.jlab.dc_calibration.core.RunReconstructionCoatjava4;
 import org.jlab.dc_calibration.fit.TimeToDistanceFitter;

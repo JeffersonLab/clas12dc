@@ -29,7 +29,7 @@ import org.jlab.groot.ui.TCanvas;
  * @author Latif Kabir < jlab.org/~latif >
  *
  */
-public class FitterForT0Static extends HBTimeDistribution
+public class FitterForT0Static extends TBTimeDistribution
 {
 	double val1;
 	double val2;
