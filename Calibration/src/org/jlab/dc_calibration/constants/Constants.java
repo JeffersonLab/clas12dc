@@ -117,6 +117,7 @@ public final class Constants
     public static final int histTypeToUseInFitting = Configure.HistType; //3; //1; //3; //1;// 2;//1;//2;
 
 	public static final double calcDocaCut = 2.0; ////5.0; // 1.0 //0.85
+	public static final String configFilePath = Configure.jarFilePath + "/config/";
 	public static final String dataOutputDir = Configure.jarFilePath + "/../data/";
 	public static final String plotsOutputDir = Configure.jarFilePath + "/../plots/";
 	public static final String outFileForFitPars = dataOutputDir + "fitParameters_run";//"src/files/fitParameters.txt";

@@ -20,13 +20,21 @@ public class FileSelector
 	 */
 	public FileSelector()
 	{
+		System.out.println("Select the input files .......");		
+		Init();
+	}
+	
+	public FileSelector(boolean selectDir)
+	{
+		if(selectDir)
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		System.out.println("Select output directory .......");
 		Init();
 	}
 
 	void Init()
 	{
-		System.out.println("Select the files .......");
-
 		fc.setMultiSelectionEnabled(true);
 		int result = fc.showOpenDialog(null);
 

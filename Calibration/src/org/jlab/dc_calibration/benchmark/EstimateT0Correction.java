@@ -32,7 +32,7 @@ import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
  * @author Latif Kabir < jlab.org/~latif >
  *
  *To be done:
- *         Discard (replace with neighbor) result if: nEntries < 10000 , error > 50%, T0 < -700 or T0 > -200. Improve pedestal calculation using histogram, Correct error calculation,
+ *         Discard (replace with neighbor) result if: nEntries < 1000 , error > 50%, T0 < -700 or T0 > -200. Improve pedestal calculation using histogram, Correct error calculation,
  *         include error in pedestal calculation
  *
  */

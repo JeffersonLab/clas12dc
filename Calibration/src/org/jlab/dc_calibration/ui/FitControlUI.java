@@ -796,7 +796,7 @@ public class FitControlUI extends javax.swing.JFrame
 
 		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]
 		{ "1", "2", "3", "4", "5", "6" }));
-		jComboBox1.setSelectedIndex(1);
+		jComboBox1.setSelectedIndex(0);
 		jComboBox1.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)

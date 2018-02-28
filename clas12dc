@@ -33,9 +33,13 @@ Instruction()
    echo "          clas12mon         : Open Clas12 monitoring GUI" 
    echo "          dcmon             : Open DC monitoring GUI" 
    echo "          effi              : Open DC efficiency studies GUI" 
+   echo "          decode            : Decode evio files to Hipo files" 
    echo "          cook_local        : Data Cooking on local machine" 
    echo "          cook_farm         : Data Cooking on farm machine"
    echo "          cooking_status    : Farm Data Cooking Status"
+   echo "          det_def           : Print Bank information of the detector given as 2nd argument"
+   echo "          bank_def          : Print variable information of the detector and bank."
+   echo "                              Issue detector name followed by bank name"
    echo "          ------------------------------------------------------------------------------------------------"
    echo "                    "    
 }
@@ -50,7 +54,7 @@ Instruction()
 
 WelcomeMessage
 
-if [ $# -ne 1 ]
+if [ $# -lt 1 ]
 then
     echo "                   "
     echo "          Syntax: clas12dc <OPTION>"
@@ -89,9 +93,32 @@ case $OPTION in
     "dcmon")
 	java -jar lib/dcmon.jar
 	;;
+    "cook_local")
+	java -cp lib/clas12lib.jar org.jlab.latif.clas12lib.recon.FarmCooking "local"
+	echo "Please wait while cooking is initialized ... ..."
+	clara-shell config/clara.config 
+	;;
+    "cook_farm")
+	java -cp lib/clas12lib.jar org.jlab.latif.clas12lib.recon.FarmCooking "farm"
+	echo "Please wait while cooking is initialized ... ..."
+	clara-shell config/clara.config 
+	;;
     "cooking_status")
 	echo "Please wait while the cooking status is retrieved ... ..."
 	jobstat -u `whoami`
 	;; 	       
-    "*") echo "Invalid option or to be implemented"	   
+    "det_def")
+	java -cp lib/clas12lib.jar org.jlab.latif.clas12lib.bankdef.PrintBankDef $2
+	;; 	       
+    "bank_def")
+	java -cp lib/clas12lib.jar org.jlab.latif.clas12lib.bankdef.PrintBankDef $2 $3
+	;;
+    "decode")
+	java -cp lib/clas12lib.jar org.jlab.latif.clas12lib.recon.Clas12Decoding
+	bin/clas12decoder.sh
+	;; 	       
+
+    *)
+	echo "                                       "	   
+	echo "              Invalid option or to be implemented        "	   
 esac  
