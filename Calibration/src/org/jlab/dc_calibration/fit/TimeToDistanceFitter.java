@@ -802,8 +802,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		{
 			layerMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("layer", j));
 			wireMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("wire", j));
-			timeMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("time", j));
-			//timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getFloat("time", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j)) );  // Subtracted TProp and TFlight
+			//timeMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("time", j));
+			timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getInt("TDC", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j) - bnkHits.getFloat("T0", j)) );  // Subtracted TProp and TFlight
 			trkDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("trkDoca", j));
 			calcDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("doca", j));
 			timeResMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("timeResidual", j));

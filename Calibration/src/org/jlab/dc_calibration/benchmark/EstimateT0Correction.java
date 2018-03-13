@@ -44,7 +44,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 	double delta_b;
 	double T0;
 	double delta_T0;
-	double previousT0 = -500.0;
+	double previousT0 = 100.0;
 	double previous_delta_T0 = 5.0;
 	FileOutputWriter file = null;
 	boolean append_to_file = false;
@@ -60,7 +60,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		try
 		{
 			file = new FileOutputWriter(Constants.dataOutputDir + "T0Estimation.txt", append_to_file);
-			file.Write("Sec  SL  Slot  Cable  T0 T0err");
+			file.Write("#Sec  SL  Slot  Cable  T0 T0err");
 		}
 		catch (IOException ex)
 		{
@@ -101,7 +101,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		delta_T0 = Math.sqrt(Math.pow(delta_b / a, 2) + Math.pow(b * (delta_a / Math.pow(a, 2)), 2)
 				+ Math.pow(pedestal * (delta_a / Math.pow(a, 2)), 2));
 
-		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < -700 || T0 > -200
+		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < 0 || T0 > 200
 				|| 100 * delta_T0 / Math.abs(T0) > 50)
 		{
 			System.out.println("For Sec:" + sec + " SL: " + sl + " Slot:" + slot + " Cable:" + cable

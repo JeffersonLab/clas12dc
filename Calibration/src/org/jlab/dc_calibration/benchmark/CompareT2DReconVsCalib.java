@@ -13,6 +13,8 @@ import static org.jlab.dc_calibration.constants.Constants.wpdist;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.image.AreaAveragingScaleFilter;
+
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -224,7 +226,7 @@ public class CompareT2DReconVsCalib
 	
 	public static void main(String[] args)
 	{
-		CompareT2DReconVsCalib t2d = new CompareT2DReconVsCalib(810, "default");
+		CompareT2DReconVsCalib t2d = new CompareT2DReconVsCalib(Integer.valueOf(args[0]), "default");
 		t2d.MakeComparison();
 		//t2d.CompareSingleSL(1,3);
 	}

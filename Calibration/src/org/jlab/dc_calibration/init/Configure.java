@@ -49,8 +49,8 @@ public class Configure
 
 	public static void setConfig()	
 	{
-		//Configure config = new Configure("/../config/config.cfg");
-		Configure config = new Configure("/config/config.cfg");
+		Configure config = new Configure("/../config/config.cfg");
+		//Configure config = new Configure("/config/config.cfg");
 		System.out.println("Reading the calibration configuration ... ...");
 		Sector = Integer.parseInt(config.getProperty("Sector").replaceAll("\\s", ""));
 		BField = config.getProperty("BField");
