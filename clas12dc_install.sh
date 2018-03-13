@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Filename: clas12dc_download.sh
-# Description: Install Clas12 DC software packages
+# Description: Installer for CLAS12 DC software packages
 # Author: Latif Kabir < latif@jlab.org >
 # Created: Tue Mar 13 01:45:37 2018 (-0400)
 # URL: jlab.org/~latif

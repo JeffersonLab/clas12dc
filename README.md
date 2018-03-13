@@ -12,18 +12,19 @@ Please read the README file inside each package for detailed instructions for th
 
 Installation
 --------------
-To install all DC software packages, download the installation script from [here](https://raw.githubusercontent.com/JeffersonLab/clas12dc/master/clas12dc_install.sh).
-Run the installation script after changing permission:
+Use the following commands to install all DC software packages.
+It will download the installer script, make it executable and install all packages:
 
 ```
+wget https://userweb.jlab.org/~latif/Hall_B/clas12dc_install.sh 
 chmod +x clas12dc_install.sh
 ./clas12dc_install.sh
 ```
 
 The utility `clas` inside the directory `clas12dc` will act as the interface for all CLAS12 related software. 
 
-Interface for all DC related software
--------------------------------------
+Interface for all DC related software:`clas` Utility
+---------------------------------------------------
 
 
 ```
