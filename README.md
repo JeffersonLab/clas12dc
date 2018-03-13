@@ -12,7 +12,7 @@ Please read the README file inside each package for detailed instructions for th
 
 Installation
 --------------
-To install all DC software packages, download the installation script from ()[here].
+To install all DC software packages, download the installation script from [here](https://raw.githubusercontent.com/JeffersonLab/clas12dc/master/clas12dc_install.sh).
 Run the installation script after changing permission:
 
 ```
