@@ -96,7 +96,7 @@ public class TBTimeDistribution extends T0Estimator
 						trkID = TBHits.getInt("trkID", k);
 						clusterID = TBHits.getShort("clusterID", k);
 						
-						time = TDC - TProp - TFlight;// - TStart;
+						time = TDC - TProp - TFlight - TStart;
 
 						//Cut 1: Fill only track associated hits
 						if(trkID <= 0 || clusterID == -1)                          // Cut,   DISABLED TEMPORARILY

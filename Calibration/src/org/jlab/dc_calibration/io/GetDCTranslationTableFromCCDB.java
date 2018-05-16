@@ -26,7 +26,7 @@ import java.util.Vector;
 public class GetDCTranslationTableFromCCDB
 {
 	// private int superlayer;
-	public Vector<Integer> vCrate, vSlot, vChan, vSector, vLayer, vComp, vOrder;
+	public Vector<Double> vCrate, vSlot, vChan, vSector, vLayer, vComp, vOrder;
 	public int[][][] Crates = new int[nSectors][nLayers0to35][nComponents];
 	public int[][][] Slots = new int[nSectors][nLayers0to35][nComponents];
 	public int[][][] Channels = new int[nSectors][nLayers0to35][nComponents];
@@ -66,32 +66,32 @@ public class GetDCTranslationTableFromCCDB
 		System.out.println("First 2 in v0 column: " + doubleValues.elementAt(0) + " " + doubleValues.elementAt(1));
 
 		// Now put all the columns in the corresponding Vector members.
-		vCrate = asgmt.getColumnValuesInt(0);
-		vSlot = asgmt.getColumnValuesInt(1);
-		vChan = asgmt.getColumnValuesInt(2);
-		vSector = asgmt.getColumnValuesInt(3);
-		vLayer = asgmt.getColumnValuesInt(4);
-		vComp = asgmt.getColumnValuesInt(5);
-		vOrder = asgmt.getColumnValuesInt(6);
+		vCrate = asgmt.getColumnValuesDouble(0);
+		vSlot = asgmt.getColumnValuesDouble(1);
+		vChan = asgmt.getColumnValuesDouble(2);
+		vSector = asgmt.getColumnValuesDouble(3);
+		vLayer = asgmt.getColumnValuesDouble(4);
+		vComp = asgmt.getColumnValuesDouble(5);
+		vOrder = asgmt.getColumnValuesDouble(6);
 
 		int crate, slot, chan, sec, lay, comp;
 		System.out.println("vector size = " + vCrate.size());
 
 		for (int i = 0; i < vCrate.size(); i++)
 		{
-			crate = vCrate.elementAt(i);
-			slot = vSlot.elementAt(i);
-			chan = vChan.elementAt(i);
-			sec = vSector.elementAt(i);
-			lay = vLayer.elementAt(i);
-			comp = vComp.elementAt(i);
-			Crates[sec - 1][lay - 1][comp - 1] = vCrate.elementAt(i);
-			Slots[sec - 1][lay - 1][comp - 1] = vSlot.elementAt(i);
-			Channels[sec - 1][lay - 1][comp - 1] = vChan.elementAt(i);
-			Sectors[crate - 41][slot - 1][chan] = vSector.elementAt(i); // Crate # starts from 41 &
+			crate = vCrate.elementAt(i).intValue();
+			slot = vSlot.elementAt(i).intValue();
+			chan = vChan.elementAt(i).intValue();
+			sec = vSector.elementAt(i).intValue();
+			lay = vLayer.elementAt(i).intValue();
+			comp = vComp.elementAt(i).intValue();
+			Crates[sec - 1][lay - 1][comp - 1] = vCrate.elementAt(i).intValue();
+			Slots[sec - 1][lay - 1][comp - 1] = vSlot.elementAt(i).intValue();
+			Channels[sec - 1][lay - 1][comp - 1] = vChan.elementAt(i).intValue();
+			Sectors[crate - 41][slot - 1][chan] = vSector.elementAt(i).intValue(); // Crate # starts from 41 &
 																		// goes upto 58
-			Layers[crate - 41][slot - 1][chan] = vLayer.elementAt(i);
-			Components[crate - 41][slot - 1][chan] = vComp.elementAt(i);
+			Layers[crate - 41][slot - 1][chan] = vLayer.elementAt(i).intValue();
+			Components[crate - 41][slot - 1][chan] = vComp.elementAt(i).intValue();
 		}
 
 		System.out.println("Debug ..");

@@ -11,7 +11,6 @@ import org.jlab.latif.clas12lib.core.ClasStyle;
  */
 public class App
 {
-
 	/**
 	 * @param args
 	 */

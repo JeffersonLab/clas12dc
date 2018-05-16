@@ -21,7 +21,7 @@ import java.util.Vector;
 public class ReadT2DparsFromCCDB
 {
 	// private int superlayer;
-	public Vector<Integer> Sector, Superlayer, Component;
+	public Vector<Double> Sector, Superlayer, Component;
 	public Vector<Double> v0, deltanm, tmax, distbeta;
 	public Vector<Double> delta_bfield_coefficient, b1, b2, b3, b4, delta_T0;
 	public double[][][] parsFromCCDB = new double[nSectors][nSL][nFitPars];// nFitPars = 10
@@ -88,9 +88,9 @@ public class ReadT2DparsFromCCDB
 		//System.out.println("First 2 in v0 column: " + doubleValues.elementAt(0) + " " + doubleValues.elementAt(1));
 
 		// Now put all the columns in the corresponding Vector members.
-		Sector = asgmt.getColumnValuesInt(0);
-		Superlayer = asgmt.getColumnValuesInt(1);
-		Component = asgmt.getColumnValuesInt(2);
+		Sector = asgmt.getColumnValuesDouble(0);
+		Superlayer = asgmt.getColumnValuesDouble(1);
+		Component = asgmt.getColumnValuesDouble(2);
 		v0 = asgmt.getColumnValuesDouble(3);
 		deltanm = asgmt.getColumnValuesDouble(4);
 		tmax = asgmt.getColumnValuesDouble(5);
@@ -140,7 +140,7 @@ public class ReadT2DparsFromCCDB
 	 */
 	public static void main(String[] args)
 	{
-		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("calib", 2091);
+		ReadT2DparsFromCCDB read_ccdb = new ReadT2DparsFromCCDB("calib", 3050);
 		read_ccdb.LoadCCDB();
 		read_ccdb.printPars();
 	}

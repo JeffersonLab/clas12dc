@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 public class ReadT0parsFromCCDB
 {
-	public Vector<Integer> Sector, Superlayer, Slot, Cable;
+	public Vector<Double> Sector, Superlayer, Slot, Cable;
 	public Vector<Double> T0Correction, T0Error;
 	String ccdbVariation = "calib";
 	int run_number = -1;
@@ -57,10 +57,10 @@ public class ReadT0parsFromCCDB
 		Assignment asgmt = provider.getData("/calibration/dc/time_corrections/T0Corrections");
 
 		// Now put all the columns in the corresponding Vector members.
-		Sector = asgmt.getColumnValuesInt(0);
-		Superlayer = asgmt.getColumnValuesInt(1);
-		Slot = asgmt.getColumnValuesInt(2);
-		Cable = asgmt.getColumnValuesInt(3);
+		Sector = asgmt.getColumnValuesDouble(0);
+		Superlayer = asgmt.getColumnValuesDouble(1);
+		Slot = asgmt.getColumnValuesDouble(2);
+		Cable = asgmt.getColumnValuesDouble(3);
 		T0Correction = asgmt.getColumnValuesDouble(4);
 		T0Error = asgmt.getColumnValuesDouble(5);
 	}
@@ -69,8 +69,9 @@ public class ReadT0parsFromCCDB
 	{
 		for (int i = 0; i < Sector.size(); i++)
 		{
-			System.out.println(String.format("%d  %d  %d  %d  %4.3f  %4.3f", Sector.elementAt(i), Superlayer.get(i),
-					Slot.get(i), Cable.get(i), T0Correction.get(i), T0Error.get(i)));
+			//System.out.println(String.format("%d  %d  %d  %d  %4.3f  %4.3f", Sector.elementAt(i), Superlayer.get(i),
+			//		Slot.get(i), Cable.get(i), T0Correction.get(i), T0Error.get(i)));
+			System.out.println( Sector.elementAt(i) + "\t" + Superlayer.get(i) + "\t" + Slot.get(i) + "\t" + Cable.get(i) + "\t" + T0Correction.get(i) + "\t" + T0Error.get(i));
 		}
 	}
 
@@ -84,7 +85,7 @@ public class ReadT0parsFromCCDB
 	 */
 	public void printModifiedT0s(int sector, int superlayer, double deltaT0)
 	{
-		int sec = 0, sl = 0;
+		double sec = 0, sl = 0;
 		double newT0 = 0.0;
 		for (int i = 0; i < Sector.size(); i++)
 		{
@@ -94,8 +95,9 @@ public class ReadT0parsFromCCDB
 
 			if (sec == sector && sl == superlayer)
 			{
-				System.out.println(String.format("%d  %d  %d  %d  %4.3f  %4.3f",
-						sec, sl, Slot.get(i), Cable.get(i), newT0, T0Error.get(i)));
+//				System.out.println(String.format("%d  %d  %d  %d  %4.3f  %4.3f",
+//						sec, sl, Slot.get(i), Cable.get(i), newT0, T0Error.get(i)));
+				System.out.println( sec + "\t" + sl + "\t" + Slot.get(i) + "\t" + Cable.get(i) + "\t" + newT0 + "\t" + T0Error.get(i));
 			}
 		}
 	}
@@ -123,7 +125,7 @@ public class ReadT0parsFromCCDB
 			Logger.getLogger(TimeToDistanceFitter.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		int sec = 0, sl = 0;
+		double sec = 0, sl = 0;
 		double newT0 = 0.0;
 		for (int i = 0; i < Sector.size(); i++)
 		{
@@ -134,8 +136,10 @@ public class ReadT0parsFromCCDB
 
 			if (sec == sector && sl == superlayer)
 			{
-				str = String.format("%d  %d  %d  %d  %4.3f  %4.3f",
-						sec, sl, Slot.get(i), Cable.get(i), newT0, T0Error.get(i));
+				//str = String.format("%d  %d  %d  %d  %4.3f  %4.3f",
+				//		sec, sl, Slot.get(i), Cable.get(i), newT0, T0Error.get(i));
+				str = sec + "\t" + sl + "\t" + Slot.get(i) + "\t" + Cable.get(i) + "\t" + newT0 + "\t" + T0Error.get(i);
+
 				if (!(file == null))
 				{
 					file.Write(str);
@@ -156,7 +160,7 @@ public class ReadT0parsFromCCDB
 
 	public static void main(String[] args)
 	{
-		ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", 1984);
+		ReadT0parsFromCCDB readT0 = new ReadT0parsFromCCDB("calib", 3050);
 		readT0.printCurrentT0s();
 		//readT0.printModifiedT0s(6, 6, 10.0);
 		//readT0.writeOutModifiedT0s(6, 6, 10.0);
