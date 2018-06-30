@@ -66,6 +66,7 @@ public class TBTimeDistribution extends T0Estimator
 			int layer;
 			int wire;
 			int clusterID;
+			float tBeta;
 
 			// ------------ Loop over all events in the file -------
 			while (reader.hasEvent())
@@ -95,13 +96,14 @@ public class TBTimeDistribution extends T0Estimator
 						TStart = TBHits.getFloat("TStart", k);
 						trkID = TBHits.getInt("trkID", k);
 						clusterID = TBHits.getShort("clusterID", k);
+						tBeta = TBHits.getFloat("tBeta", k);
 						
-						time = TDC - TProp - TFlight - TStart;
+						time = TDC - TProp - TFlight - TStart - tBeta;             // We want to calculate T0, do not subtract T0 here 
 
 						//Cut 1: Fill only track associated hits
-						if(trkID <= 0 || clusterID == -1)                          // Cut,   DISABLED TEMPORARILY
+						if(trkID <= 0 || clusterID == -1)                          // Cut,   
 							continue;	
-						if(TProp == 0 || TFlight == 0 || TStart == 0)
+						if(TProp == 0 || TFlight == 0 || TStart == 0)              
 							continue;
 						histogram[sector - 1][superLayer - 1][slotNo - 1][cableNo - 1].fill((time));
 				}

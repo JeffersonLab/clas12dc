@@ -18,6 +18,8 @@ import static org.jlab.dc_calibration.constants.Constants.histTypeToUseInFitting
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.rad2deg;
 import static org.jlab.dc_calibration.constants.Constants.wpdist;
+import static org.jlab.dc_calibration.constants.Constants.v0Averaged;;
+
 
 public class DCTimeFunction
 {
@@ -140,7 +142,7 @@ public class DCTimeFunction
 		}
 
 		// //where x is trkdoca
-		double deltatime_beta = (Math.sqrt(x * x + Math.pow(distbeta * Math.pow(beta, 2), 2)) - x) / v0Par;
+		double deltatime_beta = (Math.sqrt(x * x + Math.pow(distbeta * Math.pow(beta, 2), 2)) - x) / v0Averaged;
 		calcTime = calcTime + deltatime_bfield + deltatime_beta + deltaT0;
 		// System.out.println("deltatime_beta = " + deltatime_beta);
 

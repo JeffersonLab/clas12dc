@@ -24,9 +24,9 @@ It should just work.
 
 Running on JLAB ifarm
 ---------------------
-You can run the pre-compiled compiled jar from ```ifram``` by issuing the following command (assuming you ssh with -Y option):
+You can run the pre-compiled compiled jar on ```ifram``` by issuing the following command (assuming you ssh with -Y option):
 ```
-java -jar /volatile/clas12/latif/bin/DataExplorer.jar
+java -jar /group/clas12/clas12dc/DataExplorer.jar
 ```
 
 Dependencies
@@ -34,7 +34,7 @@ Dependencies
 
  - Clas12lib : Contains coatjava and other dependencies in a single jar
 
-The required jar file is stored inside the ```Clas12lib/lib/``` directory. You need to add them to the ```Build Path``` before you can compile the DataExplorer. 
+The required jar file is stored inside the ```clas12dc/lib/``` directory. You need to add them to the ```Build Path``` before you can compile the DataExplorer. 
 
 Compilation Instructions
 ------------------------

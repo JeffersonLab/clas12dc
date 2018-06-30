@@ -660,8 +660,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					if (event.hasBank("RUN::config"))
 					{
 						runNumber = event.getBank("RUN::config").getInt("run", 0);
-						runNumberFound = true;
-						System.out.println("Run number found from the data bank:" + runNumber);
+						if(runNumber != 0)
+						{
+							runNumberFound = true;
+							System.out.println("Run number found from the data bank:" + runNumber);
+						}
 					}
 				}
 				
@@ -803,7 +806,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			layerMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("layer", j));
 			wireMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("wire", j));
 			//timeMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("time", j));
-			timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getInt("TDC", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j) - bnkHits.getFloat("T0", j)) );  // Subtracted TProp and TFlight
+			timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getInt("TDC", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j) - bnkHits.getFloat("TStart", j) - bnkHits.getFloat("T0", j)) );  // Subtracted TProp and TFlight
 			trkDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("trkDoca", j));
 			calcDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("doca", j));
 			timeResMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("timeResidual", j));
@@ -994,7 +997,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					}
 */					// This allows to use an average default value of 0.5 Tesla for B-field in
 					// classes such as DCTimeFunction
-					if ((superlayer == 3 || superlayer == 4) && (gBfield < 0.3 || gBfield > 0.8))
+					if ((superlayer == 3 || superlayer == 4) && (gBfield < 0.2 || gBfield > 0.8))	
 					{
 						inBfieldBin = false;
 					}
@@ -1004,7 +1007,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					//-------------------Cut 5 -----------------------
 					if (gCalcDocaNorm < calcDocaCut)
 					{ 
-						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz > -1 && thBnVz < nThBinsVz
+						if (bnkSegs.getInt("Hit" + h + "_ID", j) > -1 && thBnVz > -1 && thBnVz < nThBinsVz 
 								&& inBfieldBin == true)
 						{
 							double docaNorm = gTrkDoca / docaMax;

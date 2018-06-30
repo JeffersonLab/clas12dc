@@ -44,11 +44,13 @@ public class EstimateT0Correction extends TBTimeDistribution
 	double delta_b;
 	double T0;
 	double delta_T0;
-	double previousT0 = 100.0;
+	double previousT0 = -80.0;
 	double previous_delta_T0 = 5.0;
 	FileOutputWriter file = null;
+	FileOutputWriter file_slope = null;
 	boolean append_to_file = false;
 	String result;
+	String slope_str;
 	F1D myFnc[][][][] = new F1D[nSec][nSL][nSlots][nCables];
 	public int cablesDone;
 
@@ -61,6 +63,9 @@ public class EstimateT0Correction extends TBTimeDistribution
 		{
 			file = new FileOutputWriter(Constants.dataOutputDir + "T0Estimation.txt", append_to_file);
 			file.Write("#Sec  SL  Slot  Cable  T0 T0err");
+			
+			file_slope = new FileOutputWriter(Constants.dataOutputDir + "CalulatedSlope.txt", append_to_file);
+			file_slope.Write("#Sec  SL  Slot  Cable  Slope");
 		}
 		catch (IOException ex)
 		{
@@ -70,7 +75,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 
 	public void FitLeadingEdge(int sec, int sl, int slot, int cable)
 	{
-		myFnc[sec][sl][slot][cable] = MaxSlopBin(sec, sl, slot, cable);
+		myFnc[sec][sl][slot][cable] = maxSlopeBin(sec, sl, slot, cable);
 
 		double pedestal = 0.0;
 		for (int i = 0; i < 25; i++)
@@ -101,7 +106,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		delta_T0 = Math.sqrt(Math.pow(delta_b / a, 2) + Math.pow(b * (delta_a / Math.pow(a, 2)), 2)
 				+ Math.pow(pedestal * (delta_a / Math.pow(a, 2)), 2));
 
-		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < 0 || T0 > 200
+		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < -300 || T0 > 100
 				|| 100 * delta_T0 / Math.abs(T0) > 50)
 		{
 			System.out.println("For Sec:" + sec + " SL: " + sl + " Slot:" + slot + " Cable:" + cable
@@ -117,7 +122,9 @@ public class EstimateT0Correction extends TBTimeDistribution
 		}
 		// System.out.println((sec + 1) + "\t" + (sl + 1) + "\t" + (slot + 1) + "\t" + (cable + 1) +"\t" + T0 + " \t " + delta_T0);
 		result = String.format("%d %d %d %d %4.3f %4.3f", (sec + 1), (sl + 1), (slot + 1), (cable + 1), T0, delta_T0);
+		slope_str = String.format("%d %d %d %d %4.3f", (sec + 1), (sl + 1), (slot + 1), (cable + 1), a);
 		file.Write(result);
+		file_slope.Write(slope_str);
 	}
 
 	public void DoFitting()
@@ -145,6 +152,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		try
 		{
 			file.Close();
+			file_slope.Close();
 		}
 		catch (IOException ex)
 		{
@@ -152,7 +160,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		}
 	}
 
-	public F1D MaxSlopBin(int sec, int sl, int slot, int cable)
+	public F1D maxSlopeBin(int sec, int sl, int slot, int cable)
 	{
 		int min_Bin = 50;
 		int max_Bin = 300;
@@ -179,6 +187,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 			}
 			++min_Bin;
 		}
+
 		return my_Fnc;
 	}
 

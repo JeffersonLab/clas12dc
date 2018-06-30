@@ -107,7 +107,7 @@ public class FitControlUI extends javax.swing.JFrame
 		try
 		{
 			file = new FileOutputWriter(outFileForFitPars + TimeToDistanceFitter.runNumber + ".txt", append_to_file);
-			file.Write("#Sec  SL  component  v0   deltanm   tMax   distbeta   delta_bfield_coefficient   b1   b2   b3   b4  c1   c2   c3");
+			file.Write("#Sec  SL  component  v0   deltanm   tMax   distbeta   delta_bfield_coefficient  b1   b2   b3   b4  delta_T0  c1   c2   c3");
 			file.Close();
 		}
 		catch (IOException ex)

@@ -21,6 +21,7 @@ public final class Constants
 
 	public static final double cos30 = Math.cos(30.0 / rad2deg);
 	public static final double beta = 1.0; //0.0;
+	public static final double v0Averaged = 0.007;
 
 	// public static final int nThBinsVz = 6; // [nThBinsVZ][2]
 	// public static final double[] thEdgeVzL = { -2.0, 8.0, 18.0, 28.0, 38.0, 48.0 };
@@ -126,7 +127,7 @@ public final class Constants
 	// make the following controllable from the GUI (as we may have different Max for B-field
 	// depending on expt.
 	public static final int nBFieldBins = 20;
-	public static final double bFieldMin = 0.3, bFieldMax = 0.8;  // <--------- Changed the limit for B-field
+	public static final double bFieldMin = 0.2, bFieldMax = 0.8;  // <--------- Changed the limit for B-field
 	//public static final double bFieldMin = 0.0, bFieldMax = 1.5;
 	public static final int binForTestPlotTemp = 15;//nBFieldBins / 2; // for temp purpose
 	public static final int nLocalAngleBins = 160;
