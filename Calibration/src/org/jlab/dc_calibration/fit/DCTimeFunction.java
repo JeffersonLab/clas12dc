@@ -12,14 +12,13 @@
  */
 package org.jlab.dc_calibration.fit;
 
-import static org.jlab.dc_calibration.constants.Constants.beta;
 import static org.jlab.dc_calibration.constants.Constants.deg2rad;
 import static org.jlab.dc_calibration.constants.Constants.histTypeToUseInFitting;
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.rad2deg;
 import static org.jlab.dc_calibration.constants.Constants.wpdist;
-import static org.jlab.dc_calibration.constants.Constants.v0Averaged;;
-
+import static org.jlab.dc_calibration.constants.Constants.v0Averaged;
+import static org.jlab.dc_calibration.constants.Constants.beta;
 
 public class DCTimeFunction
 {

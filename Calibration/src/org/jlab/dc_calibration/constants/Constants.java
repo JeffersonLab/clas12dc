@@ -21,6 +21,8 @@ public final class Constants
 
 	public static final double cos30 = Math.cos(30.0 / rad2deg);
 	public static final double beta = 1.0; //0.0;
+	public static final double beta_max = 1.02;
+	public static final double beta_min = 0.98;
 	public static final double v0Averaged = 0.007;
 
 	// public static final int nThBinsVz = 6; // [nThBinsVZ][2]

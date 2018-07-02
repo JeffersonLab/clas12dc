@@ -36,6 +36,8 @@ import static org.jlab.dc_calibration.constants.Constants.thEdgeVzL;
 import static org.jlab.dc_calibration.constants.Constants.thEdgeVzL2;
 import static org.jlab.dc_calibration.constants.Constants.timeAxisMax;
 import static org.jlab.dc_calibration.constants.Constants.wpdist;
+import static org.jlab.dc_calibration.constants.Constants.beta_max;
+import static org.jlab.dc_calibration.constants.Constants.beta_min;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -145,6 +147,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	private Map<Integer, Double> calcDocaMapTBHits;
 	private Map<Integer, Double> timeResMapTBHits;
 	private Map<Integer, Double> BMapTBHits;
+	private Map<Integer, Double> BetaMapTBHits;
 	private Map<Integer, Integer> gSegmThBinMapTBSegments;
 	private Map<Integer, Double> gSegmAvgWireTBSegments;
 	private Map<Integer, Double> gFitChisqProbTBSegments;
@@ -797,6 +800,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		calcDocaMapTBHits = new HashMap<Integer, Double>();
 		timeResMapTBHits = new HashMap<Integer, Double>();
 		BMapTBHits = new HashMap<Integer, Double>();
+		BetaMapTBHits = new HashMap<Integer, Double>();
 		TFlightMapTBHits = new HashMap<Integer, Double>();
 		TPropMapTBHits = new HashMap<Integer, Double>();
 
@@ -806,16 +810,18 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			layerMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("layer", j));
 			wireMapTBHits.put(bnkHits.getInt("id", j), bnkHits.getInt("wire", j));
 			//timeMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("time", j));
-			timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getInt("TDC", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j) - bnkHits.getFloat("TStart", j) - bnkHits.getFloat("T0", j)) );  // Subtracted TProp and TFlight
+			timeMapTBHits.put(bnkHits.getInt("id", j), (double) (bnkHits.getInt("TDC", j) - bnkHits.getFloat("TProp", j) - bnkHits.getFloat("TFlight", j) - bnkHits.getFloat("TStart", j) - bnkHits.getFloat("T0", j)) );  // Do not subtract Tbeta here
 			trkDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("trkDoca", j));
 			calcDocaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("doca", j));
 			timeResMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("timeResidual", j));
 			TFlightMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("TFlight", j));
-			TPropMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("TProp", j));
+			TPropMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("TProp", j));			
 			bFieldVal = (double) bnkHits.getFloat("B", j);
 			sector = bnkHits.getInt("sector", j);
 			superlayer = bnkHits.getInt("superlayer", j);
 			BMapTBHits.put(bnkHits.getInt("id", j), bFieldVal);
+			BetaMapTBHits.put(bnkHits.getInt("id", j), (double) bnkHits.getFloat("beta", j));
+			
 			h1bFieldSL[superlayer - 1].fill(bFieldVal);
 			if (superlayer == 3 || superlayer == 4)
 			{
@@ -968,6 +974,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					Double gCalcDoca = calcDocaMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gTimeRes = timeResMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gBfield = BMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
+					Double gBeta = BetaMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gTProp = TPropMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					Double gTFlight = TFlightMapTBHits.get(new Integer(bnkSegs.getInt("Hit" + h + "_ID", j)));
 					
@@ -977,6 +984,10 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					}
 					double gCalcDocaNorm = gCalcDoca / docaMax;
 
+					//Consider only tracks expected to be electrons. i.e. beta very close to 1 (a binning around 1 is used here)
+					if(gBeta > beta_max || gBeta < beta_min)
+						continue;
+					
 					//------------- New Cut by Latif: Exclude zero TFlight or TProp hits ----------------
 					if(gTFlight == 0.0 || gTProp == 0.0)
 						continue;
