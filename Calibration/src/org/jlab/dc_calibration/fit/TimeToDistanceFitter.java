@@ -14,6 +14,7 @@ import static org.jlab.dc_calibration.constants.Constants.iSecMin;
 import static org.jlab.dc_calibration.constants.Constants.localAngleMax;
 import static org.jlab.dc_calibration.constants.Constants.localAngleMin;
 import static org.jlab.dc_calibration.constants.Constants.nBFieldBins;
+import static org.jlab.dc_calibration.constants.Constants.BFieldBins;
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.nHists;
 import static org.jlab.dc_calibration.constants.Constants.nLayer;
@@ -488,18 +489,12 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		double dMax;
 		for (int i = iSecMin; i < iSecMax; i++)
 		{ 
-			//Looking only at the Sector2 (KPP) data (not to waste time in empty hists)
 			for (int j = 0; j < nSL; j++)
 			{
 				dMax = 2 * wpdist[j];
 				for (int k = 0; k < nThBinsVz; k++)
 				{ 
-					// nThBinsVz theta bins +/-2
-					// deg around 0, 10, 20, 30,
-					// 40, and 50 degs
 					hNm = String.format("Sector %d timeVnormDocaS%dTh%02d", i, j, k);
-					// h2timeVtrkDocaVZ.put(new Coordinate(i, j, k), new H2F(hNm, 200, 0.0, 1.0,
-					// 150, 0.0, 200.0));
 					h2timeVtrkDocaVZ.put(new Coordinate(i, j, k),
 							new H2F(hNm, 200, 0.0, 1.0, 150, tMin, timeAxisMax[j]));
 
@@ -510,14 +505,10 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					h2timeVtrkDocaVZ.get(new Coordinate(i, j, k)).setTitleY("Time (ns)");
 
 					hNm = String.format("Sector %d timeVtrkDocaS%dTh%02d", i, j, k);
-					// h2timeVtrkDocaVZ.put(new Coordinate(i, j, k), new H2F(hNm, 200, 0.0, 1.0,
-					// 150, 0.0, 200.0));
-					// h2timeVtrkDoca.put(new Coordinate(i, j, k), new H2F(hNm, 200, 0.0, 1.2 *
-					// dMax, 150, 0.0, timeAxisMax[j]));
 					h2timeVtrkDoca.put(new Coordinate(i, j, k),
 							new H2F(hNm, 200, 0.0, 1.2 * dMax, 150, tMin, timeAxisMax[j]));
 
-					hTtl = String.format("time vs. |Doca| (Sec=%d, SL=%d, th(%2.1f,%2.1f))", i, j + 1, thEdgeVzL[k],
+					hTtl = String.format("time vs. |trkDoca| (Sec=%d, SL=%d, th(%2.1f,%2.1f))", i, j + 1, thEdgeVzL[k],
 							thEdgeVzH[k]);
 					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitle(hTtl);
 					h2timeVtrkDoca.get(new Coordinate(i, j, k)).setTitleX("trkDoca (cm)");
@@ -549,19 +540,34 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 							thEdgeVzH[k]);
 					h1timeFitRes.get(new Coordinate(i, j, k)).setTitle(hTtl);
 					h1timeFitRes.get(new Coordinate(i, j, k)).setTitleX("Time (ns)");
-				}
-			
-////				for (int k = 0; k < nThBinsVz2; k++)
-////				{
-////					h3BTXmap.put(new Coordinate(i, j, k),
-////							new SimpleH3D(100, 0.0, 1.2 * dMax, 100, tMin, timeAxisMax[j], 60, 0.0, 1.2));
-////				}
+				}			
 			}
 		}
 
+		// ------------ Include B-field binnings -------------
+		for (int i = iSecMin; i < iSecMax; i++)
+		{
+			for (int j = 2; j <= 3; j++)
+			{
+				dMax = 2 * wpdist[j];
+				for (int k = 0; k < nThBinsVz; k++)
+				{
+					for (int l = 0; l < nBFieldBins; l++)
+					{
+						hNm = String.format("Sector %d timeVtrkDocaS%dTh%02dB%d", i, j, k, l);
+						h2timeVtrkDoca.put(new Coordinate(i, j, k, l),
+								new H2F(hNm, 200, 0.0, 1.2 * dMax, 150, tMin, timeAxisMax[j]));
+						hTtl = String.format("time vs. |trkDoca| (Sec=%d, SL=%d, Bbin=%d, th(%2.1f,%2.1f))", i, j + 1, l, thEdgeVzL[k], thEdgeVzH[k]);
+						h2timeVtrkDoca.get(new Coordinate(i, j, k, l)).setTitle(hTtl);
+						h2timeVtrkDoca.get(new Coordinate(i, j, k, l)).setTitleX("trkDoca (cm)");
+						h2timeVtrkDoca.get(new Coordinate(i, j, k, l)).setTitleY("Time (ns)");
+					}
+				}
+			}
+		}
+		
 		for (int i = iSecMin; i < iSecMax; i++)
 		{ 
-			// Looking only at the Sector2 (KPP) data (not to waste time in empty hists)
 			for (int j = 0; j < nSL; j++)
 			{
 				dMax = 2 * wpdist[j];
@@ -995,7 +1001,11 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					// ---------- Latif: Skip hits outside 100% of max cell size --------------
 					if(gTrkDoca/docaMax > 1.0)
 						continue;
-										
+					//------------- Calculate B-field Bin here ------------------
+					//
+					//
+					//
+					
 					//~~~~~~~~~~~~~~~~~~~~~~~ This Block is the possible Culprit ~~~~~~~~~~~~~~~~~~~~~~~~~
 					//----> For Temp purpose <------
 					boolean inBfieldBin = true; // For SL=3 & 4, using only data that correspond to
@@ -1049,6 +1059,13 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 								{
 									h1trkDoca4NegRes.fill(gTrkDoca);
 								}
+							}
+							
+							//------------- Fill B-field binned histos here -----------------
+							if ((superlayer == 3 || superlayer == 4))
+							{
+//								h2timeVtrkDoca.get(new Coordinate(sector - 1, superlayer - 1, thBnVz, BFieldBin))
+//								.fill(Math.abs(gTrkDoca), gTime);
 							}
 						}
 

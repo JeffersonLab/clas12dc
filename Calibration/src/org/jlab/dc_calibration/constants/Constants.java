@@ -128,7 +128,8 @@ public final class Constants
 	// ================ Binning parameters various histograms ==================
 	// make the following controllable from the GUI (as we may have different Max for B-field
 	// depending on expt.
-	public static final int nBFieldBins = 20;
+	public static final int nBFieldBins = 10; //20;
+	public static final double[] BFieldBins = {0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0};
 	public static final double bFieldMin = 0.2, bFieldMax = 0.8;  // <--------- Changed the limit for B-field
 	//public static final double bFieldMin = 0.0, bFieldMax = 1.5;
 	public static final int binForTestPlotTemp = 15;//nBFieldBins / 2; // for temp purpose
