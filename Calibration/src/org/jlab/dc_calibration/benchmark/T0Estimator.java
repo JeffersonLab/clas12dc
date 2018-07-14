@@ -4,6 +4,7 @@
 package org.jlab.dc_calibration.benchmark;
 
 import org.jlab.groot.data.H1F;
+import org.jlab.dc_calibration.init.Configure;
 
 /**
  * @author Latif Kabir < jlab.org/~latif >
@@ -37,7 +38,7 @@ public class T0Estimator
 					for (int cable = 0; cable < nCables; ++cable)
 					{
 						title = "Time : Sec " + (sec + 1) + " SL " + (sl + 1) + "Slot " + (slot + 1) + "cable" + (cable + 1);
-						histogram[sec][sl][slot][cable] = new H1F(title, 1000, -300, 700);
+						histogram[sec][sl][slot][cable] = new H1F(title, 1000, -1.0*(Configure.TStart + 100), 1000 - (Configure.TStart + 100));
 					}
 				}
 			}
