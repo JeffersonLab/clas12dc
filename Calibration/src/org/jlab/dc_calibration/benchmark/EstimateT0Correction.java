@@ -106,7 +106,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 		delta_T0 = Math.sqrt(Math.pow(delta_b / a, 2) + Math.pow(b * (delta_a / Math.pow(a, 2)), 2)
 				+ Math.pow(pedestal * (delta_a / Math.pow(a, 2)), 2));
 
-		if (histogram[sec][sl][slot][cable].getEntries() < 1000 || T0 < -300 || T0 > 100
+		if (histogram[sec][sl][slot][cable].getEntries() < 1000 /* || T0 < -300 || T0 > 100 */
 				|| 100 * delta_T0 / Math.abs(T0) > 50)
 		{
 			System.out.println("For Sec:" + sec + " SL: " + sl + " Slot:" + slot + " Cable:" + cable

@@ -15,6 +15,7 @@ public class Configure
 	public static int Sector;
 	public static String BField;
 	public static int HistType;
+	public static double TStart;
 	public static String jarFilePath;
 	
 	public Configure(String config_file)
@@ -55,6 +56,7 @@ public class Configure
 		Sector = Integer.parseInt(config.getProperty("Sector").replaceAll("\\s", ""));
 		BField = config.getProperty("BField");
 		HistType = Integer.parseInt(config.getProperty("HistType").replaceAll("\\s", ""));
+		TStart = (double)Integer.parseInt(config.getProperty("TStart").replaceAll("\\s", ""));
 		System.out.println(" Sector: " + Configure.Sector  + " HistType: " + Configure.HistType);
 		System.out.println("Jar file dir: " + Configure.jarFilePath);
 	}

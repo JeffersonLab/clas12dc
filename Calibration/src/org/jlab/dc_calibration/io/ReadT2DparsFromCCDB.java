@@ -15,6 +15,7 @@ import org.jlab.ccdb.JDBCProvider;
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.nSL;
 import static org.jlab.dc_calibration.constants.Constants.nSectors;
+import static org.jlab.dc_calibration.constants.Constants.ccdb_variation;
 
 import java.util.Vector;
 
@@ -25,7 +26,7 @@ public class ReadT2DparsFromCCDB
 	public Vector<Double> v0, deltanm, tmax, distbeta;
 	public Vector<Double> delta_bfield_coefficient, b1, b2, b3, b4, delta_T0;
 	public double[][][] parsFromCCDB = new double[nSectors][nSL][nFitPars];// nFitPars = 10
-	String ccdbVariation = "calib";
+	String ccdbVariation = ccdb_variation;
 	int run_number = -1;
 	
 	/**

@@ -10,6 +10,7 @@ import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.nSL;
 import static org.jlab.dc_calibration.constants.Constants.nSectors;
 import static org.jlab.dc_calibration.constants.Constants.nSlots7;
+import static org.jlab.dc_calibration.constants.Constants.ccdb_variation;
 
 /**
  *
@@ -30,7 +31,7 @@ public class ReadT0parsFromCCDB
 {
 	public Vector<Double> Sector, Superlayer, Slot, Cable;
 	public Vector<Double> T0Correction, T0Error;
-	String ccdbVariation = "calib";
+	String ccdbVariation = ccdb_variation;
 	int run_number = -1;
 
 	public ReadT0parsFromCCDB(String ccdbVariation, int runNumber)

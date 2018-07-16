@@ -11,6 +11,7 @@ import static org.jlab.dc_calibration.constants.Constants.nThBinsVz;
 import static org.jlab.dc_calibration.constants.Constants.outFileForFitPars;
 import static org.jlab.dc_calibration.constants.Constants.parName;
 import static org.jlab.dc_calibration.constants.Constants.parSteps;
+import static org.jlab.dc_calibration.constants.Constants.ccdb_variation;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class FitControlUI extends javax.swing.JFrame
 	// private final int nPars = nFitPars; //9;
 	private int gSector = 1;
 	private int gSuperlayer = 1;
-	private String ccdbVariation = "calib";
+	private String ccdbVariation = ccdb_variation;
 	private int xMeanErrorType = 2; // 0: RMS, 1=RMS/sqrt(N), 2 = 1.0 (giving equal weight to all
 									// profile means)
 	private boolean[] checkboxVal =
@@ -136,7 +137,7 @@ public class FitControlUI extends javax.swing.JFrame
 		// Instead of reading the two tables again and again whenever we select the item from
 		// the corresponding jComboBox4, it's better to read both once at the beginning,
 		// keep them stored in two different array variables and use those arrays later.
-		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB("calib",TimeToDistanceFitter.runNumber);
+		ReadT2DparsFromCCDB rdTable = new ReadT2DparsFromCCDB(ccdbVariation,TimeToDistanceFitter.runNumber);
 		rdTable.LoadCCDB();
 		parsFromCCDB_calib = rdTable.parsFromCCDB;
 
@@ -145,14 +146,14 @@ public class FitControlUI extends javax.swing.JFrame
 		parsFromCCDB_default = rdTable2.parsFromCCDB;
 	}
 
-	private void putCCDBvaluesToResetArrays(int sector, String ccdbVariation)
+	private void putCCDBvaluesToResetArrays(int sector, String ccdbVariation_)
 	{
 		for (int i = 0; i < nSL; i++)
 		{
 			for (int j = 0; j < nFitPars; j++)
 			{
 				// Get the init values from CCDB
-				if (ccdbVariation == "calib")
+				if (ccdbVariation_ == ccdb_variation)
 				{
 					resetFitPars[i][j] = parsFromCCDB_calib[sector - 1][i][j];
 				}
@@ -887,7 +888,7 @@ public class FitControlUI extends javax.swing.JFrame
 		});
 
 		jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]
-		{ "default", "calib" }));
+		{ "default", ccdb_variation }));
 		jComboBox4.setSelectedIndex(1);
 		jComboBox4.addActionListener(new java.awt.event.ActionListener()
 		{
