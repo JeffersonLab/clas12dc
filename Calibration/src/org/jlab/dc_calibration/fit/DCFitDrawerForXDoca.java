@@ -103,7 +103,6 @@ public class DCFitDrawerForXDoca extends Func1D
 		double dMax = 2 * wpdist[superlayer];
 		double xNorm = xDoca / dMax;
 		double thetaDeg = 0.5 * (thEdgeVzL[thetaBin] + thEdgeVzH[thetaBin]); // Center of theta bin
-		// timeFunc = new DCTimeFunction(superlayer, thetaDeg, xNorm, fPars);
 		timeFunc = new DCTimeFunction(superlayer, thetaDeg, xNorm, bField, fPars);
 		double calcTime = isLinearFit ? timeFunc.linearFit() : timeFunc.nonLinearFit();
 		return calcTime;

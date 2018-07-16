@@ -17,6 +17,7 @@ import static org.jlab.dc_calibration.constants.Constants.nThBinsVz;
 import static org.jlab.dc_calibration.constants.Constants.thEdgeVzH;
 import static org.jlab.dc_calibration.constants.Constants.thEdgeVzL;
 import static org.jlab.dc_calibration.constants.Constants.wpdist;
+import static org.jlab.dc_calibration.constants.Constants.nBFieldBins;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +32,8 @@ import org.jlab.groot.data.H2F;
 public class DCFitFunction implements FCNBase
 {
 	private GraphErrors profileX;
-	private int sector;
-	private int superlayer;
+	private int iSec;
+	private int iSL;
 	private int thetaBin;
 	private boolean isLinear;
 	private int meanErrorType = 2; // 0: RMS, 1=RMS/sqrt(N), 2 = 1.0 (giving equal weight to all
@@ -46,38 +47,39 @@ public class DCFitFunction implements FCNBase
 
 	private DCTimeFunction timeFunc;
 
-	public DCFitFunction(GraphErrors profileX, int superlayer, int thetaBin, boolean isLinear)
+	public DCFitFunction(GraphErrors profileX, int iSuperlayer, int thetaBin, boolean isLinear)
 	{
 		this.profileX = profileX;
-		this.superlayer = superlayer;
+		this.iSL = iSuperlayer;
 		this.thetaBin = thetaBin;
 		this.isLinear = isLinear;
-		dMax = 2 * wpdist[superlayer];
+		dMax = 2 * wpdist[iSuperlayer];
 	}
 
 	// public DCFitFunction(Map<Coordinate, H2F> h2timeVtrkDocaNorm, int sector, int superlayer, int
 	// thetaBin, boolean isLinear) {
-	public DCFitFunction(Map<Coordinate, H2F> h2timeVtrkDoca, int sector, int superlayer, boolean isLinear)
+	public DCFitFunction(Map<Coordinate, H2F> h2timeVtrkDoca, int iSector, int iSuperlayer, boolean isLinear)
 	{
 		this.h2timeVtrkDoca = h2timeVtrkDoca;
-		this.sector = sector;
-		this.superlayer = superlayer;
+		this.iSec = iSector;
+		this.iSL = iSuperlayer;
 		this.isLinear = isLinear;
-		dMax = 2 * wpdist[superlayer];
+		dMax = 2 * wpdist[iSuperlayer];
 	}
 
-	public DCFitFunction(Map<Coordinate, H2F> h2timeVtrkDoca, int sector, int superlayer,
+	// ------------------------ In Use ---------------------------------
+	public DCFitFunction(Map<Coordinate, H2F> h2timeVtrkDoca, int iSector, int iSuperlayer,
 			int meanErrorType, double docaNormMin, double docaNormMax, boolean isLinear, boolean[] selectedAngleBins)
 	{
 		this.h2timeVtrkDoca = h2timeVtrkDoca;
-		this.sector = sector;
-		this.superlayer = superlayer;
+		this.iSec = iSector;
+		this.iSL = iSuperlayer;
 		this.isLinear = isLinear;
 		this.meanErrorType = meanErrorType;
 		this.docaNormMin = docaNormMin;
 		this.docaNormMax = docaNormMax;
 		// this.thetaBin = thetaBin; //To be removed later
-		dMax = 2 * wpdist[superlayer];
+		dMax = 2 * wpdist[iSuperlayer];
 		this.selectedAngleBins = selectedAngleBins;
 
 		System.out.println("Inside DCFitFunction constructor ...");
@@ -91,19 +93,19 @@ public class DCFitFunction implements FCNBase
 	// DCFitFunction(..)" error or warning
 	// Later, I may want to have a similar but an entirely different class to deal with the
 	// SimpleH3D histos.
-	public DCFitFunction(Map<Coordinate, SimpleH3D> h3BvTvX, int sector, int superlayer,
+	public DCFitFunction(Map<Coordinate, SimpleH3D> h3BvTvX, int iSector, int iSuperlayer,
 			int meanErrorType, double docaNormMin, double docaNormMax, boolean isLinear, boolean[] selectedAngleBins,
 			boolean dummy)
 	{
 		this.h3BvTvX = h3BvTvX;
-		this.sector = sector;
-		this.superlayer = superlayer;
+		this.iSec = iSector;
+		this.iSL = iSuperlayer;
 		this.isLinear = isLinear;
 		this.meanErrorType = meanErrorType;
 		this.docaNormMin = docaNormMin;
 		this.docaNormMax = docaNormMax;
 		// this.thetaBin = thetaBin; //To be removed later
-		dMax = 2 * wpdist[superlayer];
+		dMax = 2 * wpdist[iSuperlayer];
 		this.selectedAngleBins = selectedAngleBins;
 
 		System.out.println("Inside DCFitFunction constructor ...");
@@ -123,18 +125,19 @@ public class DCFitFunction implements FCNBase
 	{
 		double chisq = 0.0;
 		int discardThBins = 4;
-		if (histTypeToUseInFitting == 0)
-		{
-			chisq = getChisqUsingXProfiles(discardThBins, par);
-		}
-		else if (histTypeToUseInFitting == 1 || histTypeToUseInFitting == 2)
-		{
-			chisq = getChisqWithoutXProfiles(discardThBins, par);
-		}
-		else if (histTypeToUseInFitting == 3)
-		{
-			chisq = getChisqWithBFieldUsed(discardThBins, par);
-		}
+		// ------- Commented all unused ones, to be cleaned later ------------------------------
+		// if (histTypeToUseInFitting == 0)
+		// {
+		// chisq = getChisqUsingXProfiles(discardThBins, par);
+		// }
+		// else if (histTypeToUseInFitting == 1 || histTypeToUseInFitting == 2)
+		// {
+		chisq = getChisqWithoutXProfiles(discardThBins, par);
+		// }
+		// else if (histTypeToUseInFitting == 3)
+		// {
+		// chisq = getChisqWithBFieldUsed(discardThBins, par);
+		// }
 		return chisq;
 	}
 
@@ -157,7 +160,7 @@ public class DCFitFunction implements FCNBase
 			}
 
 			thetaDeg = 0.5 * (thEdgeVzL[th] + thEdgeVzH[th]);
-			h2tvXnorm = h2timeVtrkDoca.get(new Coordinate(sector, superlayer, th));
+			h2tvXnorm = h2timeVtrkDoca.get(new Coordinate(iSec, iSL, th));
 			// profileX = h2timeVtrkDocaNorm.get(new Coordinate(sector, superlayer,
 			// th)).getProfileX();
 			profileX = h2tvXnorm.getProfileX();
@@ -189,12 +192,12 @@ public class DCFitFunction implements FCNBase
 					measTimeErr = 1.0; // Giving equal weight (to avoid having fit biased by heavily
 										// populated bins)
 				}
-				timeFunc = new DCTimeFunction(superlayer, thetaDeg, docaNorm, par);
+				timeFunc = new DCTimeFunction(iSL, thetaDeg, docaNorm, par);
 				double calcTime = isLinear ? timeFunc.linearFit() : timeFunc.nonLinearFit();
 
 				// if (measTimeErr == measTimeErr && measTimeErr > 0.0 && docaNorm < 0.9) {
 				if (measTimeErr == measTimeErr && measTimeErr > docaNormMin && docaNorm < docaNormMax)
-				{ 
+				{
 					delta = (measTime - calcTime) / measTimeErr; // error weighted deviation
 					chisq += delta * delta;
 				}
@@ -203,11 +206,19 @@ public class DCFitFunction implements FCNBase
 		return chisq;
 	}
 
+	// --------------- In Use ------------------------------
 	public double getChisqWithoutXProfiles(int discardThBins, double par[])
 	{
 		double chisq = 0;
 		double delta = 0;
 		double thetaDeg = 0;
+		double bField = 0;
+		int nOfBFieldBins;
+
+		if (iSL == 2 || iSL == 3)
+			nOfBFieldBins = nBFieldBins - 1;
+		else
+			nOfBFieldBins = 0;
 
 		H2F h2tvXnorm;
 
@@ -221,25 +232,10 @@ public class DCFitFunction implements FCNBase
 			}
 
 			thetaDeg = 0.5 * (thEdgeVzL[th] + thEdgeVzH[th]);
-			if (histTypeToUseInFitting == 1)
-			{
-				h2tvXnorm = h2timeVtrkDoca.get(new Coordinate(sector, superlayer, th));// From the
-																						// map of
-																						// H2F
-																						// histos
-			}
-			else if (histTypeToUseInFitting == 2 || histTypeToUseInFitting == 3)
-			{
-				h2tvXnorm = h3BvTvX.get(new Coordinate(sector, superlayer, th)).getXYProj();// From
-																							// the
-																							// map
-																							// of
-																							// SimpleH3D
-																							// histos
-			}
-			else 
-				h2tvXnorm = null;
-			
+			h2tvXnorm = h2timeVtrkDoca.get(new Coordinate(iSec, iSL, th));// From the
+																					// map of
+																					// H2F
+																					// histos
 			nBinsX = h2tvXnorm.getXAxis().getNBins();
 			nBinsY = h2tvXnorm.getYAxis().getNBins();
 			double wBinX = h2tvXnorm.getDataEX(1); // width of the 1st x-bin (but will be the same
@@ -247,48 +243,55 @@ public class DCFitFunction implements FCNBase
 			double wBinY = h2tvXnorm.getDataEY(1); // Width of the 1st y-bin (and of all)
 			double measTimeErr = wBinY * wBinX; // Using area of the bin for error
 			// profileX = h2tvXnorm.getProfileX();
-			for (int i = 0; i < nBinsX; i++)
+			for (int bb = 0; bb <= nOfBFieldBins; ++bb)
 			{
-				for (int j = 0; j < nBinsY; j++)
+				bField = (bb * 0.2 + 0.1);
+
+				for (int i = 0; i < nBinsX; i++)
 				{
-					double docaNorm = h2tvXnorm.getDataX(i) / dMax;// profileX.getDataX(i); //ith
-																	// x-Bin center
-					double measTime = h2tvXnorm.getDataY(j);// profileX.getDataY(i); //jth y-Bin
-															// center
-					double binContent = h2tvXnorm.getData(i, j);// getData(i,j) and
-																// getBinContent(i,j) are equivalent
-																// and both work
+					for (int j = 0; j < nBinsY; j++)
+					{
+						double docaNorm = h2tvXnorm.getDataX(i) / dMax;// profileX.getDataX(i); //ith
+																		// x-Bin center
+						double measTime = h2tvXnorm.getDataY(j);// profileX.getDataY(i); //jth y-Bin
+																// center
+						double binContent = h2tvXnorm.getData(i, j);// getData(i,j) and
+																	// getBinContent(i,j) are equivalent
+																	// and both work
+						if (binContent < 10)
+						{
+							continue; // discarding low stat bins (4/23/17)
+						}
+						// Three different options for errors to weigh the chisq calculation
+						// From
+						// https://github.com/KPAdhikari/groot/blob/master/src/main/java/org/jlab/groot/data/H2F.java
+						// getDataEX = xAxis.getBinWidth(bin); & getDataEY = yAxis.getBinWidth(bin);
+						if (meanErrorType == 0)
+						{
+							measTimeErr = wBinY * wBinX; // Using area of the bin for error
+						}
+						else if (meanErrorType == 1)
+						{
+							measTimeErr = measTimeErr / Math.sqrt(binContent); // Using Error =
+																				// RMS/sqrt(N)
+							measTimeErr = 1.0 / Math.sqrt(binContent); // Using Error = RMS/sqrt(N)
+						}
+						else if (meanErrorType == 2)
+						{
+							measTimeErr = 1.0; // Giving equal weight (to avoid having fit biased by
+												// heavily populated bins)
+						}
+						if (iSL == 2 || iSL == 3)
+							timeFunc = new DCTimeFunction(iSL, thetaDeg, docaNorm, bField, par);
+						else
+							timeFunc = new DCTimeFunction(iSL, thetaDeg, docaNorm, par);
+						double calcTime = isLinear ? timeFunc.linearFit() : timeFunc.nonLinearFit();
 
-					if (binContent < 5)
-					{
-						continue; // discarding low stat bins (4/23/17)
-					}
-					// Three different options for errors to weigh the chisq calculation
-					// From
-					// https://github.com/KPAdhikari/groot/blob/master/src/main/java/org/jlab/groot/data/H2F.java
-					// getDataEX = xAxis.getBinWidth(bin); & getDataEY = yAxis.getBinWidth(bin);
-					if (meanErrorType == 0)
-					{
-						measTimeErr = wBinY * wBinX; // Using area of the bin for error
-					}
-					else if (meanErrorType == 1)
-					{
-						measTimeErr = measTimeErr / Math.sqrt(binContent); // Using Error =
-																			// RMS/sqrt(N)
-						measTimeErr = 1.0 / Math.sqrt(binContent); // Using Error = RMS/sqrt(N)
-					}
-					else if (meanErrorType == 2)
-					{
-						measTimeErr = 1.0; // Giving equal weight (to avoid having fit biased by
-											// heavily populated bins)
-					}
-					timeFunc = new DCTimeFunction(superlayer, thetaDeg, docaNorm, par);
-					double calcTime = isLinear ? timeFunc.linearFit() : timeFunc.nonLinearFit();
-
-					if (measTimeErr == measTimeErr && measTimeErr > docaNormMin && docaNorm < docaNormMax)
-					{ 
-						delta = (measTime - calcTime) / measTimeErr; // error weighted deviation
-						chisq += delta * delta;
+						if (measTimeErr == measTimeErr && measTimeErr > docaNormMin && docaNorm < docaNormMax)
+						{
+							delta = (measTime - calcTime) / measTimeErr; // error weighted deviation
+							chisq += delta * delta;
+						}
 					}
 				}
 			}
@@ -321,7 +324,7 @@ public class DCFitFunction implements FCNBase
 			} // Next bin on each side of the central one
 
 			thetaDeg = 0.5 * (thEdgeVzL[th] + thEdgeVzH[th]);
-			h3d = h3BvTvX.get(new Coordinate(sector, superlayer, th));
+			h3d = h3BvTvX.get(new Coordinate(iSec, iSL, th));
 			h2tvXnorm = h3d.getXYProj();// From the map of SimpleH3D histos
 
 			nBinsX = h2tvXnorm.getXAxis().getNBins();
@@ -369,7 +372,7 @@ public class DCFitFunction implements FCNBase
 							measTimeErr = 1.0; // Giving equal weight (to avoid having fit biased by
 												// heavily populated bins)
 						}
-						timeFunc = new DCTimeFunction(superlayer, thetaDeg, docaNorm, bField, par);
+						timeFunc = new DCTimeFunction(iSL, thetaDeg, docaNorm, bField, par);
 						double calcTime = isLinear ? timeFunc.linearFit() : timeFunc.nonLinearFit();
 
 						// if (measTimeErr == measTimeErr && measTimeErr > 0.0 && docaNorm < 0.9) {

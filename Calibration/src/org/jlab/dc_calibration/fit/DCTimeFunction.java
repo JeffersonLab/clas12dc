@@ -22,23 +22,24 @@ import static org.jlab.dc_calibration.constants.Constants.beta;
 
 public class DCTimeFunction
 {
-	private int superlayer;
+	private int iSuperlayer;
 	private double thetaDeg;
 	private double docaNorm;
 	private double[] par;
-	private double bfield = 0.5;
+	private double bfield;
 
-	public DCTimeFunction(int superlayer, double thetaDeg, double docaNorm, double[] par)
+	public DCTimeFunction(int iSL, double thetaDeg, double docaNorm, double[] par)
 	{
-		this.superlayer = superlayer;
+		this.iSuperlayer = iSL;
 		this.thetaDeg = thetaDeg;
 		this.docaNorm = docaNorm;
 		this.par = par;
+		this.bfield = 0.0;
 	}
 
-	public DCTimeFunction(int superlayer, double thetaDeg, double docaNorm, double bfield, double[] par)
+	public DCTimeFunction(int iSL, double thetaDeg, double docaNorm, double bfield, double[] par)
 	{
-		this.superlayer = superlayer;
+		this.iSuperlayer = iSL;
 		this.thetaDeg = thetaDeg;
 		this.docaNorm = docaNorm;
 		this.par = par;
@@ -47,7 +48,7 @@ public class DCTimeFunction
 
 	public double linearFit()
 	{
-		double dMax = 2 * wpdist[superlayer];
+		double dMax = 2 * wpdist[iSuperlayer];
 		double x = docaNorm * dMax;
 		double v0Par = par[0];
 		return x / v0Par;
@@ -55,7 +56,7 @@ public class DCTimeFunction
 
 	public double nonLinearFit()
 	{
-		double dMax = 2 * wpdist[superlayer];
+		double dMax = 2 * wpdist[iSuperlayer];
 		// constant to avoid repeated calc. (see above main())
 		double x = docaNorm * dMax;
 		double v0Par = par[0];
@@ -130,8 +131,8 @@ public class DCTimeFunction
 		// bfield for where xhat=x/dmaxalpha where dmaxalpha is the 'dmax' for
 		// a track with local angle alpha (for local angle = alpha)
 		double deltatime_bfield = 0.0;
-		// if (superlayer == 3 || superlayer == 4) {
-		if (superlayer == 2 || superlayer == 3)
+		
+		if (iSuperlayer == 2 || iSuperlayer == 3)
 		{
 			deltatime_bfield = delta_bfield_coefficient * Math.pow(bfield, 2) * tMax
 					* (b1 * xhatalpha
