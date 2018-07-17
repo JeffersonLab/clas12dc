@@ -6,7 +6,6 @@ package org.jlab.dc_calibration.fit;
 
 import static org.jlab.dc_calibration.constants.Constants.bFieldMax;
 import static org.jlab.dc_calibration.constants.Constants.bFieldMin;
-import static org.jlab.dc_calibration.constants.Constants.binForTestPlotTemp;
 import static org.jlab.dc_calibration.constants.Constants.calcDocaCut;
 import static org.jlab.dc_calibration.constants.Constants.histTypeToUseInFitting;
 import static org.jlab.dc_calibration.constants.Constants.iSecMax;
@@ -14,7 +13,6 @@ import static org.jlab.dc_calibration.constants.Constants.iSecMin;
 import static org.jlab.dc_calibration.constants.Constants.localAngleMax;
 import static org.jlab.dc_calibration.constants.Constants.localAngleMin;
 import static org.jlab.dc_calibration.constants.Constants.nBFieldBins;
-import static org.jlab.dc_calibration.constants.Constants.BFieldBins;
 import static org.jlab.dc_calibration.constants.Constants.nFitPars;
 import static org.jlab.dc_calibration.constants.Constants.nHists;
 import static org.jlab.dc_calibration.constants.Constants.nLayer;
@@ -26,9 +24,7 @@ import static org.jlab.dc_calibration.constants.Constants.nThBinsVz;
 import static org.jlab.dc_calibration.constants.Constants.nThBinsVz2;
 import static org.jlab.dc_calibration.constants.Constants.outFileForFitPars;
 import static org.jlab.dc_calibration.constants.Constants.parName;
-import static org.jlab.dc_calibration.constants.Constants.prevFitPars;
 import static org.jlab.dc_calibration.constants.Constants.rad2deg;
-import static org.jlab.dc_calibration.constants.Constants.tMaxSL;
 import static org.jlab.dc_calibration.constants.Constants.tMin;
 import static org.jlab.dc_calibration.constants.Constants.thBins;
 import static org.jlab.dc_calibration.constants.Constants.thEdgeVzH;
@@ -57,7 +53,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.math3.analysis.function.Abs;
 import org.freehep.math.minuit.FunctionMinimum;
 import org.freehep.math.minuit.MnMigrad;
 import org.freehep.math.minuit.MnStrategy;
@@ -65,9 +60,7 @@ import org.freehep.math.minuit.MnUserParameters;
 import org.jlab.dc_calibration.constants.Constants;
 import org.jlab.dc_calibration.init.Coordinate;
 import org.jlab.dc_calibration.init.ProcessTBTracks;
-import org.jlab.dc_calibration.init.SimpleH3D;
 import org.jlab.dc_calibration.io.FileOutputWriter;
-import org.jlab.dc_calibration.io.ReadT0parsFromCCDB;
 import org.jlab.dc_calibration.ui.DCTabbedPane;
 import org.jlab.dc_calibration.ui.FitControlUI;
 import org.jlab.dc_calibration.ui.OrderOfAction;
@@ -83,8 +76,6 @@ import org.jlab.io.base.DataEvent;
 import org.jlab.io.base.DataBank;
 import org.jlab.io.evio.EvioDataChain;
 import org.jlab.io.hipo.HipoDataSource;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class TimeToDistanceFitter implements ActionListener, Runnable
 {
@@ -624,7 +615,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		for (int i = 0; i < nSL; i++)
 		{
 			String.format(hName, "BfieldSL%d", i + 1);
-			h1bFieldSL[i] = new H1F(hName, 4 * nBFieldBins, bFieldMin, bFieldMax);
+			h1bFieldSL[i] = new H1F(hName, 10 * nBFieldBins, bFieldMin, bFieldMax);
 			String.format(hTitle, "B field for SL=%d", i + 1);
 			h1bFieldSL[i].setTitle(hTitle);
 			h1bFieldSL[i].setLineColor(2);
@@ -1138,10 +1129,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					pInit[iSL][i], pHigh[iSL][i], fixIt[i]));
 		}
 
-		System.out.println("Called createCanvasMaps(); ");
-		drawQuickTestPlots();
-		System.out.println("Called drawQuickTestPlots();");
-
 		try
 		{
 			runFitterNew(textArea, Sec, SL, xMeanErrorType, xNormLow, xNormHigh, fixIt, checkBoxFixAll, pLow,
@@ -1331,7 +1318,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 				bField = 1; // Average
 				mapOfFitLinesX.put(new Coordinate(iSec, iSL, k, (int) bField),
-						new DCFitDrawerForXDoca(title, 0.0, dMax, iSL, k, bField, isLinearFit));
+						new DCFitDrawerForXDoca(title, 0.0, dMax, iSL, k, (bField - 0.1), isLinearFit));
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineColor(1);// (colSimulFit);//(2);
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineWidth(3);
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineStyle(3);
@@ -1340,7 +1327,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 
 				bField = 2; // Maximum
 				mapOfFitLinesX.put(new Coordinate(iSec, iSL, k, (int) bField),
-						new DCFitDrawerForXDoca(title, 0.0, dMax, iSL, k, bField, isLinearFit));
+						new DCFitDrawerForXDoca(title, 0.0, dMax, iSL, k, (bField - 0.1), isLinearFit));
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineColor(1);// (colSimulFit);//(2);
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineWidth(3);
 				mapOfFitLinesX.get(new Coordinate(iSec, iSL, k, (int) bField)).setLineStyle(3);
@@ -1367,6 +1354,7 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		int iSec = Sec - 1, iSL = SL - 1;
 		int nSkippedThBins = 4; // Skipping marginal 4 bins from both sides
 		String Title = "";
+		GraphErrors profHist;
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -1379,18 +1367,15 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			Title = "Sec=" + Sec + " SL=" + SL
 					+ " theta=(" + thEdgeVzL[k] + "," + thEdgeVzH[k] + ")"
 					+ " indvFitCol=" + colIndivFit;
-			if (histTypeToUseInFitting < 2)
+			
+			if (iSL == 2 || iSL == 3)
 			{
+				canvas.draw(h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 0)));  // Minimum B-field
+				canvas.draw(h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 4)), "same");  // Average B-field
+				canvas.draw(h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 9)), "same");  //Maximum B-field
+			}
+			else
 				canvas.draw(h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k)));
-			}
-			else if (histTypeToUseInFitting == 2)
-			{
-				//// canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj());
-			}
-			else if (histTypeToUseInFitting == 3 && (iSL == 2 || iSL == 3))
-			{
-				//// canvas.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getSliceZ(binForTestPlotTemp));// Tmp
-			}
 
 			if (iSL == 2 || iSL == 3)
 			{
@@ -1417,14 +1402,26 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 			Title = "Sec=" + Sec + " SL=" + SL
 					+ " theta=(" + thEdgeVzL[k] + "," + thEdgeVzH[k] + ")"
 					+ " indvFitCol=" + colIndivFit;
-			if (histTypeToUseInFitting < 2)
+
+			if (iSL == 2 || iSL == 3)
 			{
+				profHist = h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 0)).getProfileX();  // Minimum B-field
+				profHist.getAttributes().setLineColor(1);
+				profHist.getAttributes().setMarkerColor(1);
+				canvas2.draw(profHist); 
+				
+				profHist = h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 4)).getProfileX(); // average B-field
+				profHist.getAttributes().setLineColor(2);
+				profHist.getAttributes().setMarkerColor(2);
+				canvas2.draw(profHist, "same");
+				
+				profHist = h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k, 9)).getProfileX();  // Maximum B-field
+				profHist.getAttributes().setLineColor(3);
+				profHist.getAttributes().setMarkerColor(3);
+				canvas2.draw(profHist, "same"); 
+			}
+			else
 				canvas2.draw(h2timeVtrkDoca.get(new Coordinate(iSec, iSL, k)).getProfileX());
-			}
-			else if (histTypeToUseInFitting == 2)
-			{
-				//// canvas2.draw(h3BTXmap.get(new Coordinate(iSec, iSL, k)).getXYProj().getProfileX());
-			}
 
 			if (iSL == 2 || iSL == 3)
 			{
@@ -1683,91 +1680,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		frame.setVisible(true);
 	}
 
-	protected void drawHistograms()
-	{
-		drawQuickTestPlots();
-
-		for (int i = iSecMin; i < iSecMax; i++)
-		{
-			// Looking only at the Sector2 (KPP) data (not to waste time in empty hists)
-			for (int j = 0; j < nSL; j++)
-			{
-				for (int k = 0; k < nThBinsVz; k++)
-				{
-					htime2DisDocaProfile.put(new Coordinate(i, j, k),
-							h2timeVtrkDocaVZ.get(new Coordinate(i, j, k)).getProfileX());
-					htime2DisDocaProfile.get(new Coordinate(i, j, k))
-							.setTitle("Sector " + i + " timeVtrkDocaS " + j + " Th" + k);
-				}
-			}
-		}
-
-		// Done running fitter
-		// lets create lines we just fit
-		createFitLines();
-
-		DrawResidualsInTabbedPanes();
-
-		// drawSectorWiseCanvases();
-		DrawInTabbedPanesOfSecSLTh();
-
-		// lets add the canvas's to the pane and draw it.
-		// addToPane(); //Temprarily disabled
-		System.out.println("====================================");
-		System.out.println("Done with the fitting & drawing ...`");
-		System.out.println("====================================");
-	}
-
-	protected void drawQuickTestPlots()
-	{
-		// DrawResidualsInTabbedPanes();
-
-		int nEntries = h1bField.getEntries();// .getDataSize(1);
-		System.out.println("# of entries in h1bField = " + nEntries);
-		// this is temp for testHist
-		EmbeddedCanvas canv = new EmbeddedCanvas();
-		canv.setSize(500, 500);
-		canv.cd(0);
-		canv.draw(h1bField);
-		canv.save(Constants.plotsOutputDir + "plots/test_bField.png");
-
-		EmbeddedCanvas canv0 = new EmbeddedCanvas();
-		canv0.setSize(1500, 1000);
-		canv0.divide(3, 2);
-		for (int i = 0; i < nSL; i++)
-		{
-			canv0.cd(i);
-			canv0.draw(h1bFieldSL[i]);
-		}
-		canv0.save(Constants.plotsOutputDir + "plots/test_bFieldAllSL.png");
-
-		EmbeddedCanvas canv1 = new EmbeddedCanvas();
-		canv1.setSize(1200, 800);
-		canv1.divide(3, 2);
-		canv1.cd(0);
-		canv1.draw(h1fitChisqProb);
-		canv1.cd(1);
-		canv1.draw(h1fitChi2Trk);
-		canv1.cd(2);
-		canv1.draw(h1ndfTrk);
-		canv1.cd(3);
-		canv1.draw(h1zVtx);
-		canv1.cd(4);
-		canv1.draw(h1fitChi2Trk2);// (h1fitChisqProb);
-		canv1.save(Constants.plotsOutputDir + "plots/test_fitChisqProb.png");
-
-		canv1 = new EmbeddedCanvas();
-		canv1.setSize(1200, 400);
-		canv1.divide(3, 1);
-		canv1.cd(0);
-		canv1.draw(h1trkDoca4PosRes);
-		canv1.cd(1);
-		canv1.draw(h1trkDoca4NegRes);
-		canv1.cd(2);
-		canv1.draw(h2ResidualVsTrkDoca);
-		canv1.save(Constants.plotsOutputDir + "plots/residualVsTrkDoca.png");
-	}
-
 	protected void DrawResidualsInTabbedPanes()
 	{
 
@@ -1994,9 +1906,9 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 					for (int l = 0; l < nBFieldBins; l++)
 					{
 						canvasBbins.cd(l);
-						Title = "B-bin = " + l + "( " + l * 0.2 + 0.1 + " )";
+						//Title = "B-bin = " + l + "( " + l * 0.2 + 0.1 + " )";
 						canvasBbins.draw(h2timeVtrkDoca.get(new Coordinate(i, j, k, l)));
-						canvasBbins.getPad(j).setTitle(Title);
+						//canvasBbins.getPad(j).setTitle(Title);
 						canvasBbins.setPadTitlesX("trkDoca");
 						canvasBbins.setPadTitlesY("time (ns)");
 					}
@@ -2016,97 +1928,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		frame.setLocationRelativeTo(null);
 		frame.add(mainPane);
 		frame.setVisible(true);
-	}
-
-	private void createFitLinesXTB()
-	{
-		double dMax;
-		for (int i = iSecMin; i < iSecMax; i++)
-		{
-			// Looking only at the Sector2 (KPP) data (not to waste time in empty hists)
-			for (int j = 0; j < nSL; j++)
-			{
-				dMax = 2 * wpdist[j];
-				for (int k = 0; k < nThBinsVz2; k++)
-				{
-					String title = "timeVsNormDoca Sec=" + (i + 1) + " SL=" + (j + 1) + " Th=" + k;
-					double maxFitValue = h2timeVtrkDocaVZ.get(new Coordinate(i, j, k))
-							.getDataX(getMaximumFitValue(i, j, k));
-					mapOfFitLinesXTB.put(new Coordinate(i, j, k),
-							new DCFitDrawerForXDocaXTB(title, 0.0, 1.1 * dMax, j, k, isLinearFit));
-					mapOfFitLinesXTB.get(new Coordinate(i, j, k)).setLineColor(4);// (2);
-					mapOfFitLinesXTB.get(new Coordinate(i, j, k)).setLineWidth(3);
-					mapOfFitLinesXTB.get(new Coordinate(i, j, k)).setLineStyle(4);
-					// mapOfFitLines.get(new Coordinate(i, j,
-					// k)).setParameters(mapOfUserFitParameters.get(new Coordinate(i, j, k)));
-					// Because we do the simultaneous fit over all theta bins, we have the same set
-					// of pars for all theta-bins.
-					mapOfFitLinesXTB.get(new Coordinate(i, j, k))
-							.setParameters(mapOfUserFitParametersXTB.get(new Coordinate(i, j)));
-				}
-			}
-		}
-
-	}
-
-	private void createFitLines()
-	{
-		double dMax;
-		for (int i = iSecMin; i < iSecMax; i++)
-		{
-			// Looking only at the Sector2 (KPP) data (not to waste time in empty hists)
-			for (int j = 0; j < nSL; j++)
-			{
-				dMax = 2 * wpdist[j];
-				for (int k = 0; k < nThBinsVz; k++)
-				{
-					String title = "timeVsNormDoca Sec=" + (i + 1) + " SL=" + (j + 1) + " Th=" + k;
-					double maxFitValue = h2timeVtrkDocaVZ.get(new Coordinate(i, j, k))
-							.getDataX(getMaximumFitValue(i, j, k));
-					mapOfFitLines.put(new Coordinate(i, j, k), new DCFitDrawer(title, 0.0, 1.0, j, k, isLinearFit));
-					mapOfFitLines.get(new Coordinate(i, j, k)).setLineColor(4);// (2);
-					mapOfFitLines.get(new Coordinate(i, j, k)).setLineWidth(3);
-					mapOfFitLines.get(new Coordinate(i, j, k)).setLineStyle(4);
-					// mapOfFitLines.get(new Coordinate(i, j,
-					// k)).setParameters(mapOfUserFitParameters.get(new Coordinate(i, j, k)));
-					// Because we do the simultaneous fit over all theta bins, we have the same set
-					// of pars for all theta-bins.
-					mapOfFitLines.get(new Coordinate(i, j, k))
-							.setParameters(mapOfUserFitParameters.get(new Coordinate(i, j)));
-
-					// Now creating lines using parameters from individual theta-bin fits
-					mapOfFitLinesOld.put(new Coordinate(i, j, k), new DCFitDrawer(title, 0.0, 1.0, j, k, isLinearFit));
-					mapOfFitLinesOld.get(new Coordinate(i, j, k)).setLineColor(colIndivFit);
-					mapOfFitLinesOld.get(new Coordinate(i, j, k)).setLineWidth(3);
-					mapOfFitLinesOld.get(new Coordinate(i, j, k)).setLineStyle(1);
-					mapOfFitLinesOld.get(new Coordinate(i, j, k))
-							.setParameters(mapOfUserFitParametersOld.get(new Coordinate(i, j, k)));
-
-					title = "timeVsTrkDoca Sec=" + (i + 1) + " SL=" + (j + 1) + " Th=" + k;
-					mapOfFitLinesX.put(new Coordinate(i, j, k),
-							new DCFitDrawerForXDoca(title, 0.0, 1.1 * dMax, j, k, isLinearFit));
-					mapOfFitLinesX.get(new Coordinate(i, j, k)).setLineColor(colSimulFit);// (2);
-					mapOfFitLinesX.get(new Coordinate(i, j, k)).setLineWidth(3);
-					mapOfFitLinesX.get(new Coordinate(i, j, k)).setLineStyle(4);
-					// mapOfFitLines.get(new Coordinate(i, j,
-					// k)).setParameters(mapOfUserFitParameters.get(new Coordinate(i, j, k)));
-					// Because we do the simultaneous fit over all theta bins, we have the same set
-					// of pars for all theta-bins.
-					mapOfFitLinesX.get(new Coordinate(i, j, k))
-							.setParameters(mapOfUserFitParameters.get(new Coordinate(i, j)));
-
-					// Now creating lines using parameters from individual theta-bin fits
-					mapOfFitLinesXOld.put(new Coordinate(i, j, k),
-							new DCFitDrawerForXDoca(title, 0.0, 1.1 * dMax, j, k, isLinearFit));
-					mapOfFitLinesXOld.get(new Coordinate(i, j, k)).setLineColor(1);
-					mapOfFitLinesXOld.get(new Coordinate(i, j, k)).setLineWidth(3);
-					mapOfFitLinesXOld.get(new Coordinate(i, j, k)).setLineStyle(1);
-					mapOfFitLinesXOld.get(new Coordinate(i, j, k))
-							.setParameters(mapOfUserFitParametersOld.get(new Coordinate(i, j, k)));
-				}
-			}
-		}
-
 	}
 
 	public int getMaximumFitValue(int i, int j, int k)
@@ -2138,8 +1959,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		{
 			JOptionPane.showMessageDialog(frame, "Click OK to start processing the time to distance fitting...");
 			processData();
-			drawHistograms();
-			// DCTabbedPane test = new DCTabbedPane();
 		}
 		else
 		{
@@ -2215,7 +2034,6 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 	{
 		processData();
 
-		drawQuickTestPlots();
 		System.out.println("Called drawQuickTestPlots();");
 
 		MakeAndDrawXTProjectionsOfXTBhists();
@@ -2241,18 +2059,8 @@ public class TimeToDistanceFitter implements ActionListener, Runnable
 		ArrayList<String> fileArray = new ArrayList<String>();
 		fileArray.add(
 				"/Users/michaelkunkel/WORK/CLAS/CLAS12/DC_Calibration/data/Calibration/pion/mergedFiles/cookedFiles/out_out_1.evio");
-		fileArray.add(
-				"/Users/michaelkunkel/WORK/CLAS/CLAS12/DC_Calibration/data/Calibration/pion/mergedFiles/cookedFiles/out_out_10.evio");
-		fileArray.add(
-				"/Users/michaelkunkel/WORK/CLAS/CLAS12/DC_Calibration/data/Calibration/pion/mergedFiles/cookedFiles/out_out_2.evio");
-		fileArray.add(
-				"/Users/michaelkunkel/WORK/CLAS/CLAS12/DC_Calibration/data/Calibration/pion/mergedFiles/cookedFiles/out_out_4.evio");
-
 		TimeToDistanceFitter rd = new TimeToDistanceFitter(fileArray, true);
 
 		rd.processData();
-		// System.out.println(rd.getMaximumFitValue(5, 5, 5) + " output");
-		rd.drawHistograms();
-
 	}
 }
