@@ -30,9 +30,9 @@ public class ReconTimeFunction
     	SL_index = SLindex;
     	
     	 //Uncomment the following lines if you make the plot independently
-		 DatabaseConstantProvider provider = new DatabaseConstantProvider(2052,"default");
-		 IndexedTable table = provider.readTable("/calibration/dc/time_to_distance/time2dist");	 
-		 TableLoader.Fill(table);
+		 //DatabaseConstantProvider provider = new DatabaseConstantProvider(2052,"default");
+		 //IndexedTable table = provider.readTable("/calibration/dc/time_to_distance/time2dist");	 
+		 //TableLoader.Fill(table);
 	 }
 
     public GraphErrors getGraph(double bField, double angDegree, double minTime, double maxTime)

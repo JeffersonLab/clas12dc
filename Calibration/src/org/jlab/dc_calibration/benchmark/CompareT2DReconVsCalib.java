@@ -204,7 +204,7 @@ public class CompareT2DReconVsCalib
 		c1.setTitle("Distance (cm) vs Time (ns)");
 
 		 GStyle.getGraphErrorsAttributes().setTitle("Time (ns) vs Distance (cm) for S " + (secIndex + 1) + " SL " + (slIndex + 1) 
-				 + " Reconstruction (dotted line) vs Calibration (solid line) for 10 degree and B= 0.0 , 0.5, 1.0, 1.5 T");
+				 + " Reconstruction (dotted line) vs Calibration (solid line) for 10 degree and B = 0.0 , 0.5, 1.0, 1.5 T");
 
 		ReconTimeFunction recon = new ReconTimeFunction(secIndex, slIndex);
 	
