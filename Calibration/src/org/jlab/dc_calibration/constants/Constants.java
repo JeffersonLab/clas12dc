@@ -16,7 +16,7 @@ import org.jlab.dc_calibration.init.Configure;
 
 public final class Constants
 {
-	public static final String ccdb_variation = "dc_team"; //"calib";
+	public static final String ccdb_variation = "calib"; //"calib";
 	public static final double rad2deg = 180.0 / Math.PI;
 	public static final double deg2rad = Math.PI / 180.0;
 
