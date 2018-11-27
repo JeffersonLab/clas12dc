@@ -102,8 +102,8 @@ public class CompareT2DReconVsCalib
 		for (double angDegree = min_ang_degree; angDegree <= max_ang_degree; angDegree += 5)
 		{
 	        //-------------------------- T2D Functional form from Reconstruction --------------------
-			GStyle.getGraphErrorsAttributes().setMarkerColor((int) (angDegree / 5) + 1);
-			canvasA[secIndex].draw(recon.getGraph(bField, angDegree, minTime, maxTime), "same");
+//			GStyle.getGraphErrorsAttributes().setMarkerColor((int) (angDegree / 5) + 1);
+//			canvasA[secIndex].draw(recon.getGraph(bField, angDegree, minTime, maxTime), "same");
 						
 	        //-------------------------- T2D Functional form from Calibration --------------------			
 			t2dFncCalib = new CalibTimeFunction("myFnc", minRange, maxRange * Math.cos(Math.toRadians(30 - angDegree)));
@@ -135,11 +135,11 @@ public class CompareT2DReconVsCalib
 			t2dFncCalib.setLineColor((int) (angDegree / 5) + 2);
 			canvasB[secIndex].draw(t2dFncCalib, "same");
             
-			// In the presence of B field Tmax can be higher than default
+			// In the presence of B-field Tmax can be higher than default
 			maxTime = t2dFncCalib.evaluate(maxRange * Math.cos(Math.toRadians(30 - angDegree)));
 	        //-------------------------- T2D Functional form from Reconstruction --------------------
-			GStyle.getGraphErrorsAttributes().setMarkerColor((int) (angDegree / 5) + 1);
-			canvasB[secIndex].draw(recon.getGraph(B_field, angDegree, minTime, maxTime), "same");	
+//			GStyle.getGraphErrorsAttributes().setMarkerColor((int) (angDegree / 5) + 1);
+//			canvasB[secIndex].draw(recon.getGraph(B_field, angDegree, minTime, maxTime), "same");	
 		}
 	}
 
@@ -228,6 +228,6 @@ public class CompareT2DReconVsCalib
 	{
 		CompareT2DReconVsCalib t2d = new CompareT2DReconVsCalib(Integer.valueOf(args[0]), "default");
 		t2d.MakeComparison();
-		//t2d.CompareSingleSL(1,3);
+		//t2d.CompareSingleSL(0,0);
 	}
 }

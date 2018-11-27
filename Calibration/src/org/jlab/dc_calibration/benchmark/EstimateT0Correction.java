@@ -44,7 +44,7 @@ public class EstimateT0Correction extends TBTimeDistribution
 	double delta_b;
 	double T0;
 	double delta_T0;
-	double previousT0 = -80.0;
+	double previousT0 = 0.0;
 	double previous_delta_T0 = 5.0;
 	FileOutputWriter file = null;
 	FileOutputWriter file_slope = null;
