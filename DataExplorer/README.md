@@ -26,7 +26,7 @@ Running on JLAB ifarm
 ---------------------
 You can run the pre-compiled compiled jar on ```ifram``` by issuing the following command (assuming you ssh with -Y option):
 ```
-java -jar /group/clas12/clas12dc/DataExplorer.jar
+/group/clas12/clas12dc/mclas12 explorer
 ```
 
 Dependencies
@@ -48,6 +48,7 @@ If you want to compile on your computer, then do:
 
 How to use
 ----------
+
 It should be trivial to use.
 Check the presentation [here](https://userweb.jlab.org/~latif/Hall_B/DC_Update_CalCom_meeting_July14_2017.pdf)
 
