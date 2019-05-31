@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-import org.jlab.latif.clas12lib.bankdef.*;
-import org.jlab.latif.clas12lib.core.*;
+import org.jlab.dc.clas12lib.bankdef.*;
+import org.jlab.dc.clas12lib.core.*;
 
 /**
  * 

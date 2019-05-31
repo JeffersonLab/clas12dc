@@ -2,7 +2,7 @@
 package org.jlab.clas12.DataExplorer;
 
 
-import org.jlab.latif.clas12lib.core.ClasStyle;
+import org.jlab.dc.clas12lib.core.ClasStyle;
 
 /**
  * Data Explorer for CLAS12 data

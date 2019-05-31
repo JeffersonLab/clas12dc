@@ -6,8 +6,8 @@ import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.graphics.EmbeddedCanvas;
 
-import org.jlab.latif.clas12lib.core.ClasRun;
-import org.jlab.latif.clas12lib.core.ClasStyle;
+import org.jlab.dc.clas12lib.core.ClasRun;
+import org.jlab.dc.clas12lib.core.ClasStyle;
 
 /**
  * Exploring the CLAS run

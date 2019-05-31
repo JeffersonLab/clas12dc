@@ -16,7 +16,7 @@ Download the executable
 A pre-compiled executable ```jar``` file is inside the directory ```target/```. Download that ```jar``` file on your computer and run the program as:
 
 ```
-java -jar /path/to/DataExplorer_v3.0.jar
+java -jar /path/to/DataExplorer.jar
 ```
 
 It should just work.
@@ -28,13 +28,6 @@ You can run the pre-compiled compiled jar on ```ifram``` by issuing the followin
 ```
 /group/clas12/clas12dc/mclas12 explorer
 ```
-
-Dependencies
---------------
-
- - Clas12lib : Contains coatjava and other dependencies in a single jar
-
-The required jar file is stored inside the ```clas12dc/lib/``` directory. You need to add them to the ```Build Path``` before you can compile the DataExplorer. 
 
 Compilation Instructions
 ------------------------
